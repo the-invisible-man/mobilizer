@@ -6,6 +6,15 @@ use Guzzle\Http\Client;
 use Guzzle\Http\Message\Response;
 use Lib\Packages\OpenGraph\Exceptions\OG_UnreachableSiteException;
 
+/**
+ * Class OpenGraph
+ *
+ * Utility to easily interface with websites following
+ * the OpenGraph standards.
+ *
+ * @author Carlos Granados <granados.carlos91@gmail.com>
+ * @package Lib\Packages\OpenGraph
+ */
 class OpenGraph {
 
     /**

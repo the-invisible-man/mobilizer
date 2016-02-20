@@ -2,6 +2,14 @@
 
 namespace Lib\Packages\OpenGraph;
 
+/**
+ * Class OG_SiteData
+ *
+ * Container for XPath extracted OpenGraph meta data.
+ *
+ * @author Carlos Granados <granados.carlos91@gmail.com>
+ * @package Lib\Packages\OpenGraph
+ */
 class OG_SiteData {
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Laravel\Socialite\Facades\Socialite;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -44,14 +45,15 @@ class AuthController extends Controller
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @return Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data) : Validator
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
+            'first_name'    => 'required|max:255',
+            'last_name'     => 'required|max:255',
+            'email'         => 'required|email|max:255|unique:users',
+            'password'      => 'required|confirmed|min:6',
         ]);
     }
 
@@ -64,9 +66,21 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'first_name'    => $data['first_name'],
+            'last_name'     => $data['last_name'],
+            'email'         => $data['email'],
+            'password'      => bcrypt($data['password'])
         ]);
+    }
+
+    protected function facebook()
+    {
+        Socialite::with('facebook')->redirect();
+    }
+
+    protected function callback()
+    {
+        $user = Socialite::with('facebook')->user();
+
     }
 }

@@ -1,6 +1,4 @@
-<?php
-
-namespace Lib\Packages\OpenGraph;
+<?php namespace Lib\Packages\Tools\OpenGraph;
 
 /**
  * Class OG_SiteData
@@ -42,47 +40,57 @@ class OG_SiteData {
     /**
      * @param \DOMNodeList $nodes
      */
-    private function extract(\DOMNodeList $nodes) {
+    private function extract(\DOMNodeList $nodes)
+    {
         foreach($nodes as $node){
             /**
              * @var \DOMElement $node
              */
-            $this->data[$node->getAttribute("property")] = $node->getAttribute("content");
+            $property               = $node->getAttribute("property");
+
+            if (strlen(str_replace(" ", "", $property))) {
+                $this->data[strtolower($property)] = $node->getAttribute("content");
+            }
         }
     }
 
     /**
      * @return string
      */
-    public function getTitle() : string {
+    public function getTitle() : string
+    {
         return $this->fetchNode(self::TITLE);
     }
 
     /**
      * @return string
      */
-    public function getUrl() : string {
+    public function getUrl() : string
+    {
         return $this->fetchNode(self::URL);
     }
 
     /**
      * @return string
      */
-    public function getImage() : string {
+    public function getImage() : string
+    {
         return $this->fetchNode(self::IMAGE);
     }
 
     /**
      * @return string
      */
-    public function getDescription() : string {
+    public function getDescription() : string
+    {
         return $this->fetchNode(self::DESCRIPTION);
     }
 
     /**
      * @return string
      */
-    public function getSite() : string {
+    public function getSite() : string
+    {
         return $this->fetchNode(self::SITE);
     }
 
@@ -90,7 +98,13 @@ class OG_SiteData {
      * @param string $property
      * @return string
      */
-    public function fetchNode(string $property) : string{
+    public function fetchNode(string $property) : string
+    {
         return isset($this->data[$property]) ? $this->data[$property] : null;
+    }
+
+    public function toArray()
+    {
+        return $this->data;
     }
 }

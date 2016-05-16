@@ -1,6 +1,4 @@
-<?php
-
-namespace Lib\Packages\OpenGraph;
+<?php namespace Lib\Packages\Tools\OpenGraph;
 
 use Guzzle\Http\Client;
 use Guzzle\Http\Message\Response;
@@ -14,16 +12,18 @@ use Lib\Packages\OpenGraph\Exceptions\OG_UnreachableSiteException;
  *
  * @author Carlos Granados <granados.carlos91@gmail.com>
  * @package Lib\Packages\OpenGraph
+ * @deprecated Now using the Facebook SDK for reliably fetching OpenGraph data
  */
 class OpenGraph {
 
     /**
      * @var Client
      */
-    private $guzzleClient = null;
+    private $httpClient = null;
 
-    public function __construct()
+    public function __construct(Client $httpClient)
     {
+        $this->httpClient = new Client();
         libxml_use_internal_errors(true);
     }
 
@@ -31,7 +31,7 @@ class OpenGraph {
      * @param string $url
      * @return OG_SiteData
      */
-    public function get(string $url) : OG_SiteData {
+    public function build(string $url) : OG_SiteData {
         $htmlBody   = $this->getBody($url);
         $document   = new \DOMDocument();
 
@@ -58,17 +58,14 @@ class OpenGraph {
      * @throws OG_UnreachableSiteException
      */
     private function getRequest(string $url) : Response {
-        if ( $this->guzzleClient === null ){
-            $this->guzzleClient = new Client();
-        }
-
         $maxAttempts    = 3;
+        $request        = $this->httpClient->createRequest('GET', $url);
 
-        for( $i = 0 ; $i < $maxAttempts ; $i++) {
-            $request = $this->guzzleClient->get($url)->getResponse();
+        for ($i = 0 ; $i < $maxAttempts ; $i++) {
+            $response = $request->send();
 
-            if ( $request->getStatusCode() === 200 ){
-                return $request;
+            if ( ! is_null($response) && ($response->getStatusCode() < 201 ||  $response->getStatusCode() > 299) ){
+                return $response;
             }
         }
 

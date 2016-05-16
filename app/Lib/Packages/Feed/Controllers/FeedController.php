@@ -1,6 +1,4 @@
-<?php
-
-namespace Lib\Packages\Feed\Controllers;
+<?php namespace Lib\Packages\Feed\Controllers;
 
 use App\Http\Controllers\Controller;
 

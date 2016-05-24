@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Lib\Packages\Bookings\Models\Booking;
-use App\Lib\Packages\Bookings\BookingsBuilder;
+use App\Lib\Packages\Bookings\BookingBuilder;
 use Validator;
 
 /**
@@ -18,7 +18,7 @@ use Validator;
 class BookingsController extends Controller {
 
     /**
-     * @var BookingsBuilder
+     * @var BookingBuilder
      */
     private $bookingsBuilder;
 
@@ -38,10 +38,10 @@ class BookingsController extends Controller {
 
     /**
      * BookingsController constructor.
-     * @param BookingsBuilder $bookingsBuilder
+     * @param BookingBuilder $bookingsBuilder
      * @param DatabaseManager $databaseManager
      */
-    public function __construct(BookingsBuilder $bookingsBuilder, DatabaseManager $databaseManager)
+    public function __construct(BookingBuilder $bookingsBuilder, DatabaseManager $databaseManager)
     {
         $this->bookingsBuilder  = $bookingsBuilder;
         $this->db               = $databaseManager->connection();
@@ -84,7 +84,6 @@ class BookingsController extends Controller {
     public function get(int $bookingId) : JsonResponse
     {
         $responseCode = 200;
-
         try {
             $response = Booking::findOrFail($bookingId);
         } catch (ModelNotFoundException $e) {

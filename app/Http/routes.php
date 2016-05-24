@@ -61,6 +61,7 @@ Route::delete('accounts/{account_id}', 'AccountsController@delete');
 
 
 
+Route::get('/add-listing', 'HomeController@listing');
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();

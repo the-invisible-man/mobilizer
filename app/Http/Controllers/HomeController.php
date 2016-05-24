@@ -14,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -25,5 +25,12 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function listing(Request $request)
+    {
+        $type = $request->all();
+
+        return $type['type'] == 'r' ? view('list_ride') : view('list_home');
     }
 }

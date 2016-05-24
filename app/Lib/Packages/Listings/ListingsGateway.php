@@ -2,9 +2,9 @@
 
 namespace App\Lib\Packages\Listings;
 
-use App\Lib\Packages\Listings\Contracts\AbstractListing;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\MySqlConnection;
+use App\Lib\Packages\Listings\Contracts\AbstractListing;
 
 /**
  * Class ListingsGateway

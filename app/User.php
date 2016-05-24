@@ -5,7 +5,7 @@ namespace App;
 use App\Lib\Packages\Bookings\Models\Booking;
 use App\Lib\Packages\Listings\Listing;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Lib\Packages\Tools\Traits\UuidModel;
+use App\Lib\Packages\Tools\Traits\UuidModel;
 
 /**
  * Class User

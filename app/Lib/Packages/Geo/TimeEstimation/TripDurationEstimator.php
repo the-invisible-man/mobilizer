@@ -2,16 +2,19 @@
 
 namespace App\Lib\Packages\Geo\TimeEstimation;
 
+use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
 use Illuminate\Cache\Repository as CacheRepository;
 
 /**
  * Class TripDurationEstimator
  * @package App\Lib\Packages\Geo
- * @author Carlos Granados <granados.carlos91@gmail.com>
+ * @author Carlos Granados <carlos@polivet.org>
  */
 class TripDurationEstimator
 {
+    use ConfigValidatorTrait;
+
     /**
      * @var GeoServiceInterface
      */
@@ -28,6 +31,11 @@ class TripDurationEstimator
     private $config;
 
     /**
+     * @var array
+     */
+    protected $requiredConfig = ['cache-ttl'];
+
+    /**
      * TripDurationEstimator constructor.
      * @param array $config
      * @param GeoServiceInterface $geoService
@@ -36,6 +44,7 @@ class TripDurationEstimator
     public function __construct(array $config, GeoServiceInterface $geoService, CacheRepository $cache)
     {
         $this->geoService   = $geoService;
+        $this->config       = $this->validateConfig($config);
         $this->cache        = $cache;
     }
 
@@ -77,11 +86,14 @@ class TripDurationEstimator
     private function cacheKeyForZip(string $startingZip, string $destinationZip) : string
     {
         // Some zip codes in the US start with 0, the smallest zip code is 00501,
-        // currently in use by the IRS. We will convert to int and multiply both
+        // currently  in use by the IRS. We will convert to int and multiply both
         // values, then generate a hash.
         $startingZip        = (int)$startingZip * 0x10;
         $destinationZip     = (int)$destinationZip * 0x10;
 
+        // We'll enforce the smaller zip code to always come before the larger zip
+        // code. This will allows us to always generate a seed that will work
+        // regardless of the order that the zip code arguments are passed
         if ($startingZip > $destinationZip) {
             $seed = $destinationZip . $startingZip;
         } else {
@@ -89,8 +101,8 @@ class TripDurationEstimator
         }
 
         // Now that we've created a seed based on the zip codes we can run it through
-        // a hash algorithm and return. We will use sha256 to do the best we can to
-        // avoid any collisions.
+        // the  sha256 algorithm and  return the generated hash to be uses as a cache
+        // key that works two ways.
         return hash('sha256', $seed);
     }
 }

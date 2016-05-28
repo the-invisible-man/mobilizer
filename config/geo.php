@@ -1,6 +1,6 @@
 <?php
 
-use App\Lib\Packages\Geo\Services\Google;
+use App\Lib\Packages\Geo\Services\Google\GoogleMaps;
 
 return [
 
@@ -15,14 +15,15 @@ return [
     | when automatically resolving class dependencies for injection.
     |
     */
-    'default'   => Google::class,
+    'default'   => GoogleMaps::class,
 
     'drivers'   => [
 
         // Currently we have a max of 150,000
         // requests per day that we can use.
         'google' => [
-            'key'   => 'AIzaSyB7-veSR-bmwjhQNXSPPIKAJRTRG5CzZZ8'
+            'key'   => 'AIzaSyB7-veSR-bmwjhQNXSPPIKAJRTRG5CzZZ8',
+            'url'   => 'https://maps.googleapis.com/maps/api/directions/json'
         ]
     ],
 

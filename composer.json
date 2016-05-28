@@ -12,8 +12,7 @@
         "barryvdh/laravel-ide-helper": "^2.1",
         "laravel/socialite": "~2.0",
         "ramsey/uuid": "^3.4",
-        "predis/predis": "^1.0",
-        "php-google-maps/php-google-maps": " g "
+        "predis/predis": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

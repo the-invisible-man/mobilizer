@@ -68,27 +68,38 @@
                         origin: originLatLong,
                         destination: wellFargoCenter,
                         travelMode: google.maps.TravelMode.DRIVING,
-                        provideRouteAlternatives: true
+                        provideRouteAlternatives: true,
+                        unitSystem: google.maps.UnitSystem.IMPERIAL
                     };
 
                     directionsService.route(directionsRequest, function(result, status) {
                         if (status == google.maps.DirectionsStatus.OK) {
                             handleRouteDisplay(directionsDisplay, result);
                         } else {
-
+                            handleNoMatchingRoute();
                         }
                     });
                 });
             });
         });
 
+        function handleNoMatchingRoute() {
+
+        }
+
         function handleRouteDisplay(displayService, result) {
             var list_r = '';
             var domRouteResults = $("#route_results");
             var domRouteResultsHolder = $("#route_results_holder");
             var starting = $("#autocomplete").val();
+            var selected_user_route = $("#selected_user_route");
 
             $("#number_of_routes").html(result.routes.length);
+
+            // Set first route as default selected route
+            selected_user_route.val(result.routes[0]["overview_polyline"]);
+
+            console.dir(result);
 
             if (result.routes.length > 1) {
                 $("#route_plural").html('s');
@@ -98,7 +109,9 @@
             displayService.setDirections(result);
 
             for (var i = 0; i < result.routes.length; i++) {
-                list_r = list_r + '<li class="booking-item user_route_item" id="' + i + '"><i class="fa fa-car"></i><span class="booking-item-feature-title"><span class="via">via</span> ' + result.routes[i]["summary"] +' </li>';
+                var class_ = i == 0 ? "user_route_item_active" : '';
+                var icon_class = i == 0 ? "" : 'hidden';
+                list_r = list_r + '<li style="padding-bottom:3px;" class="booking-item user_route_item ' + class_ + '" id="' + i + '"><i class="fa fa-car"></i><span class="booking-item-feature-title"><span class="via">via</span> ' + result.routes[i].summary + '<br><span style="color:green">' + result.routes[i].legs[0].distance.text + ' | ' + result.routes[i].legs[0].duration.text + '</span></span> <i class="' + icon_class + ' fa-check-circle-o fa-check-icon_selected_active-o icon_selected_active fa icon_selected"></i></li>';
             }
 
             starting = starting.split(',');
@@ -112,7 +125,16 @@
             }
 
             $(".user_route_item").click(function () {
+
+                var icon_selected = $(".icon_selected");
+                var selected_route = parseInt($(this).attr("id"));
+
+                $(".user_route_item").removeClass("user_route_item_active");
+                $(this).addClass("user_route_item_active");
+                icon_selected.addClass("hidden");
+                $(".icon_selected", this).removeClass("hidden");
                 displayService.setRouteIndex(parseInt($(this).attr("id")));
+                selected_user_route.val(result.routes[selected_route]["overview_polyline"]);
             });
         }
 

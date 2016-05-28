@@ -20,8 +20,7 @@ class CreateAddressesTable extends Migration
             $table->string('state');
             $table->string('zip');
             $table->string('country');
-            $table->float('lat', 10, 6);
-            $table->float('long', 10, 6);
+            $table->timestamps();
         });
     }
 

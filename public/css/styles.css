@@ -7497,6 +7497,16 @@ fieldset[disabled] .datepicker table tr td span.active.disabled:hover.active {
   background: #4d4d4d;
   color: #fff;
 }
+.user_route_item_active {
+  color: #737373;
+  border: 1px solid #ed8323;
+  -webkit-box-shadow: 0 2px 1px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 1px rgba(0,0,0,0.2);
+}
+.icon_selected_active {
+  float:right !important;
+  border:0 !important;
+}
 .user-profile-sidebar {
   -webkit-border-radius: 5px;
   border-radius: 5px;

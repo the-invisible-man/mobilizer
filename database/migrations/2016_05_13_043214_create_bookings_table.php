@@ -14,12 +14,12 @@ class CreateBookingsTable extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->uuid('id')->index()->unique();
-            $table->uuid('fk_users_id')->index();
+            $table->uuid('fk_user_id')->index();
             $table->uuid('fk_address_id')->index();
+            $table->uuid('fk_user_route_id')->index();
+            $table->uuid('fk_listing_id')->index();
             $table->integer('total_people');
-            $table->string('message');
-            $table->boolean('brings_dog');
-            $table->boolean('brings_cat');
+            $table->char('status', 1);
             $table->timestamps();
         });
     }

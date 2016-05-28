@@ -10,7 +10,8 @@
     </div>
     <div class="container">
         <div class="row">
-            <form role="form">
+            <form role="form" name="list_user_ride" id="list_user_ride_form">
+                <input type="hidden" value="0" id="selected_user_route" name="selected_user_route"/>
                 <div class="col-md-8 col-md-offset-2">
                     <div class="row">
                         <div class="col-md-12">
@@ -59,10 +60,10 @@
                         </div>
                         <div class="row" id="route_results_holder">
                             <div class="col-md-12">
-                                <center>Please choose a preferred route. We will use this information to match passengers with the ride closest to them.</center>
+                                <strong><center>Please choose a preferred route. We will use this information to match passengers with the ride closest to them.</center></strong>
                             </div>
                             <div class="gap"></div>
-                            <div class="col-md-11 col-md-offset-1">
+                            <div class="col-md-12">
                                 <strong>Found <span id="number_of_routes"></span> route<span id="route_plural"></span> coming from <span id="starting_address" style="color:green"></span> to Philly:</strong>
                                 <ul class="booking-item-features booking-item-features-expand mb30 clearfix" id="route_results">
 
@@ -70,14 +71,14 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div id="map-canvas" style="width:100%; height:500px;"></div>
+                            <div id="map-canvas" style="width:100%; height:400px;"></div>
                         </div>
                         <div class="gap"></div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 Check if you'd be open to allowing passengers to bring their pet along. Be sure that pets are safe AT ALL times. I mean, make sure you're ALL safe... but the pets more.
                                 <br><br>
-                                <div class="row">
+                                <div class="row" style="padding-left:20px;">
                                     <div class="checkbox col-md-8 col-md-offset-4">
                                         <label><input class="i-check" type="checkbox" />Passengers can bring a dog!</label>
                                     </div>
@@ -85,7 +86,7 @@
                                         <label><input class="i-check" type="checkbox" />Passengers can bring a cat!</label>
                                     </div>
                                     <div class="checkbox col-md-8 col-md-offset-4">
-                                        <label><input class="i-check" type="checkbox" />I like to have <strong><span style="color:#00cc00">fun</span></strong> :)</label>
+                                        <label><input class="i-check" type="checkbox" />This is a <strong><span style="color:#00cc00">smoke</span></strong> friendly vehicle:)</label>
                                     </div>
                                 </div>
                             </div>

@@ -4,63 +4,60 @@ namespace App\Lib\Packages\Geo\Services\Google;
 
 use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
-use Guzzle;
+use App\Lib\Packages\Geo\Services\Google\API\Geocode;
+use App\Lib\Packages\Geo\Services\Google\Services\Directions;
 
 /**
- * Class Google
+ * Class GoogleMaps
+ *
+ * This clase merges the functionality of each Google Maps
+ * API in a single object that obeys the GeoServiceInterface contract
+ *
  * @package App\Lib\Packages\Geo\GeoServices
  * @author Carlos Granados <granados.carlos91@gmail.com>
  */
 class GoogleMaps implements GeoServiceInterface {
 
-    use ConfigValidatorTrait;
-
     /**
-     * @var array
+     * @var GoogleMapsAPI[]|Directions[]
      */
-    private $config;
-
-    /**
-     * @var array
-     */
-    protected $requiredConfig   = ['key', 'url'];
-
-    const   DRIVING = 'driving',
-            WALKING = 'walking',
-            TRANSIT = 'transit';
+    private $services;
 
     /**
      * GoogleMaps constructor.
-     * @param array $config
+     * @param Directions $directions
+     * @param Geocode $geocode
      */
-    public function __construct(array $config)
+    public function __construct(Directions $directions, Geocode $geocode)
     {
-        $this->config = $this->validateConfig($config);
+        $this->services['directions']   = $directions;
+        $this->services['geocode']      = $geocode;
     }
 
     /**
+     * Returns duration in minutes
+     *
      * @param string $startingZip
      * @param string $destinationZip
+     * @param string $travelMode
+     * @param string $format
      * @return string
      */
-    public function estimateTripDurationByZip(string $startingZip, string $destinationZip) : string
+    public function estimateTripDurationByZip(string $startingZip, string $destinationZip, $travelMode=Directions::DRIVING, $format=Directions::TO_MINUTES) : string
     {
+        $response = $this->directions($startingZip, $destinationZip, $travelMode);
 
+        return $response["routes"]["legs"]["duration"][$format];
     }
 
     /**
      * @param string $origin
      * @param string $destination
-     * @param string $mode
+     * @param string $travelMode
      * @return array
      */
-    public function directions(string $origin, string $destination, string $mode=self::DRIVING) : array
+    public function directions(string $origin, string $destination, string $travelMode=Directions::DRIVING) : array
     {
-
-    }
-
-    private function request()
-    {
-
+        return $this->services['directions']->getDirections($origin, $destination, $travelMode);
     }
 }

@@ -75,7 +75,7 @@ class TripDurationEstimator
      */
     private function grabFreshFromZip(string $startingZip, string $destinationZip) : string
     {
-
+        return $this->geoService->estimateTripDurationByZip($startingZip, $destinationZip);
     }
 
     /**

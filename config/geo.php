@@ -1,6 +1,7 @@
 <?php
 
 use App\Lib\Packages\Geo\Services\Google\GoogleMaps;
+use App\Lib\Packages\Geo\Services\Google\GoogleMapsAPI;
 
 return [
 
@@ -19,11 +20,20 @@ return [
 
     'drivers'   => [
 
-        // Currently we have a max of 150,000
-        // requests per day that we can use.
+        // Currently we have a max of 150,000 requests per day that we can use.
         'google' => [
+
             'key'   => 'AIzaSyB7-veSR-bmwjhQNXSPPIKAJRTRG5CzZZ8',
-            'url'   => 'https://maps.googleapis.com/maps/api/directions/json'
+
+            'directions-api' => [
+                'url'           => 'https://maps.googleapis.com/maps/api/directions/json',
+                'responseType'  => GoogleMapsAPI::JSON
+            ],
+
+            'geocode-api'   => [
+                'url'           => 'https://maps.googleapis.com/maps/api/geocode/json',
+                'responseType'  => GoogleMapsAPI::JSON
+            ]
         ]
     ],
 

@@ -2,12 +2,14 @@
 
 namespace App\Lib\Packages\Geo\ServiceProvider;
 
+use Guzzle\Http\Client;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use App\Lib\Packages\Geo\TimeEstimation\TripDurationEstimator;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
 use App\Lib\Packages\Geo\Services\GeocodeManager;
-use App\Lib\Packages\Geo\Services\Google\GoogleMaps;
+use App\Lib\Packages\Geo\Services\Google\Services\Directions;
+use App\Lib\Packages\Geo\Services\Google\API\Geocode;
 
 class GeoServiceProvider extends ServiceProvider
 {
@@ -29,8 +31,20 @@ class GeoServiceProvider extends ServiceProvider
             return new TripDurationEstimator($config, $geoService, $cache);
         });
 
-        $this->app->singleton(GoogleMaps::class, function (Application $app) {
+        $this->app->singleton(Directions::class, function (Application $app) {
+            $config             = $app['config']['geo.drivers.google.directions-api'];
+            $config['apiKey']   = $app['config']['geo.drivers.google.key'];
+            $httpClient         = new Client();
 
+            return new Directions($config, $httpClient);
+        });
+
+        $this->app->singleton(Geocode::class, function (Application $app) {
+            $config             = $app['config']['geo.drivers.google.geocode-api'];
+            $config['apiKey']   = $app['config']['geo.drivers.google.key'];
+            $httpClient         = new Client();
+
+            return new Geocode($config, $httpClient);
         });
     }
 }

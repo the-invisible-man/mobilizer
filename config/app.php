@@ -150,6 +150,7 @@ return [
         Lib\Packages\Tools\ToolsServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
+        App\Lib\Packages\Geo\ServiceProvider\GeoServiceProvider::class,
 
         /*
          * Application Service Providers...

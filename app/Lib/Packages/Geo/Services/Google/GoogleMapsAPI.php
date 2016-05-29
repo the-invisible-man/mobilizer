@@ -5,6 +5,7 @@ namespace App\Lib\Packages\Geo\Services\Google;
 use App\Lib\Packages\Core\Exceptions\ConfigNotFoundException;
 use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
 use Guzzle\Http\Client;
+use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Message\Response;
 
 /**
@@ -75,9 +76,22 @@ abstract class GoogleMapsAPI {
     {
         $url            = $this->getConfig('url') . $endpoint;
         $data['key']    = $this->getConfig('apiKey');
-        $request        = $this->httpClient->createRequest($method, $url, $data);
+        $options        = null;
 
-        return $this->handleResponse($request->send());
+        if ($method == self::GET) {
+            $options    = ['query' => $data];
+            $data       = null;
+        }
+
+        $request        = $this->httpClient->createRequest($method, $url, null, $data, $options);
+
+        try {
+            $response = $request->send();
+        }
+        catch (ClientErrorResponseException $e){
+            throw $e;
+        }
+        return $this->handleResponse($response);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Lib\Packages\Geo\TimeEstimation;
 
 use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
+use App\Lib\Packages\Geo\Services\Google\API\Directions;
 use Illuminate\Cache\Repository as CacheRepository;
 
 /**
@@ -31,11 +32,6 @@ class TripDurationEstimator
     private $config;
 
     /**
-     * @var array
-     */
-    protected $requiredConfig = ['cache-ttl'];
-
-    /**
      * TripDurationEstimator constructor.
      * @param array $config
      * @param GeoServiceInterface $geoService
@@ -43,17 +39,18 @@ class TripDurationEstimator
      */
     public function __construct(array $config, GeoServiceInterface $geoService, CacheRepository $cache)
     {
-        $this->geoService   = $geoService;
-        $this->config       = $this->validateConfig($config);
-        $this->cache        = $cache;
+        $this->requiredConfig   = ['cache_ttl'];
+        $this->geoService       = $geoService;
+        $this->config           = $this->validateConfig($config);
+        $this->cache            = $cache;
     }
 
     /**
      * @param string $startingZip
      * @param string $destinationZip
-     * @return string
+     * @return int|string
      */
-    public function zip(string $startingZip, string $destinationZip) : string
+    public function zip(string $startingZip, string $destinationZip)
     {
         $key = $this->cacheKeyForZip($startingZip, $destinationZip);
 

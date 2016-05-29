@@ -27,7 +27,7 @@ class GeocodeManager extends ServiceManager implements ServiceFactory
      * @param string $name
      * @return mixed
      */
-    public function service(string $name)
+    public function service(string $name = null)
     {
         $name = $name ?: $this->getDefaultService();
 
@@ -39,7 +39,7 @@ class GeocodeManager extends ServiceManager implements ServiceFactory
      *
      * @return string
      */
-    public function getDefaultService()
+    public function getDefaultService() : string
     {
         return $this->app['config']['geo.default'];
     }

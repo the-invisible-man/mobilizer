@@ -2,6 +2,7 @@
 
 namespace App\Lib\Packages\Geo;
 
-class AddressGateway {
+class AddressGateway
+{
 
 }

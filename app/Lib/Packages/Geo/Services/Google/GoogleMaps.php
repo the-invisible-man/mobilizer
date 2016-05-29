@@ -2,10 +2,9 @@
 
 namespace App\Lib\Packages\Geo\Services\Google;
 
-use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
 use App\Lib\Packages\Geo\Services\Google\API\Geocode;
-use App\Lib\Packages\Geo\Services\Google\Services\Directions;
+use App\Lib\Packages\Geo\Services\Google\API\Directions;
 
 /**
  * Class GoogleMaps
@@ -43,11 +42,11 @@ class GoogleMaps implements GeoServiceInterface {
      * @param string $format
      * @return string
      */
-    public function estimateTripDurationByZip(string $startingZip, string $destinationZip, $travelMode=Directions::DRIVING, $format=Directions::TO_MINUTES) : string
+    public function estimateTripDurationByZip(string $startingZip, string $destinationZip, $travelMode=Directions::DRIVING, $format=Directions::AS_MINUTES) : string
     {
         $response = $this->directions($startingZip, $destinationZip, $travelMode);
 
-        return $response["routes"]["legs"]["duration"][$format];
+        return (int)$response["routes"][0]["legs"][0]["duration"][$format] / 60;
     }
 
     /**

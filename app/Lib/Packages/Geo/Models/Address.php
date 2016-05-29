@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Lib\Packages\Geo;
+namespace App\Lib\Packages\Geo\Models;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @author Carlos Granados <carlos@polivet.org>
  */
 class Address extends Model {
+
 
     public function user() : User
     {

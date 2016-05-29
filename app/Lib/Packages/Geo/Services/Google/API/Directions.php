@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Lib\Packages\Geo\Services\Google\Services;
+namespace App\Lib\Packages\Geo\Services\Google\API;
 
 use App\Lib\Packages\Geo\Services\Google\GoogleMapsAPI;
 
@@ -16,8 +16,8 @@ class Directions extends GoogleMapsAPI {
             TRANSIT     = 'transit',
             BICYCLING   = 'bicycling',
 
-            TO_MINUTES  = 'value',
-            TO_STRING   = 'text';
+            AS_MINUTES  = 'value',
+            AS_STRING   = 'text';
 
     /**
      * @param string $origin

@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Lib\Packages\Geo\TimeEstimation\TripDurationEstimator;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
 use App\Lib\Packages\Geo\Services\GeocodeManager;
-use App\Lib\Packages\Geo\Services\Google\Services\Directions;
+use App\Lib\Packages\Geo\Services\Google\API\Directions;
 use App\Lib\Packages\Geo\Services\Google\API\Geocode;
 
 class GeoServiceProvider extends ServiceProvider
@@ -24,7 +24,7 @@ class GeoServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(TripDurationEstimator::class, function (Application $app) {
-            $config         = \Config::get('geo.duration-estimator');
+            $config         = $app['config']['geo.duration-estimator'];
             $geoService     = $app[GeoServiceInterface::class];
             $cache          = $app['cache.store'];
 

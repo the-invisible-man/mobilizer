@@ -87,8 +87,7 @@ abstract class GoogleMapsAPI {
 
         try {
             $response = $request->send();
-        }
-        catch (ClientErrorResponseException $e){
+        } catch (ClientErrorResponseException $e) {
             throw $e;
         }
         return $this->handleResponse($response);
@@ -126,7 +125,7 @@ abstract class GoogleMapsAPI {
      */
     private function handleXml(Response $requestInterface) : array
     {
-        // TODO: implement this shit
+        // TODO: implement this bullshit
         return [];
     }
 

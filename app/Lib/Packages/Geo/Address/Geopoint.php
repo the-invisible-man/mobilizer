@@ -24,8 +24,8 @@ class Geopoint {
     {
         $this->validate($point);
 
-        $this->point[self::LAT]     = (float)$point[self::LAT];
-        $this->point[self::LONG]    = (float)$point[self::LONG];
+        $this->point[self::LAT]     = (float)number_format((float)$point[self::LAT], 6, '.', '');
+        $this->point[self::LONG]    = (float)number_format((float)$point[self::LONG], 6, '.', '');
     }
 
     private function validate(array $point) : array
@@ -59,6 +59,4 @@ class Geopoint {
     {
         return $this->point[self::LONG];
     }
-
-
 }

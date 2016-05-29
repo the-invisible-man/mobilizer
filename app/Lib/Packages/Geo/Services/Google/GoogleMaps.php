@@ -9,7 +9,7 @@ use App\Lib\Packages\Geo\Services\Google\API\Directions;
 /**
  * Class GoogleMaps
  *
- * This clase merges the functionality of each Google Maps
+ * This class merges the functionality of each Google Maps
  * API in a single object that obeys the GeoServiceInterface contract
  *
  * @package App\Lib\Packages\Geo\GeoServices
@@ -34,7 +34,7 @@ class GoogleMaps implements GeoServiceInterface {
     }
 
     /**
-     * Returns duration in minutes
+     * Returns duration in minutes of the shortest route
      *
      * @param string $startingZip
      * @param string $destinationZip

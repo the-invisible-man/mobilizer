@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Lib\Packages\Listings;
+namespace App\Lib\Packages\Listings\Models;
 
 use App\User;
 use App\Lib\Packages\Geo\Models\Address;

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Lib\Packages\Listings\ListingsGateway;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Lib\Packages\Listings\Listing;
+use App\Lib\Packages\Listings\Models\Listing;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Validator;
 
 /**
@@ -14,9 +16,13 @@ use Validator;
  */
 class ListingsController extends Controller {
 
-    public function __construct()
+    private $listingsGateway;
+
+    public function __construct(ListingsGateway $listingsGateway)
     {
         $this->middleware('auth');
+
+        $this->listingsGateway = $listingsGateway;
     }
 
     /**
@@ -28,10 +34,13 @@ class ListingsController extends Controller {
     protected function validator(array $data) : Validator
     {
         return Validator::make($data, [
-            'first_name'    => 'required|max:255',
-            'last_name'     => 'required|max:255',
-            'email'         => 'required|email|max:255|unique:users',
-            'password'      => 'required|confirmed|min:6',
+            'party_name'            => 'required|min:5|max:255',
+            'start'                 => 'required|date',
+            'end'                   => 'required|date|after:start',
+            'time_of_day'           => 'required|confirmed|min:6',
+            'max_passengers'        => 'required|numeric',
+            'starting_location'     => 'required|min:5',
+            'selected_user_route'   => 'required'
         ]);
     }
 
@@ -46,9 +55,17 @@ class ListingsController extends Controller {
     /**
      * @return JsonResponse
      */
-    public function add() : JsonResponse
+    public function add(Request $request) : JsonResponse
     {
+        $reponseCode = 200;
 
+        try {
+            $response = $this->listingsGateway->create($request->all());
+        } catch (\Exception $e) {
+
+        }
+
+        return $response;
     }
 
     /**

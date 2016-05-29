@@ -33,6 +33,22 @@ class ListingsGateway {
      */
     public function create(array $data) : AbstractListing
     {
+        $required = [
+            'party_name',
+            'additional_info',
+            'start',
+            'end',
+            'max_passengers',
+            'starting_locations',
+            'time_of_day'
+        ];
+
+        $missing = array_diff($required, array_keys($data));
+
+        if (!$missing) {
+            throw new \InvalidArgumentException("Cannot create new listing. Missing required information: [" . implode(',', $missing) . "]");
+        }
+
 
     }
 

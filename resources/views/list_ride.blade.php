@@ -3,7 +3,7 @@
 @section('content')
     <div class="container pad-header">
         <div class="row">
-            <div class="col-md-6 col-md-offset-3">
+            <div class="col-md-8 col-md-offset-4">
                 <h2>List My Ride</h2>
             </div>
         </div>
@@ -19,24 +19,33 @@
                             <div class="form-group">
                                 <label for="InputName">Party Name <span class="sub_text">(A fun little name to give your journey to the DNC)</span></label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="party_name" id="party_name" placeholder="Bernin' The Road" required>
+                                    <input type="text" class="form-control" name="party_name" id="party_name" pattern=".{5,}" required title="Make your party name at least 5 characters." placeholder="Bernin' The Road">
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="InputEmail">Date You're Leaving Your House</label>
-                                <div class="input-group">
-                                    <input class="date-pick form-control" data-date-format="DD d MM yyyy" type="text" />
+                        <div class="input-daterange">
+                            <div class="row" style="margin:2px;">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Date You're Leaving Your House</label>
+                                        <input class="form-control" name="start" type="text" required/>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="InputEmail">Date You're Leaving Philly</label>
-                                <div class="input-group">
-                                    <input class="date-pick form-control" data-date-format="DD d MM yyyy" type="text" />
+                                <div class="col-md-4">
+                                    <label>Approximate Time</label>
+                                    <select name="time_of_day" class="form-control" required>
+                                        <option value="0">Early Morning</option>
+                                        <option value="1" selected>Noon</option>
+                                        <option value="2">Afternoon</option>
+                                        <option value="3">Evening</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Date You're Leaving Philly</label>
+                                        <input class="form-control" name="end" type="text" required/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -44,7 +53,7 @@
                             <div class="form-group">
                                 <label for="InputEmail">Max Passengers</label>
                                 <div class="input-group">
-                                    <input type="numeric" class="form-control bfh-number" placeholder="How many passengers can you fit?">
+                                    <input type="numeric" class="form-control bfh-number" name="max_passengers" placeholder="How many passengers can you fit?" required>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div>
@@ -53,7 +62,7 @@
                             <div class="form-group">
                                 <label for="InputEmail">Starting Point</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control bfh-number" id="autocomplete" placeholder="Address or ZIP Code You're Driving From">
+                                    <input type="text" class="form-control bfh-number" id="autocomplete" name="starting_location" placeholder="Address or ZIP Code You're Driving From" required title = "You have to enter a starting point. You can use your ZIP code.">
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div>
@@ -80,20 +89,17 @@
                                 <br><br>
                                 <div class="row" style="padding-left:20px;">
                                     <div class="checkbox col-md-8 col-md-offset-4">
-                                        <label><input class="i-check" type="checkbox" />Passengers can bring a dog!</label>
+                                        <label><input class="i-check" type="checkbox" name="bringing_dog"/>Passengers can bring a dog!</label>
                                     </div>
                                     <div class="checkbox col-md-8 col-md-offset-4">
-                                        <label><input class="i-check" type="checkbox" />Passengers can bring a cat!</label>
-                                    </div>
-                                    <div class="checkbox col-md-8 col-md-offset-4">
-                                        <label><input class="i-check" type="checkbox" />This is a <strong><span style="color:#00cc00">smoke</span></strong> friendly vehicle:)</label>
+                                        <label><input class="i-check" type="checkbox" name="bringing_cat"/>Passengers can bring a cat!</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="InputMessage">Additional Info</label>
                                 <div class="input-group">
-                                    <textarea name="InputMessage" rows="7" cols="100" placeholder="A short intro" id="InputMessage" class="form-control" required></textarea>
+                                    <textarea name="additional_info" rows="7" cols="100" placeholder="A short intro" id="InputMessage" class="form-control" required></textarea>
                                 </div>
                             </div>
                             <dix class="well well-sm col-md-12 text-center">

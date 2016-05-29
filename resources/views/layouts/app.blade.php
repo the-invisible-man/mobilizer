@@ -552,6 +552,7 @@
     <script src="/js/gridrotator.js"></script>
     <script src="/js/custom.js"></script>
     <script src="/js/ride-book.js"></script>
+    <script src="/js/jquery-deparam.js"></script>
 </div>
 </body>
 

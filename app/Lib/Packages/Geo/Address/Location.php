@@ -10,7 +10,7 @@ use App\Lib\Packages\Geo\Services\Google\API\Geocode;
  * @package App\Lib\Packages\Geo\Address
  * @author Carlos Granados <granados.carlos91@gamil.com>
  */
-class Address
+class Location
 {
     /**
      * @var AddressDatabaseModel;
@@ -18,19 +18,17 @@ class Address
     private $address;
 
     /**
-     * @var Geocode
+     * @var Geopoint
      */
-    private $geocode;
+    private $geopoint;
 
     /**
      * Address constructor.
      * @param AddressDatabaseModel $address
-     * @param Geocode $geocode
      */
-    public function __construct(AddressDatabaseModel $address, Geocode $geocode)
+    public function __construct(AddressDatabaseModel $address = null)
     {
         $this->address = $address;
-        $this->geocode = $geocode;
     }
 
     /**
@@ -39,5 +37,20 @@ class Address
     public function __toString() : string
     {
         // TODO: Implement __toString() method.
+    }
+
+    /**
+     * @param Geopoint $geopoint
+     * @return Location
+     */
+    public function setGeopoint(Geopoint $geopoint)
+    {
+        $this->geopoint = $geopoint;
+        return $this;
+    }
+
+    public function hydrate(AddressDatabaseModel $address)
+    {
+        
     }
 }

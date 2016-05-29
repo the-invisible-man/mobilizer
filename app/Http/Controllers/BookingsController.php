@@ -13,7 +13,7 @@ use Validator;
 /**
  * Class BookingsController
  * @package App\Http\Controllers
- * @author Carlos Granados <carlos@polivet.org>
+ * @author Carlos Granados <granados.carlos91@gmail.com>
  */
 class BookingsController extends Controller {
 

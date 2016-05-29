@@ -25,7 +25,7 @@ class Directions extends GoogleMapsAPI {
      * @param string $travelMode
      * @return array
      */
-    public function getDirections(string $origin, string $destination, string $travelMode=Directions::DRIVING) : array
+    public function getDirections(string $origin, string $destination, string $travelMode = Directions::DRIVING) : array
     {
         $data = [
             'origin'        => $origin,

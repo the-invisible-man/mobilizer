@@ -4,13 +4,12 @@ namespace App\Lib\Packages\Geo\TimeEstimation;
 
 use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
-use App\Lib\Packages\Geo\Services\Google\API\Directions;
 use Illuminate\Cache\Repository as CacheRepository;
 
 /**
  * Class TripDurationEstimator
  * @package App\Lib\Packages\Geo
- * @author Carlos Granados <carlos@polivet.org>
+ * @author Carlos Granados <granados.carlos91@gmail.com>
  */
 class TripDurationEstimator
 {

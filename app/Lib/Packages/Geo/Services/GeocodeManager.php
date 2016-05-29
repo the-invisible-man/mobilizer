@@ -8,7 +8,7 @@ use App\Lib\Packages\Core\Contracts\ServiceManager;
 /**
  * Class GeocodeManager
  * @package App\Lib\Packages\Geo\API
- * @author Carlos Granados <carlos@polivet.org>
+ * @author Carlos Granados <granados.carlos91@gmail.com>
  */
 class GeocodeManager extends ServiceManager implements ServiceFactory
 {

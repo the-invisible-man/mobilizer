@@ -3,7 +3,7 @@
 namespace App\Lib\Packages\Listings;
 
 use App\User;
-use App\Lib\Packages\Geo\Address;
+use App\Lib\Packages\Geo\Models\Address;
 use Illuminate\Database\Eloquent\Model;
 use App\Lib\Packages\Tools\Traits\UuidModel;
 

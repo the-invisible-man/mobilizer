@@ -10,7 +10,7 @@ use Validator;
 /**
  * Class ListingsController
  * @package App\Http\Controllers
- * @author Carlos Granados <carlos@polivet.org>
+ * @author Carlos Granados <granados.carlos91@gmail.com>
  */
 class ListingsController extends Controller {
 

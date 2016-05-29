@@ -17,8 +17,6 @@ class CreateListingsMetadata extends Migration
             $table->uuid('fk_listing_id')->index();
             $table->boolean('dog_friendly')->nullable();
             $table->boolean('cat_friendly')->nullable();
-            $table->string('make')->nullable();
-            $table->string('model')->nullable();
             $table->string('additional_info')->nullable();
             $table->timestamps();
         });

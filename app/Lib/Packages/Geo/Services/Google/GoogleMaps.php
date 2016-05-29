@@ -38,15 +38,22 @@ class GoogleMaps implements GeoServiceInterface {
      *
      * @param string $startingZip
      * @param string $destinationZip
-     * @param string $travelMode
      * @param string $format
+     * @param string $travelMode
      * @return string
      */
-    public function estimateTripDurationByZip(string $startingZip, string $destinationZip, $travelMode=Directions::DRIVING, $format=Directions::AS_MINUTES) : string
+    public function estimateTripDurationByZip(string $startingZip, string $destinationZip, $format = Directions::AS_MINUTES, $travelMode = Directions::DRIVING) : string
     {
         $response = $this->directions($startingZip, $destinationZip, $travelMode);
 
-        return (int)$response["routes"][0]["legs"][0]["duration"][$format] / 60;
+        switch($format) {
+            case Directions::AS_MINUTES:
+                return (int)$response["routes"][0]["legs"][0]["duration"][$format] / 60;
+            case Directions::AS_STRING:
+                return $response["routes"][0]["legs"][0]["duration"][$format];
+            default:
+                throw new \InvalidArgumentException("Invalid format option '{$format}'");
+        }
     }
 
     /**

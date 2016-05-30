@@ -9,9 +9,7 @@ abstract class AbstractDriver
     /**
      * @var array
      */
-    protected $required = [
-        'fk_listing_id'
-    ];
+    protected $required = [];
 
     /**
      * @var string
@@ -23,7 +21,7 @@ abstract class AbstractDriver
      * @param array $data
      * @return AbstractListing
      */
-    abstract public function process(AbstractListing $listing, array $data) : AbstractListing;
+    abstract public function process(AbstractListing $listing, array $data);
 
     /**
      * @param AbstractListing $listing
@@ -40,7 +38,7 @@ abstract class AbstractDriver
      */
     public function validateRequired(array $data, callable $furtherValidation = null)
     {
-        $missing = array_diff($this->required, $data);
+        $missing = array_diff($this->required, array_keys($data));
 
         if (count($missing)) {
             throw new \InvalidArgumentException("Missing required data for listing metadata: " . implode(',', $missing) . " - Type: {$this->type}");

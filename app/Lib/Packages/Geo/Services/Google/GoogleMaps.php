@@ -36,6 +36,16 @@ class GoogleMaps implements GeoServiceInterface {
     }
 
     /**
+     * @param GoogleMapsAPI $mapsAPI
+     * @return $this
+     */
+    public function pushAPIService(GoogleMapsAPI $mapsAPI)
+    {
+        $this->services[get_class($mapsAPI)] = $mapsAPI;
+        return $this;
+    }
+
+    /**
      * Returns duration in minutes of the shortest route
      *
      * @param string $startingZip

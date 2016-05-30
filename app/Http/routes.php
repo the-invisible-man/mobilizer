@@ -45,9 +45,9 @@ Route::group(['middleware' => ['web']], function () {
 
 
 Route::get('listings', 'ListingsController@all');
+Route::post('listings', 'ListingsController@add');
 Route::get('listings/{listing_id}', 'ListingsController@get');
 Route::put('listings/{listing_id}', 'ListingsController@edit');
-Route::post('listings/{listing_id}', 'ListingsController@new');
 Route::delete('listings/{listing_id}', 'ListingsController@delete');
 
 Route::get('bookings', 'BookingsController@all');

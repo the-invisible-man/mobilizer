@@ -26,7 +26,7 @@ abstract class AbstractListing extends Model implements \JsonSerializable {
             STARTING_DATE   = 'starting_date',
             ENDING_DATE     = 'ending_date',
             MAX_OCCUPANTS   = 'max_occupants',
-            ADDITIONAL_INFO = 'addition_info',
+            ADDITIONAL_INFO = 'additional_info',
             ACTIVE          = 'active';
 
     /**
@@ -38,6 +38,11 @@ abstract class AbstractListing extends Model implements \JsonSerializable {
      * @var string
      */
     protected $table = 'listings';
+
+    /**
+     * @var bool
+     */
+    public $incrementing = false;
 
     /**
      * @return string

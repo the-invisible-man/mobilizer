@@ -3,6 +3,7 @@
 namespace App\Lib\Packages\Listings\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Lib\Packages\Tools\Traits\UuidModel;
 
 /**
  * Class ListingRoute
@@ -11,7 +12,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ListingRoute extends Model {
 
+    use UuidModel;
+
+    /**
+     * @var string
+     */
     protected $table = 'listing_routes';
+
+    /**
+     * @var bool
+     */
+    public $incrementing = false;
 
     // Columns
     const   ID              = 'id',

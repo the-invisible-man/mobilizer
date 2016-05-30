@@ -28,7 +28,7 @@ class ListingsController extends Controller {
 
     public function __construct(ListingsGateway $listingsGateway, Writer $log)
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
 
         $this->listingsGateway  = $listingsGateway;
         $this->log              = $log;
@@ -71,14 +71,25 @@ class ListingsController extends Controller {
         $responseCode = 200;
 
         try {
-            $response = $this->listingsGateway->create($request->all())->toArray();
+            $data       = $this->prepareData($request->all());
+            $response   = $this->listingsGateway->create($data)->toArray();
         } catch (\Exception $e) {
             $this->log->error($e->getMessage());
-            $responseCode = 400;
-            $response = ["message" => "Service not available"];
+            $responseCode   = 400;
+            $response       = ["message" => "Service not available"];
         }
 
         return \Response::json($response, $responseCode);
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function prepareData(array $data) : array
+    {
+        $data['fk_user_id'] = "fa59822a-3f55-408c-98a6-e2b7e5905664";
+        return $data;
     }
 
     /**
@@ -90,10 +101,10 @@ class ListingsController extends Controller {
         $responseCode = 200;
 
         try {
-            $response = Listing::findOrFail($listingId);
+            $response = $this->listingsGateway->find($listingId);
         } catch (ModelNotFoundException $e) {
             $responseCode   = 400;
-            $response       = ['message' => "No booking with id of {$listingId} found"];
+            $response       = ['message' => "No listing with id of {$listingId} found"];
         }
 
         return \Response::json($response, $responseCode);

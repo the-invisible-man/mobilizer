@@ -27,7 +27,7 @@ class RideDriver extends AbstractDriver
      */
     protected $allowedTimeOfDay = [
         self::EARLY_MORNING,
-        self::NOON.
+        self::NOON,
         self::AFTERNOON,
         self::EVENING
     ];
@@ -51,7 +51,7 @@ class RideDriver extends AbstractDriver
      * @param array $data
      * @return Ride
      */
-    public function process(AbstractListing $listing, array $data) : Ride
+    public function process(AbstractListing $listing, array $data)
     {
         $this->validate($listing, $data);
 

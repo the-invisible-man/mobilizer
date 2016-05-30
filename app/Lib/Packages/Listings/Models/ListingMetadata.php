@@ -3,6 +3,7 @@
 namespace App\Lib\Packages\Listings\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Lib\Packages\Tools\Traits\UuidModel;
 
 /**
  * Class ListingMetadata
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ListingMetadata extends Model
 {
+    use UuidModel;
+
     // Columns
     const   ID = 'id',
             FK_LISTING_ID       = 'fk_listing_id',
@@ -23,6 +26,11 @@ class ListingMetadata extends Model
      * @var string
      */
     protected $table = 'listings_metadata';
+
+    /**
+     * @var bool
+     */
+    public $incrementing = false;
 
     /**
      * @return string

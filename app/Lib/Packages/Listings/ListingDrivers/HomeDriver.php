@@ -12,7 +12,12 @@ use App\Lib\Packages\Listings\ListingTypes\Home;
  */
 class HomeDriver extends AbstractDriver
 {
-    public function process(AbstractListing $listing, array $data) : Home
+    /**
+     * @param AbstractListing $listing
+     * @param array $data
+     * @return Home
+     */
+    public function process(AbstractListing $listing, array $data)
     {
         // TODO: Implement process() method.
     }

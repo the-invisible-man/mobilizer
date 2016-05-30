@@ -3,6 +3,7 @@
 namespace App\Lib\Packages\Geo\Location;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Lib\Packages\Tools\Traits\UuidModel;
 
 /**
  * Class Location
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Location extends Model
 {
+    use UuidModel;
+
     /**
      * @var Geopoint
      */
@@ -25,6 +28,14 @@ class Location extends Model
             ZIP         = 'zip',
             COUNTRY     = 'country';
 
+    protected $table = 'locations';
+
+    /**
+     * We are using uuid's and not auto-incrementing integers
+     * @var bool
+     */
+    public $incrementing = false;
+
     /**
      * @return string
      */
@@ -37,21 +48,21 @@ class Location extends Model
     }
 
     /**
-     * @param int $id
+     * @param string $id
      * @return $this
      */
-    public function setId(int $id)
+    public function setId(string $id)
     {
         $this->setAttribute(self::ID, $id);
         return $this;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getId() : string
     {
-        return (int)$this->getAttribute(self::ID);
+        return (string)$this->getAttribute(self::ID);
     }
 
     /**

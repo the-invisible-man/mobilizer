@@ -72,20 +72,19 @@ class ListingsGateway {
     /**
      * @var Application
      */
-    private $app;
+    protected $kernel;
 
     /**
      * ListingsGateway constructor.
      * @param DatabaseManager $databaseManager
      * @param LocationGateway $locationGateway
      * @param Application $app
-     * @param string $defaultDriver
      */
-    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway, Application $app, string $defaultDriver = Ride::ListingType)
+    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway, Application $app)
     {
-        $this->db               = $databaseManager->getConnections();
-        $this->locationsGateway = $locationGateway;
-        $this->app              = $app;
+        $this->db                   = $databaseManager->connection();
+        $this->locationsGateway     = $locationGateway;
+        $this->kernel               = $app;
     }
 
     /**
@@ -152,7 +151,20 @@ class ListingsGateway {
         /**
          * @var AbstractListing $listing
          */
-        $listing = new $this->listingTypes[$data]($data);
+        $listing = new $this->listingTypes[$data['type']];
+
+        $listing->setFkUserId($data[AbstractListing::FK_USER_ID]);
+        $listing->setFkLocationId($data[AbstractListing::FK_LOCATION_ID]);
+        $listing->setPartyName($data[AbstractListing::PARTY_NAME]);
+        $listing->setType($data[AbstractListing::TYPE]);
+        $listing->setMaxOccupants($data[AbstractListing::MAX_OCCUPANTS]);
+        $listing->setAdditionalInfo($data[AbstractListing::ADDITIONAL_INFO]);
+
+        $startingDate = new \DateTime($data[AbstractListing::STARTING_DATE]);
+        $endingDate   = new \DateTime($data[AbstractListing::ENDING_DATE]);
+
+        $listing->setStartingDate($startingDate);
+        $listing->setEndingDate($endingDate);
 
         $listing->save();
 
@@ -168,7 +180,7 @@ class ListingsGateway {
         $type = $type?: $this->currentDriver;
 
         if (!isset($this->drivers[$type])) {
-            $this->drivers[$type] = $this->app[$this->listingDrivers[$type]];
+            $this->drivers[$type] = $this->kernel->make($this->listingDrivers[$type]);
         }
 
         return $this->drivers[$type];
@@ -189,7 +201,7 @@ class ListingsGateway {
 
         $missing        = array_diff($this->required, array_keys($data));
 
-        if (!$missing) {
+        if (count($missing)) {
             throw new \InvalidArgumentException("Cannot create new listing. Missing required information: [" . implode(',', $missing) . "]");
         }
     }

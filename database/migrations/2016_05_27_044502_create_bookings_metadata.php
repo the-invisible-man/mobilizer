@@ -30,6 +30,6 @@ class CreateBookingsMetadata extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('bookings_metadata');
     }
 }

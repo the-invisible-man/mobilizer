@@ -2,6 +2,8 @@
 
 namespace App\Lib\Packages\Geo\Contracts;
 
+use App\Lib\Packages\Geo\Responses\GeocodeResponse;
+
 /**
  * Interface GeoServiceInterface
  * @package App\Lib\Packages\Geo\Contracts
@@ -16,4 +18,6 @@ interface GeoServiceInterface {
      * @return string
      */
     public function estimateTripDurationByZip(string $startingZip, string $destinationZip) : string;
+
+    public function geocode(string $address) : GeocodeResponse;
 }

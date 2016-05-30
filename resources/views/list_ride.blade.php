@@ -90,10 +90,10 @@
                                 <br><br>
                                 <div class="row" style="padding-left:20px;">
                                     <div class="checkbox col-md-8 col-md-offset-4">
-                                        <label><input class="i-check" type="checkbox" name="bringing_dog"/>Passengers can bring a dog!</label>
+                                        <label><input class="i-check" type="checkbox" name="dog_friendly"/>Passengers can bring a dog!</label>
                                     </div>
                                     <div class="checkbox col-md-8 col-md-offset-4">
-                                        <label><input class="i-check" type="checkbox" name="bringing_cat"/>Passengers can bring a cat!</label>
+                                        <label><input class="i-check" type="checkbox" name="cat_friendly"/>Passengers can bring a cat!</label>
                                     </div>
                                 </div>
                             </div>

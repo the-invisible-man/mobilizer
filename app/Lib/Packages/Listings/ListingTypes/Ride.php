@@ -3,7 +3,7 @@
 namespace App\Lib\Packages\Listings\ListingTypes;
 
 use App\Lib\Packages\Listings\Contracts\AbstractListing;
-
+use App\Lib\Packages\Listings\Models\ListingMetadata;
 /**
  * Class RideListing
  * @package App\Lib\Packages\Listings\Contracts
@@ -14,17 +14,31 @@ class Ride extends AbstractListing
     const ListingType = 'R';
 
     /**
+     * @var ListingMetadata
+     */
+    private $metadata;
+
+    /**
      * @var array
      */
     public static $required = ['time_of_day', 'selected_user_route'];
 
-    // protected function
+    /**
+     * @param ListingMetadata $listingMetadata
+     * @return $this
+     */
+    public function setMetadata(ListingMetadata $listingMetadata)
+    {
+        $this->metadata = $listingMetadata;
+        return $this;
+    }
 
     /**
-     * @return array
+     * @return ListingMetadata
      */
-    public function getData() : array
+    public function getMetadata()
     {
-
+        return $this->metadata;
     }
+
 }

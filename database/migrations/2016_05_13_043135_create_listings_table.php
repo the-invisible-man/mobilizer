@@ -21,6 +21,7 @@ class CreateListingsTable extends Migration
             $table->date('starting_date');
             $table->date('ending_date');
             $table->integer('max_occupants');
+            $table->string('additional_info')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
         });
@@ -33,6 +34,6 @@ class CreateListingsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('listings');
     }
 }

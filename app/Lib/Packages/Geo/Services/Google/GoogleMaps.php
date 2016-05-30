@@ -3,8 +3,10 @@
 namespace App\Lib\Packages\Geo\Services\Google;
 
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
+use App\Lib\Packages\Geo\Location\Geopoint;
 use App\Lib\Packages\Geo\Services\Google\API\Geocode;
 use App\Lib\Packages\Geo\Services\Google\API\Directions;
+use App\Lib\Packages\Geo\Responses\GeocodeResponse;
 
 /**
  * Class GoogleMaps
@@ -18,7 +20,7 @@ use App\Lib\Packages\Geo\Services\Google\API\Directions;
 class GoogleMaps implements GeoServiceInterface {
 
     /**
-     * @var GoogleMapsAPI[]|Directions[]
+     * @var GoogleMapsAPI[]|Directions[]|Geocode[]
      */
     private $services;
 
@@ -54,6 +56,52 @@ class GoogleMaps implements GeoServiceInterface {
             default:
                 throw new \InvalidArgumentException("Invalid format option '{$format}'");
         }
+    }
+
+    /**
+     * @param string $address
+     * @return GeocodeResponse
+     */
+    public function geocode(string $address) : GeocodeResponse
+    {
+        return $this->formatGeocodeResponse($this->services['geocode']->geocode($address));
+    }
+
+    /**
+     * @param array $response
+     * @return GeocodeResponse
+     */
+    private function formatGeocodeResponse(array $response) : GeocodeResponse
+    {
+        $return = new GeocodeResponse();
+
+        foreach ($response['results'][0]['address_components'] as $component) {
+            switch($component['types'][0]) {
+                case "street_number":
+                    $return->setStreetNumber($component['long_name']);
+                    break;
+                case "route":
+                    $return->setStreetName($component['long_name']);
+                    break;
+                case "locality":
+                    $return->setCity($component['long_name']);
+                    break;
+                case "administrative_area_level_2":
+                    $return->setCounty($component['long_name']);
+                    break;
+                case "administrative_area_level_1":
+                    $return->setState($component['short_name']);
+                    break;
+                case "country":
+                    $return->setCountry($component['long_name']);
+                    break;
+                case "postal_code":
+                    $return->setZip($component['long_name']);
+                    break;
+            }
+        }
+
+        return $return;
     }
 
     /**

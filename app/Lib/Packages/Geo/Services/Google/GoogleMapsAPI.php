@@ -7,6 +7,7 @@ use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
 use Guzzle\Http\Client;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Message\Response;
+use App\Lib\Packages\Geo\Services\Google\Exceptions\GoogleMapsRequestNotOkatException;
 
 /**
  * Class GoogleMapsRequest
@@ -100,6 +101,7 @@ abstract class GoogleMapsAPI {
      */
     private function handleResponse(Response $requestInterface) : array
     {
+
         switch($this->getConfig('responseType')) {
             case self::JSON:
                 return $this->handleJson($requestInterface);
@@ -111,12 +113,24 @@ abstract class GoogleMapsAPI {
     }
 
     /**
+     * @param string $status
+     * @throws GoogleMapsRequestNotOkatException
+     */
+    public function statusIsOk(string $status) {
+        if ($status != "OK") {
+            throw new GoogleMapsRequestNotOkatException($status);
+        }
+    }
+
+    /**
      * @param Response $requestInterface
      * @return array
      */
     private function handleJson(Response $requestInterface) : array
     {
-        return json_decode($requestInterface->getBody(), true);
+        $response = json_decode($requestInterface->getBody(), true);
+        $this->statusIsOk($response['status']);
+        return $response;
     }
 
     /**

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Lib\Packages\Listings\ListingsGateway;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Lib\Packages\Listings\Models\Listing;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Log\Writer;
 use Validator;
 
 /**
@@ -16,13 +16,22 @@ use Validator;
  */
 class ListingsController extends Controller {
 
+    /**
+     * @var ListingsGateway
+     */
     private $listingsGateway;
 
-    public function __construct(ListingsGateway $listingsGateway)
+    /**
+     * @var Writer
+     */
+    private $log;
+
+    public function __construct(ListingsGateway $listingsGateway, Writer $log)
     {
         $this->middleware('auth');
 
-        $this->listingsGateway = $listingsGateway;
+        $this->listingsGateway  = $listingsGateway;
+        $this->log              = $log;
     }
 
     /**
@@ -54,20 +63,22 @@ class ListingsController extends Controller {
     }
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
     public function add(Request $request) : JsonResponse
     {
-        $reponseCode = 200;
+        $responseCode = 200;
 
         try {
-            $data['type'] = strtoupper($data['type']);
-            $response = $this->listingsGateway->create($request->all());
+            $response = $this->listingsGateway->create($request->all())->toArray();
         } catch (\Exception $e) {
-
+            $this->log->error($e->getMessage());
+            $responseCode = 400;
+            $response = ["message" => "Service not available"];
         }
 
-        return $response;
+        return \Response::json($response, $responseCode);
     }
 
     /**

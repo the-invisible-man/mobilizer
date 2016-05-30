@@ -14,7 +14,6 @@ class CreateLocationsTable extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->uuid('id')->index()->unique();
-            $table->uuid('fk_user_id')->index();
             $table->string('street')->nullable();
             $table->string('city');
             $table->string('state');
@@ -31,6 +30,6 @@ class CreateLocationsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('locations');
     }
 }

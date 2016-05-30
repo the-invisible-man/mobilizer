@@ -2,6 +2,7 @@
 
 namespace App\Lib\Packages\Listings\Contracts;
 
+use App\Lib\Packages\Geo\Location\Location;
 use Illuminate\Database\Eloquent\Model;
 use App\Lib\Packages\Geo\Models\Address;
 use App\Lib\Packages\Tools\Traits\UuidModel;
@@ -25,6 +26,7 @@ abstract class AbstractListing extends Model implements \JsonSerializable {
             STARTING_DATE   = 'starting_date',
             ENDING_DATE     = 'ending_date',
             MAX_OCCUPANTS   = 'max_occupants',
+            ADDITIONAL_INFO = 'addition_info',
             ACTIVE          = 'active';
 
     /**
@@ -38,36 +40,36 @@ abstract class AbstractListing extends Model implements \JsonSerializable {
     protected $table = 'listings';
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getId() : string
     {
-        return (int)$this->getAttribute(self::ID);
+        return (string)$this->getAttribute(self::ID);
     }
 
     /**
-     * @param $id
+     * @param string $id
      * @return $this
      */
-    public function setId(int $id)
+    public function setId(string $id)
     {
         $this->setAttribute(self::ID, $id);
         return $this;
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getFkUserId()
     {
-        return (int)$this->getAttribute(self::FK_USER_ID);
+        return (string)$this->getAttribute(self::FK_USER_ID);
     }
 
     /**
-     * @param int $userId
+     * @param string $userId
      * @return $this
      */
-    public function setFkUserId(int $userId)
+    public function setFkUserId(string $userId)
     {
         $this->setAttribute(self::FK_USER_ID, $userId);
         return $this;
@@ -75,18 +77,18 @@ abstract class AbstractListing extends Model implements \JsonSerializable {
 
 
     /**
-     * @return int
+     * @return string
      */
     public function getFkLocationId()
     {
-        return (int)$this->getAttribute(self::FK_LOCATION_ID);
+        return (string)$this->getAttribute(self::FK_LOCATION_ID);
     }
 
     /**
-     * @param int $locationId
+     * @param string $locationId
      * @return $this
      */
-    public function setFkLocationId(int $locationId)
+    public function setFkLocationId(string $locationId)
     {
         $this->setAttribute(self::FK_LOCATION_ID, $locationId);
         return $this;
@@ -183,6 +185,24 @@ abstract class AbstractListing extends Model implements \JsonSerializable {
     }
 
     /**
+     * @param string $additionalInfo
+     * @return $this
+     */
+    public function setAdditionalInfo(string $additionalInfo)
+    {
+        $this->setAttribute(self::ADDITIONAL_INFO, $additionalInfo);
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdditionalInfo()
+    {
+        return $this->getAttribute(self::ADDITIONAL_INFO);
+    }
+
+    /**
      * @return bool
      */
     public function isActive()
@@ -209,10 +229,10 @@ abstract class AbstractListing extends Model implements \JsonSerializable {
     }
 
     /**
-     * @return Address
+     * @return Location
      */
-    public function address() : Address
+    public function location() : Location
     {
-        $this->hasOne(Address::class);
+        return $this->hasOne(Location::class);
     }
 }

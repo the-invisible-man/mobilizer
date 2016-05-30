@@ -10,7 +10,7 @@ class Geocode extends GoogleMapsAPI
      * @param string $address
      * @return array
      */
-    public function getLatLong(string $address) : array
+    public function geocode(string $address) : array
     {
         $data = [
             'address' => $address

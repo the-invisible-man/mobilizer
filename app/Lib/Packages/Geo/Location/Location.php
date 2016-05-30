@@ -55,24 +55,6 @@ class Location extends Model
     }
 
     /**
-     * @param int $userId
-     * @return $this
-     */
-    public function setFkUserId(int $userId)
-    {
-        $this->setAttribute(self::FK_USER_ID, $userId);
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFkUserId()
-    {
-        return (int)$this->getAttribute(self::FK_USER_ID);
-    }
-
-    /**
      * @param string $street
      * @return $this
      */
@@ -170,10 +152,5 @@ class Location extends Model
     {
         $this->geopoint = $geopoint;
         return $this;
-    }
-
-    public function getLocationId() : int
-    {
-
     }
 }

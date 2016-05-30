@@ -27,6 +27,6 @@ class CreateListingRoutes extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('listing_routes');
     }
 }

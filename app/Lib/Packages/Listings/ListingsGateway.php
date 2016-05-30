@@ -58,14 +58,13 @@ class ListingsGateway {
      * @var array
      */
     private $required = [
+        'fk_user_id',
         'party_name',
-        'additional_info',
+        'type',
         'starting_date',
         'ending_date',
         'max_occupants',
-        'starting_location',
-        'fk_user_id',
-        'type'
+        'additional_info',
     ];
 
     /**
@@ -117,12 +116,16 @@ class ListingsGateway {
         // We're gonna wrap these two writes in a transaction
         $this->db->beginTransaction();
 
-        $location               = $this->locationsGateway->create($data['starting_location']);
-        $data['fk_location_id'] = $location->getLocationId();
-        $listing                = $this->insert($data);
+        // This is hacky as f@#k
+        if (isset($data['starting_location'])) {
+            $location = $this->locationsGateway->create($data['starting_location']);
+            $data['fk_location_id'] = $location->getId();
+        }
+
+        $listing = $this->insert($data);
 
         // Use driver to process listing type specific metadata
-        $this->getDriver()->process($listing);
+        $this->getDriver()->process($listing, $data);
 
         // We're done
         $this->db->commit();

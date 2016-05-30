@@ -6,7 +6,7 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Address
+ * Class Location
  * @package App\Lib\Packages\Geo
  * @author Carlos Granados <carlos@polivet.org>
  */

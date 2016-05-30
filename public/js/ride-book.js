@@ -68,7 +68,7 @@
             'party_name': function (value) {
 
             },
-            'max_passengers': function (value) {
+            'max_occupants': function (value) {
                 if (isNaN($.trim(value))) {
                     throw "Maximum number of passengers is supposed to be a number, you entered \"" + value + "\"";
                 }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAddressesTable extends Migration
+class CreateListingRoutes extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,10 @@ class CreateAddressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('addresses', function (Blueprint $table) {
+        Schema::create('listing_routes', function (Blueprint $table) {
             $table->uuid('id')->index()->unique();
-            $table->uuid('fk_user_id')->index();
-            $table->string('street');
-            $table->string('city');
-            $table->string('state');
-            $table->string('zip');
-            $table->string('country');
+            $table->text('overview_path');
+            $table->boolean('synchronized')->default(false);
             $table->timestamps();
         });
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Lib\Packages\Geo\Address;
+namespace App\Lib\Packages\Geo\Location;
 
 /**
  * Class Geopoint
- * @package App\Lib\Packages\Geo\Address
+ * @package App\Lib\Packages\Geo\Location
  * @author Carlos Granados <granados.carlos91@gmail.com>
  */
 class Geopoint {

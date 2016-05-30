@@ -19,7 +19,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | SMTP Host Address
+    | SMTP Host Location
     |--------------------------------------------------------------------------
     |
     | Here you may provide the host address of the SMTP server used by your
@@ -45,7 +45,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Global "From" Address
+    | Global "From" Location
     |--------------------------------------------------------------------------
     |
     | You may wish for all e-mails sent by your application to be sent from

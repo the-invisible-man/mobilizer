@@ -15,6 +15,7 @@ class CreateBookingsMetadata extends Migration
         Schema::create('bookings_metadata', function (Blueprint $table) {
             $table->uuid('id')->unique()->index();
             $table->uuid('fk_booking_id')->index();
+            $table->uuid('fk_location_id')->nullable()->index();
             $table->boolean('brings_dog')->nullable();
             $table->boolean('brings_cat')->nullable();
             $table->string('additional_info')->nullable();

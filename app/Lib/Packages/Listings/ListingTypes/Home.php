@@ -11,7 +11,9 @@ use App\Lib\Packages\Listings\Contracts\AbstractListing;
  */
 class Home extends AbstractListing {
 
-    const ListingType = 'Home';
+    const ListingType = 'H';
+
+    public static $required = [];
 
     public function getData() : array
     {

@@ -15,11 +15,10 @@ class CreateBookingsTable extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->uuid('id')->index()->unique();
             $table->uuid('fk_user_id')->index();
-            $table->uuid('fk_address_id')->index();
-            $table->uuid('fk_user_route_id')->index();
             $table->uuid('fk_listing_id')->index();
             $table->integer('total_people');
             $table->char('status', 1);
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

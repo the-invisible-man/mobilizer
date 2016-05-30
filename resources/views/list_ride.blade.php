@@ -12,6 +12,7 @@
         <div class="row">
             <form role="form" name="list_user_ride" id="list_user_ride_form">
                 <input type="hidden" value="0" id="selected_user_route" name="selected_user_route"/>
+                <input type="hidden" value="R" id="type" name="type"/>
                 <div class="col-md-8 col-md-offset-2">
                     <div class="row">
                         <div class="col-md-12">
@@ -53,7 +54,7 @@
                             <div class="form-group">
                                 <label for="InputEmail">Max Passengers</label>
                                 <div class="input-group">
-                                    <input type="numeric" class="form-control bfh-number" name="max_passengers" placeholder="How many passengers can you fit?" required>
+                                    <input type="numeric" class="form-control bfh-number" name="max_occupants" placeholder="How many passengers can you fit?" required>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div>

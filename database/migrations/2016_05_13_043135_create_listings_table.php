@@ -15,12 +15,13 @@ class CreateListingsTable extends Migration
         Schema::create('listings', function (Blueprint $table) {
             $table->uuid('id')->index()->unique();
             $table->uuid('fk_user_id')->index();
-            $table->uuid('fk_address_id')->index();
+            $table->uuid('fk_location_id')->index();
             $table->string('party_name');
             $table->char('type', 1);
             $table->date('starting_date');
             $table->date('ending_date');
             $table->integer('max_occupants');
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

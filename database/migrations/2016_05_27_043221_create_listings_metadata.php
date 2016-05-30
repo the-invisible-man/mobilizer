@@ -15,6 +15,7 @@ class CreateListingsMetadata extends Migration
         Schema::create('listings_metadata', function (Blueprint $table) {
             $table->uuid('id')->index()->unique();
             $table->uuid('fk_listing_id')->index();
+            $table->uuid('fk_listing_route_id')->nullable()->index();
             $table->boolean('dog_friendly')->nullable();
             $table->boolean('cat_friendly')->nullable();
             $table->string('additional_info')->nullable();

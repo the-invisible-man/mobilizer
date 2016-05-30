@@ -4,8 +4,8 @@ namespace App\Lib\Packages\Listings\ServiceProviders;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
-use App\Lib\Packages\Listings\ListingDrivers\RideDriver;
-use App\Lib\Packages\Listings\ListingDrivers\HomeDriver;
+use App\Lib\Packages\Listings\ListingDrivers\RideMetadataDriver;
+use App\Lib\Packages\Listings\ListingDrivers\HomeMetadataDriver;
 
 /**
  * Class ListingsServiceProvider
@@ -16,12 +16,12 @@ class ListingsServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton(RideDriver::class, function (Application $app) {
-            return new RideDriver();
+        $this->app->singleton(RideMetadataDriver::class, function (Application $app) {
+            return new RideMetadataDriver();
         });
 
-        $this->app->singleton(HomeDriver::class, function (Application $app) {
-            return new HomeDriver();
+        $this->app->singleton(HomeMetadataDriver::class, function (Application $app) {
+            return new HomeMetadataDriver();
         });
     }
 }

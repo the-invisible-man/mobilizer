@@ -11,7 +11,7 @@
     <div class="container">
         <div class="row">
             <form role="form" name="list_user_ride" id="list_user_ride_form">
-                <input type="hidden" value="0" id="selected_user_route" name="selected_user_route"/>
+                <input type="hidden" value="0" id="overview_path" name="overview_path"/>
                 <input type="hidden" value="R" id="type" name="type"/>
                 <div class="col-md-8 col-md-offset-2">
                     <div class="row">

@@ -171,7 +171,7 @@
         var domRouteResults         = $("#route_results");
         var domRouteResultsHolder   = $("#route_results_holder");
         var starting                = $("#autocomplete").val();
-        var selected_user_route     = $("#selected_user_route");
+        var selected_user_route     = $("#overview_path");
 
         $("#number_of_routes").html(result.routes.length);
 

@@ -3,15 +3,15 @@
 namespace App\Lib\Packages\Listings;
 
 use App\Lib\Packages\Geo\Location\LocationGateway;
-use App\Lib\Packages\Listings\ListingDrivers\RideDriver;
+use App\Lib\Packages\Listings\ListingDrivers\RideMetadataDriver;
 use App\Lib\Packages\Listings\ListingTypes\Home;
 use App\Lib\Packages\Listings\ListingTypes\Ride;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\MySqlConnection;
 use App\Lib\Packages\Listings\Contracts\AbstractListing;
-use App\Lib\Packages\Listings\ListingDrivers\AbstractDriver;
+use App\Lib\Packages\Listings\ListingDrivers\AbstractMetadataDriver;
 use Illuminate\Foundation\Application;
-use App\Lib\Packages\Listings\ListingDrivers\HomeDriver;
+use App\Lib\Packages\Listings\ListingDrivers\HomeMetadataDriver;
 
 /**
  * Class ListingsGateway
@@ -42,12 +42,12 @@ class ListingsGateway {
      * @var string[]
      */
     private $listingDrivers = [
-        Ride::ListingType => RideDriver::class,
-        Home::ListingType => HomeDriver::class
+        Ride::ListingType => RideMetadataDriver::class,
+        Home::ListingType => HomeMetadataDriver::class
     ];
 
     /**
-     * @var AbstractDriver[]
+     * @var AbstractMetadataDriver[]
      */
     private $drivers = [];
 
@@ -67,6 +67,7 @@ class ListingsGateway {
         'ending_date',
         'max_occupants',
         'additional_info',
+        'location'
     ];
 
     /**
@@ -115,21 +116,13 @@ class ListingsGateway {
      */
     private function with(array $data) : AbstractListing
     {
-        // We're gonna wrap these two writes in a transaction
+        // We're gonna wrap these writes in a transaction
         $this->db->beginTransaction();
 
         try {
-            // This is hacky as f@#k
-            if (isset($data['starting_location'])) {
-                $location = $this->locationsGateway->create($data['starting_location']);
-                $data['fk_location_id'] = $location->getId();
-            }
-
             $listing = $this->insert($data);
-
             // Use driver to process listing type specific metadata
             $this->getDriver()->process($listing, $data);
-
         } catch(\Exception $e) {
             // Whoa, no no
             $this->db->rollBack();
@@ -151,7 +144,10 @@ class ListingsGateway {
         /**
          * @var AbstractListing $listing
          */
-        $listing = new $this->listingTypes[$data['type']];
+        $listing    = new $this->listingTypes[$data['type']];
+        $location   = $this->locationsGateway->create($data['location']);
+
+        $data[AbstractListing::FK_LOCATION_ID] = $location->getId();
 
         $listing->setFkUserId($data[AbstractListing::FK_USER_ID]);
         $listing->setFkLocationId($data[AbstractListing::FK_LOCATION_ID]);
@@ -173,7 +169,7 @@ class ListingsGateway {
 
     /**
      * @param $type
-     * @return AbstractDriver
+     * @return AbstractMetadataDriver
      */
     private function getDriver(string $type = null)
     {

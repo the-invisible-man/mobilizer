@@ -43,14 +43,13 @@ class ListingsController extends Controller {
     protected function validator(array $data) : Validator
     {
         return Validator::make($data, [
-            'party_name'            => 'required|min:5|max:255',
-            'start'                 => 'required|date',
-            'end'                   => 'required|date|after:start',
-            'time_of_day'           => 'required|confirmed|min:6',
-            'max_occupants'         => 'required|numeric',
-            'starting_location'     => 'required|min:5',
-            'selected_user_route'   => 'required',
-            'type'                  => 'required|min:1|max:1'
+            'party_name'    => 'required|min:5|max:255',
+            'starting_date' => 'required|date',
+            'ending_date'   => 'required|date|after:start',
+            'time_of_day'   => 'required|confirmed|min:6',
+            'max_occupants' => 'required|numeric',
+            'location'      => 'required|min:5',
+            'type'          => 'required|min:1|max:1'
         ]);
     }
 

@@ -3,13 +3,19 @@
 namespace App\Lib\Packages\Listings\ListingDrivers;
 
 use App\Lib\Packages\Listings\Contracts\AbstractListing;
+use App\Lib\Packages\Listings\Models\ListingMetadata;
 
-abstract class AbstractDriver
+abstract class AbstractMetadataDriver
 {
     /**
      * @var array
      */
     protected $required = [];
+
+    /**
+     * @var array
+     */
+    protected $optional = [ListingMetadata::DOG_FRIENDLY, ListingMetadata::CAT_FRIENDLY];
 
     /**
      * @var string

@@ -4,7 +4,7 @@ namespace App\Lib\Packages\Listings\Contracts;
 
 use App\Lib\Packages\Geo\Location\Location;
 use Illuminate\Database\Eloquent\Model;
-use App\Lib\Packages\Geo\Models\Address;
+use App\Lib\Packages\Listings\Models\ListingMetadata;
 use App\Lib\Packages\Tools\Traits\UuidModel;
 use App\User;
 
@@ -43,6 +43,29 @@ abstract class AbstractListing extends Model implements \JsonSerializable {
      * @var bool
      */
     public $incrementing = false;
+
+    /**
+     * @var ListingMetadata
+     */
+    protected $metadata;
+
+    /**
+     * @param ListingMetadata $listingMetadata
+     * @return $this
+     */
+    public function setMetadata(ListingMetadata $listingMetadata)
+    {
+        $this->metadata = $listingMetadata;
+        return $this;
+    }
+
+    /**
+     * @return ListingMetadata
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
 
     /**
      * @return string

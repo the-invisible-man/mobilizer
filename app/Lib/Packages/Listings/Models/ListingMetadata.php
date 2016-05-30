@@ -131,12 +131,12 @@ class ListingMetadata extends Model
     }
 
     /**
-     * @param \DateTime $dateTime
+     * @param int $timeOfDayInterval
      * @return ListingMetadata
      */
-    public function setTimeOfDay(\DateTime $dateTime) : ListingMetadata
+    public function setTimeOfDay(int $timeOfDayInterval) : ListingMetadata
     {
-        $this->setAttribute(self::TIME_OF_DAY, $dateTime);
+        $this->setAttribute(self::TIME_OF_DAY, $timeOfDayInterval);
         return $this;
     }
 

@@ -18,7 +18,7 @@ class CreateListingsMetadata extends Migration
             $table->uuid('fk_listing_route_id')->nullable()->index();
             $table->boolean('dog_friendly')->nullable();
             $table->boolean('cat_friendly')->nullable();
-            $table->time('time_of_day')->nullable();
+            $table->integer('time_of_day')->nullable();
             $table->timestamps();
         });
     }

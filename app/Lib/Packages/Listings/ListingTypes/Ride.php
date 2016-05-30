@@ -13,32 +13,11 @@ class Ride extends AbstractListing
 {
     const ListingType = 'R';
 
-    /**
-     * @var ListingMetadata
-     */
-    private $metadata;
+
 
     /**
      * @var array
      */
     public static $required = ['time_of_day', 'selected_user_route'];
-
-    /**
-     * @param ListingMetadata $listingMetadata
-     * @return $this
-     */
-    public function setMetadata(ListingMetadata $listingMetadata)
-    {
-        $this->metadata = $listingMetadata;
-        return $this;
-    }
-
-    /**
-     * @return ListingMetadata
-     */
-    public function getMetadata()
-    {
-        return $this->metadata;
-    }
 
 }

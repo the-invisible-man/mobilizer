@@ -8,14 +8,14 @@ use App\Lib\Packages\Listings\Models\ListingMetadata;
 use App\Lib\Packages\Listings\Models\ListingRoute;
 
 /**
- * Class RideDriver
+ * Class RideMetadataDriver
  *
  * This class processes data that is specific to a ride listing
  *
  * @package App\Lib\Packages\Listings\ListingDrivers
  * @author Carlos Granados <granados.carlos91@gmail.com>
  */
-class RideDriver extends AbstractDriver
+class RideMetadataDriver extends AbstractMetadataDriver
 {
     /**
      * @var string
@@ -39,11 +39,11 @@ class RideDriver extends AbstractDriver
             EVENING         = 3;
 
     /**
-     * RideDriver constructor.
+     * RideMetadataDriver constructor.
      */
     public function __construct()
     {
-        array_push($this->required, "selected_user_route", "time_of_day");
+        array_push($this->required, ListingRoute::OVERVIEW_PATH, ListingMetadata::TIME_OF_DAY);
     }
 
     /**
@@ -55,9 +55,9 @@ class RideDriver extends AbstractDriver
     {
         $this->validate($listing, $data);
 
-        $route = $this->createRoute($data['selected_user_route']);
+        $route = $this->createRoute($data[ListingRoute::OVERVIEW_PATH]);
 
-        $listing->setMetadata($this->createMetadata($listing, $route));
+        $listing->setMetadata($this->createMetadata($listing, $route, $data));
 
         return $listing;
     }
@@ -65,15 +65,25 @@ class RideDriver extends AbstractDriver
     /**
      * @param Ride $listing
      * @param ListingRoute $route
+     * @param array $data
      * @return ListingMetadata
      */
-    private function createMetadata(Ride $listing, ListingRoute $route)
+    private function createMetadata(Ride $listing, ListingRoute $route, array $data)
     {
         // We now have all necessary data to add metadata for a ride
         $metadata = new ListingMetadata();
         $metadata->setFkListingId($listing->getId())
                  ->setFkListingRouteId($route->getId())
-                 ->save();
+                 ->setTimeOfDay($data[ListingMetadata::TIME_OF_DAY]);
+
+        // Set optional metadata
+        foreach ($this->optional as $column) {
+            if (isset($data[$column])) {
+                $metadata->setAttribute($column, $data[$column]);
+            }
+        }
+
+        $metadata->save();
 
         return $metadata;
     }
@@ -100,7 +110,7 @@ class RideDriver extends AbstractDriver
     {
         $this->validateRequired($data, function (array $data) use($listing) {
             if (!$this->isCorrectType($listing)) {
-                throw new \InvalidArgumentException("(!) [Listing -> Driver] Mismatch: RideDriver expected a Ride object to process, received a " . get_class($listing));
+                throw new \InvalidArgumentException("(!) [Listing -> Driver] Mismatch: RideMetadataDriver expected a Ride object to process, received a " . get_class($listing));
             }
 
             if (!in_array($data['time_of_day'], $this->allowedTimeOfDay)) {

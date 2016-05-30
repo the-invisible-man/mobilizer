@@ -9,14 +9,14 @@ use App\Lib\Packages\Listings\Contracts\AbstractListing;
  * @package App\Lib\Packages\Listings\ListingTypes
  * @author Carlos Granados <carlos@polivet.org>
  */
-class Home extends AbstractListing {
-
+class Home extends AbstractListing
+{
     const ListingType = 'H';
 
+    /**
+     * @var array
+     */
     public static $required = [];
 
-    public function getData() : array
-    {
-        // TODO: Implement getData() method.
-    }
+
 }

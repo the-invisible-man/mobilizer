@@ -131,4 +131,12 @@ class ListingMetadata extends Model
         $this->setAttribute(self::TIME_OF_DAY, $dateTime);
         return $this;
     }
+
+    /**
+     * @return ListingRoute
+     */
+    public function route()
+    {
+        return $this->hasOne(ListingRoute::class);
+    }
 }

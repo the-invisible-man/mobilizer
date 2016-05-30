@@ -21,9 +21,9 @@ abstract class AbstractDriver
     /**
      * @param AbstractListing $listing
      * @param array $data
-     * @return array
+     * @return AbstractListing
      */
-    abstract public function process(AbstractListing $listing, array $data) : array;
+    abstract public function process(AbstractListing $listing, array $data) : AbstractListing;
 
     /**
      * @param AbstractListing $listing
@@ -38,7 +38,7 @@ abstract class AbstractDriver
      * @param array $data
      * @param callable $furtherValidation
      */
-    public function validateRequired(array $data, callable $furtherValidation)
+    public function validateRequired(array $data, callable $furtherValidation = null)
     {
         $missing = array_diff($this->required, $data);
 
@@ -46,6 +46,6 @@ abstract class AbstractDriver
             throw new \InvalidArgumentException("Missing required data for listing metadata: " . implode(',', $missing) . " - Type: {$this->type}");
         }
 
-        return $furtherValidation($data);
+        if (null !== $furtherValidation) return $furtherValidation($data);
     }
 }

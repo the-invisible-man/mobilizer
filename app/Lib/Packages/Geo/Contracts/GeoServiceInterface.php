@@ -19,5 +19,9 @@ interface GeoServiceInterface {
      */
     public function estimateTripDurationByZip(string $startingZip, string $destinationZip) : string;
 
+    /**
+     * @param string $address
+     * @return GeocodeResponse
+     */
     public function geocode(string $address) : GeocodeResponse;
 }

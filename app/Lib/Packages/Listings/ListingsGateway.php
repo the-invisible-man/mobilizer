@@ -3,6 +3,7 @@
 namespace App\Lib\Packages\Listings;
 
 use App\Lib\Packages\Geo\Location\LocationGateway;
+use App\Lib\Packages\Listings\ListingDrivers\RideDriver;
 use App\Lib\Packages\Listings\ListingTypes\Home;
 use App\Lib\Packages\Listings\ListingTypes\Ride;
 use Illuminate\Database\DatabaseManager;
@@ -10,6 +11,7 @@ use Illuminate\Database\MySqlConnection;
 use App\Lib\Packages\Listings\Contracts\AbstractListing;
 use App\Lib\Packages\Listings\ListingDrivers\AbstractDriver;
 use Illuminate\Foundation\Application;
+use App\Lib\Packages\Listings\ListingDrivers\HomeDriver;
 
 /**
  * Class ListingsGateway
@@ -40,8 +42,8 @@ class ListingsGateway {
      * @var string[]
      */
     private $listingDrivers = [
-        Ride::ListingType => '',
-        Home::ListingType => ''
+        Ride::ListingType => RideDriver::class,
+        Home::ListingType => HomeDriver::class
     ];
 
     /**
@@ -110,22 +112,30 @@ class ListingsGateway {
     /**
      * @param array $data
      * @return AbstractListing
+     * @throws \Exception
      */
     private function with(array $data) : AbstractListing
     {
         // We're gonna wrap these two writes in a transaction
         $this->db->beginTransaction();
 
-        // This is hacky as f@#k
-        if (isset($data['starting_location'])) {
-            $location = $this->locationsGateway->create($data['starting_location']);
-            $data['fk_location_id'] = $location->getId();
+        try {
+            // This is hacky as f@#k
+            if (isset($data['starting_location'])) {
+                $location = $this->locationsGateway->create($data['starting_location']);
+                $data['fk_location_id'] = $location->getId();
+            }
+
+            $listing = $this->insert($data);
+
+            // Use driver to process listing type specific metadata
+            $this->getDriver()->process($listing, $data);
+
+        } catch(\Exception $e) {
+            // Whoa, no no
+            $this->db->rollBack();
+            throw $e;
         }
-
-        $listing = $this->insert($data);
-
-        // Use driver to process listing type specific metadata
-        $this->getDriver()->process($listing, $data);
 
         // We're done
         $this->db->commit();
@@ -177,9 +187,7 @@ class ListingsGateway {
             throw new \InvalidArgumentException("Invalid listing type ({$data['type']}) - Allowed: [" . implode(',', $this->listingTypes) . "]");
         }
 
-        $listingClass   = $this->listingTypes[$data['listing_type']];
-        $requiredFields = array_merge($this->required, $listingClass::$required);
-        $missing        = array_diff($requiredFields, array_keys($data));
+        $missing        = array_diff($this->required, array_keys($data));
 
         if (!$missing) {
             throw new \InvalidArgumentException("Cannot create new listing. Missing required information: [" . implode(',', $missing) . "]");

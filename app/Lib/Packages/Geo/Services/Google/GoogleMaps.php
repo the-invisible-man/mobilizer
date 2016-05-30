@@ -31,8 +31,8 @@ class GoogleMaps implements GeoServiceInterface {
      */
     public function __construct(Directions $directions, Geocode $geocode)
     {
-        $this->services['directions']   = $directions;
-        $this->services['geocode']      = $geocode;
+        $this->services[Directions::class]   = $directions;
+        $this->services[Geocode::class]      = $geocode;
     }
 
     /**
@@ -64,7 +64,7 @@ class GoogleMaps implements GeoServiceInterface {
      */
     public function geocode(string $address) : GeocodeResponse
     {
-        return $this->formatGeocodeResponse($this->services['geocode']->geocode($address));
+        return $this->formatGeocodeResponse($this->services[Geocode::class]->geocode($address));
     }
 
     /**
@@ -73,6 +73,7 @@ class GoogleMaps implements GeoServiceInterface {
      */
     private function formatGeocodeResponse(array $response) : GeocodeResponse
     {
+        // Todo: add geopoint object to response
         $return = new GeocodeResponse();
 
         foreach ($response['results'][0]['address_components'] as $component) {
@@ -112,6 +113,6 @@ class GoogleMaps implements GeoServiceInterface {
      */
     public function directions(string $origin, string $destination, string $travelMode=Directions::DRIVING) : array
     {
-        return $this->services['directions']->getDirections($origin, $destination, $travelMode);
+        return $this->services[Directions::class]->getDirections($origin, $destination, $travelMode);
     }
 }

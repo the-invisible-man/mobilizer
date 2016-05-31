@@ -48,7 +48,11 @@ class LocationGateway
 
         $location->setCity($response->getCity());
         $location->setState($response->getState());
-        $location->setZip($response->getZip());
+
+        if ($response->getZip() !== null) {
+            $location->setZip($response->getZip());
+        }
+
         $location->setCountry($response->getCountry());
 
         $location->save();

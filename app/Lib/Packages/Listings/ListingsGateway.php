@@ -147,6 +147,7 @@ class ListingsGateway {
         $listing    = new $this->listingTypes[$data['type']];
         $location   = $this->locationsGateway->create($data['location']);
 
+        $listing->setLocation($location);
         $data[AbstractListing::FK_LOCATION_ID] = $location->getId();
 
         $listing->setFkUserId($data[AbstractListing::FK_USER_ID]);

@@ -38,12 +38,8 @@ class HomeMetadataDriver extends AbstractMetadataDriver
         $metadata = new ListingMetadata();
         $metadata->setFkListingId($listing->getId());
 
-        // Set optional metadata
-        foreach ($this->optional as $column) {
-            if (isset($column, $data)) {
-                $metadata->setAttribute($column, $data[$column]);
-            }
-        }
+        // Set optional values
+        $this->setOptional($metadata, $data);
 
         $metadata->save();
 

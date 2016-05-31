@@ -57,6 +57,7 @@ class RideMetadataDriver extends AbstractMetadataDriver
 
         $route = $this->createRoute($data[ListingRoute::OVERVIEW_PATH]);
 
+        $listing->setListingRoute($route);
         $listing->setMetadata($this->createMetadata($listing, $route, $data));
 
         return $listing;
@@ -76,12 +77,8 @@ class RideMetadataDriver extends AbstractMetadataDriver
                  ->setFkListingRouteId($route->getId())
                  ->setTimeOfDay($data[ListingMetadata::TIME_OF_DAY]);
 
-        // Set optional metadata
-        foreach ($this->optional as $column) {
-            if (isset($data[$column])) {
-                $metadata->setAttribute($column, $data[$column]);
-            }
-        }
+        // Set optional values
+        $this->setOptional($metadata, $data);
 
         $metadata->save();
 

@@ -13,9 +13,15 @@ abstract class AbstractMetadataDriver
     protected $required = [];
 
     /**
+     * Here add any optional boolean options. The key should be
+     * the column name and the value will be the default if the
+     * data array doesn't contain the option.
      * @var array
      */
-    protected $optional = [ListingMetadata::DOG_FRIENDLY, ListingMetadata::CAT_FRIENDLY];
+    protected $options = [
+        ListingMetadata::DOG_FRIENDLY   => false,
+        ListingMetadata::CAT_FRIENDLY   => false
+    ];
 
     /**
      * @var string
@@ -36,6 +42,18 @@ abstract class AbstractMetadataDriver
     protected function isCorrectType(AbstractListing $listing)
     {
         return is_a($listing, $this->type);
+    }
+
+    /**
+     * @param ListingMetadata $metadata
+     * @param array $data
+     */
+    public function setOptional(ListingMetadata $metadata, array $data)
+    {
+        foreach ($this->options as $column => $default) {
+            $val = array_get($data, $column, $default);
+            $metadata->setAttribute($column, $val);
+        }
     }
 
     /**

@@ -2,30 +2,33 @@
  * @file
  * Ride Sharing Listing JS
  *
- * Totally winged this logic. I should have used Angular but I
- * had not time to relearn it.
+ * This entire file is one giant hack. 1 man dev team here fml.
+ * @author Carlos Granados <granados.carlos91@gmail.com>
  */
 (function ($, undefined) {
 
-    var RideListing = {};
+    var PACKAGE_NAME    = 'ride-book';
+    var RideListing     = {};
 
     $("#route_results_holder").hide();
 
     jQuery(function($) {
         $(document).ready(function() {
-            var packages = {
-                MapComponent: {
-                    mapElementId: "map-canvas",
-                    autocompleteElementId: "autocomplete"
-                },
+            if ($("#app").attr("about") == PACKAGE_NAME) {
+                var packages = {
+                    MapComponent: {
+                        mapElementId: "map-canvas",
+                        autocompleteElementId: "autocomplete"
+                    },
 
-                FormComponent: {
-                    formElementId: "list_user_ride_form"
-                }
-            };
+                    FormComponent: {
+                        formElementId: "list_user_ride_form"
+                    }
+                };
 
-            // Avoid events from being bound twice, seriously that shit's annoying
-            registerEvents(packages);
+                // Avoid events from being bound twice, seriously that shit's annoying
+                registerEvents(packages);
+            }
         });
     });
 
@@ -43,44 +46,127 @@
 
         var form = $("#" + config['formElementId']);
 
-        form.submit(function (event) {
-            // Let's make sure all data we need is being submitted
-            data = $.deparam($(this).serialize());
-            event.preventDefault();
-            console.dir(data);
+        $("#submit_listing").click(function ()
+        {
+            var data = $.deparam($(form).serialize());
+
             try {
                 RideListing.FormComponent.validateForm(data);
-            } catch (err) {
-                event.preventDefault();
-                RideListing.FormComponent.handleFormValidationFail(err);
+                // Validation passed!
+                RideListing.FormComponent.ConfirmSubmission(data);
+            } catch (validationErrors) {
+                RideListing.FormComponent.handleFormValidationFail(validationErrors);
             }
+        });
+
+        // If the user confirms
+        $("#submit_listing_confirm_now").click(function () {
+            var data = $.deparam($(form).serialize());
+            RideListing.FormComponent.prepareData(form, data);
+            $(form).trigger('submit');
         });
     };
 
-    RideListing.FormComponent.handleFormValidationFail = function(err) {
-        // fug it
-        alert(err);
+    RideListing.FormComponent.prepareData = function (form, data) {
+        console.dir("preparing form data");
+        $('<input />').attr('type', 'hidden').attr('name', 'starting_date').attr('value', data['start']).appendTo(form);
+        $('<input />').attr('type', 'hidden').attr('name', 'ending_date').attr('value', data['end']).appendTo(form);
 
+        if ('cat_friendly' in data) {
+            $("#cat_friendly").attr('value', 1);
+        }
+        if ('dog_friendly' in data) {
+            $("#dog_friendly").attr('value', 1);
+        }
+    };
+
+    // Trigger modal and ask user to confirm listing
+    RideListing.FormComponent.ConfirmSubmission = function (data) {
+
+        // Get ready, shit's about to get ugly(er)...
+        var content = "<h5><strong>Check that everything looks good and submit when you're ready.</strong></h5>";
+
+        for (key in data) {
+            if (data.hasOwnProperty(key)) continue;
+            content = content + '<div class="row"> <div class="col-md-4"> <strong>' + key + '</strong> </div> <div class="col-md-8" style="text-align:left;">' + data[data] + '</div></div><hr>';
+        }
+
+        // Party name
+        content = content + '<div class="row"> <div class="col-md-4"> <strong>Party Name</strong> </div> <div class="col-md-8" style="text-align:left;">' + data['party_name'] + '</div></div><hr>';
+
+        // Date ranges
+        content = content + '<div class="row"> <div class="col-md-4"> <strong>Leaving Home On</strong> </div> <div class="col-md-8" style="text-align:left;">' + data['start'] + '</div></div><hr>';
+        content = content + '<div class="row"> <div class="col-md-4"> <strong>Leaving Philly On</strong> </div> <div class="col-md-8" style="text-align:left;">' + data['end'] + '</div></div><hr>';
+
+        // Passengers
+        content = content + '<div class="row"> <div class="col-md-4"> <strong>Max Passengers</strong> </div> <div class="col-md-8" style="text-align:left;">' + data['max_occupants'] + '</div></div><hr>';
+
+        // Location
+        content = content + '<div class="row"> <div class="col-md-4"> <strong>Coming From</strong> </div> <div class="col-md-8" style="text-align:left;">' + data['location'] + '</div></div><hr>';
+
+        if ('cat_friendly' in data) {
+            content = content + '<div class="row"> <div class="col-md-4"> <strong>Cat</strong> </div> <div class="col-md-8" style="text-align:left;">Passengers can bring their cat</div></div><hr>';
+        }
+        if ('dog_friendly' in data) {
+            content = content + '<div class="row"> <div class="col-md-4"> <strong>Dog</strong> </div> <div class="col-md-8" style="text-align:left;">Passengers can bring their dog</div></div><hr>';
+        }
+
+        content = content + '<div class="row"> <div class="col-md-4"> <strong>Additional Info</strong> </div> <div class="col-md-8" style="text-align:left;">' + data['additional_info'] + '</div></div><hr>';
+
+        $('#listing_confirmation_content').html(content);
+
+        $('#listing_confirmation_modal').modal('toggle');
+    };
+
+    RideListing.FormComponent.handleFormValidationFail = function(validationErrors) {
+        // The user messed up, let em' know what's up
+        var content = '<div class="alert alert-danger" role="alert">Cannot submit form. Please correct the following errors:</div>';
+
+        for (var i = 0; i < validationErrors.length; i++)
+        {
+            content = content + "<p>Please specify <strong>" + validationErrors[i] + "</strong>.</p>";
+        }
+
+        $("#submit_error_modal_content").html(content);
+        $("#submit_error_modal").modal('toggle');
     };
 
     RideListing.FormComponent.validateForm = function (data) {
-        var validators = {
-            'party_name': function (value) {
 
-            },
+        console.dir(data);
+
+        var requiredFields = {'party_name':"a party name", 'start':"a starting location", 'time_of_day':"the time approximation of when you're planning to leave", 'end':"the date you're coming back", 'max_occupants':"the maximum number of people you can bring, 1 at minimum.", 'location':"a starting location", 'additional_info':"additional information in the text box."};
+        var messages = [];
+        var validators = {
             'max_occupants': function (value) {
-                if (isNaN($.trim(value))) {
-                    throw "Maximum number of passengers is supposed to be a number, you entered \"" + value + "\"";
+                value = $.trim(value);
+                if (isNaN(value)) {
+                    throw "maximum number of passengers is supposed to be a number, you entered \"" + value + "\"";
+                } else if(value == 0) {
+                    throw "maximum number of passengers must be greater than zero.";
                 }
             }
         };
 
-        for (key in data) {
-            if (!data.hasOwnProperty(key)) continue;
+        for (var field in requiredFields) {
+            if (!requiredFields.hasOwnProperty(field)) continue;
 
-            if (validators.hasOwnProperty(key)) {
-                validators[key](data[key]);
+            if (!field in data || !$.trim(data[field]).length) {
+                messages.push(requiredFields[field]);
+                continue;
             }
+
+            if (field in validators) {
+                try {
+                    validators[field](data[field]);
+                } catch (message) {
+                    messages.push(message);
+                }
+            }
+        }
+
+        if (messages.length) {
+            throw messages;
         }
     };
 

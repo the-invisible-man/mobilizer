@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Lib\Packages\Listings\ListingsGateway;
+use App\Lib\Packages\Listings\ListingTypes\Ride;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Log\Writer;
+use Symfony\Component\HttpFoundation\Response;
 use Validator;
 
 /**
@@ -76,9 +78,17 @@ class ListingsController extends Controller {
             $this->log->error($e->getMessage());
             $responseCode   = 400;
             $response       = ["message" => "Service not available"];
+            return \Response::json($response, $responseCode);
         }
 
         return \Response::json($response, $responseCode);
+        //return $request['type'] == Ride::ListingType ? view('list_ride_success', $response) : view('list_house_success', $response);
+    }
+
+    public function testSuccess()
+    {
+        $response = json_decode("", true);
+        return view('list_ride_success', $response);
     }
 
     /**

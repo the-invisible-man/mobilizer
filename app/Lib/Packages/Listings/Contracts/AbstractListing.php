@@ -50,6 +50,11 @@ abstract class AbstractListing extends Model implements \JsonSerializable {
     protected $metadata;
 
     /**
+     * @var Location
+     */
+    protected $location;
+
+    /**
      * @param ListingMetadata $listingMetadata
      * @return $this
      */
@@ -57,6 +62,26 @@ abstract class AbstractListing extends Model implements \JsonSerializable {
     {
         $this->metadata = $listingMetadata;
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    protected function prepareToArray()
+    {
+        $attributes = $this->attributesToArray();
+
+        return array_merge($attributes, ['metadata' => $this->getMetadata()->toArray(), 'location' =>$this->getLocation()->toArray()]);
+    }
+
+    /**
+     * Convert the model instance to an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->prepareToArray();
     }
 
     /**
@@ -254,6 +279,24 @@ abstract class AbstractListing extends Model implements \JsonSerializable {
     public function user() : User
     {
         $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return Location
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param Location $location
+     * @return $this
+     */
+    public function setLocation(Location $location)
+    {
+        $this->location = $location;
+        return $this;
     }
 
     /**

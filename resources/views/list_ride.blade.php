@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    <div id="app" about="ride-book"></div>
     <div class="container pad-header">
         <div class="row">
             <div class="col-md-8 col-md-offset-4">
@@ -10,7 +11,7 @@
     </div>
     <div class="container">
         <div class="row">
-            <form role="form" name="list_user_ride" id="list_user_ride_form">
+            <form role="form" name="list_user_ride" method="post" action="/listings" id="list_user_ride_form">
                 <input type="hidden" value="0" id="overview_path" name="overview_path"/>
                 <input type="hidden" value="R" id="type" name="type"/>
                 <div class="col-md-8 col-md-offset-2">
@@ -63,7 +64,7 @@
                             <div class="form-group">
                                 <label for="InputEmail">Starting Point</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control bfh-number" id="autocomplete" name="starting_location" placeholder="Address or ZIP Code You're Driving From" required title = "You have to enter a starting point. You can use your ZIP code.">
+                                    <input type="text" class="form-control bfh-number" id="autocomplete" name="location" placeholder="Address or ZIP Code You're Driving From" required title = "You have to enter a starting point. You can use your ZIP code.">
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div>
@@ -90,10 +91,10 @@
                                 <br><br>
                                 <div class="row" style="padding-left:20px;">
                                     <div class="checkbox col-md-8 col-md-offset-4">
-                                        <label><input class="i-check" type="checkbox" name="dog_friendly"/>Passengers can bring a dog!</label>
+                                        <label><input class="i-check" type="checkbox" id="dog_friendly" name="dog_friendly"/>Passengers can bring a dog!</label>
                                     </div>
                                     <div class="checkbox col-md-8 col-md-offset-4">
-                                        <label><input class="i-check" type="checkbox" name="cat_friendly"/>Passengers can bring a cat!</label>
+                                        <label><input class="i-check" type="checkbox" id="cat_friendly" name="cat_friendly"/>Passengers can bring a cat!</label>
                                     </div>
                                 </div>
                             </div>
@@ -110,12 +111,51 @@
                                     </div>
                                 </row>
                             </dix>
-                            <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-info pull-right">
                             <br><br>
                         </div>
                     </div>
                 </div>
             </form>
+        </div>
+        <div class="row" style="margin:10px;">
+            <div class="col-md-3 col-md-offset-4">
+                <center><input type="submit" name="submit" value="Submit" id="submit_listing" class="btn btn-info pull-right"></center>
+            </div>
+        </div>
+    </div>
+    <!-- Confirm Modal -->
+    <div class="modal fade" id="listing_confirmation_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Your Listing</h4>
+                </div>
+                <div class="modal-body" id="listing_confirmation_content">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Go Back and Make Changes</button>
+                    <button type="button" class="btn btn-primary" id="submit_listing_confirm_now">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="submit_error_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">(!)Validation Error!</h4>
+                </div>
+                <div class="modal-body" id="submit_error_modal_content">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">ok</button>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

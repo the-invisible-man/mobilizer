@@ -553,6 +553,7 @@
     <script src="/js/custom.js"></script>
     <script src="/js/ride-book.js"></script>
     <script src="/js/jquery-deparam.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </div>
 </body>
 

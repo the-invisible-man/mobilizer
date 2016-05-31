@@ -7,7 +7,7 @@
  */
 (function ($, undefined) {
 
-    var PACKAGE_NAME    = 'ride-book';
+    var PACKAGE_NAME    = 'ride-list';
     var RideListing     = {};
 
     $("#route_results_holder").hide();

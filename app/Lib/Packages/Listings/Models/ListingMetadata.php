@@ -15,12 +15,19 @@ class ListingMetadata extends Model
     use UuidModel;
 
     // Columns
-    const   ID = 'id',
+    const   ID                  = 'id',
             FK_LISTING_ID       = 'fk_listing_id',
             FK_LISTING_ROUTE_ID = 'fk_listing_route_id',
             DOG_FRIENDLY        = 'dog_friendly',
             CAT_FRIENDLY        = 'cat_friendly',
             TIME_OF_DAY         = 'time_of_day';
+
+    public static $timeOfDayTranslations = [
+        0 => "Early Morning",
+        1 => "Noon",
+        2 => "Afternoon",
+        3 => "Evening"
+    ];
 
     /**
      * @var string

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div id="app" about="ride-book"></div>
+    <div id="app" about="ride-list"></div>
     <div class="container pad-header">
         <div class="row">
             <div class="col-md-8 col-md-offset-4">
@@ -114,6 +114,9 @@
                             <br><br>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-6 col-md-offset-4">
+                    <div class="g-recaptcha" data-sitekey="6LemViETAAAAAOGjQXwCEuy4BiaRcVxiS8iskcVT"></div>
                 </div>
             </form>
         </div>

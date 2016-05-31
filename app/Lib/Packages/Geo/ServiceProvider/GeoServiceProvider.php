@@ -2,6 +2,7 @@
 
 namespace App\Lib\Packages\Geo\ServiceProvider;
 
+use App\Lib\Packages\Geo\Services\Google\API\Timezone;
 use Guzzle\Http\Client;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -45,6 +46,14 @@ class GeoServiceProvider extends ServiceProvider
             $httpClient         = new Client();
 
             return new Geocode($config, $httpClient);
+        });
+
+        $this->app->singleton(Timezone::class, function (Application $app) {
+            $config             = $app['config']['geo-drivers.google.timezone-api'];
+            $config['apiKey']   = $app['config']['geo.drivers.google.key'];
+            $httpClient         = new Client();
+
+            return new Timezone($config, $httpClient);
         });
     }
 }

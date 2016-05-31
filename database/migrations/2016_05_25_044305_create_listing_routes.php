@@ -15,7 +15,8 @@ class CreateListingRoutes extends Migration
         Schema::create('listing_routes', function (Blueprint $table) {
             $table->uuid('id')->index()->unique();
             $table->text('overview_path');
-            $table->boolean('synchronized')->default(false);
+            $table->string('status')->default('queued');
+            $table->integer('attempts')->default(0);
             $table->timestamps();
         });
     }

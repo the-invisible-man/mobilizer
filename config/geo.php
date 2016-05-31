@@ -7,7 +7,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Geosptial Driver
+    | Geosptial Drivers
     |--------------------------------------------------------------------------
     |
     | The app is able to use multiple geocoding third party services. These
@@ -23,7 +23,7 @@ return [
         // Currently we have a max of 150,000 requests per day that we can use.
         'google' => [
 
-            'key'   => 'AIzaSyB7-veSR-bmwjhQNXSPPIKAJRTRG5CzZZ8',
+            'key'   => env('GOOGLE_MAPS_API_KEY'),
 
             'directions-api' => [
                 'url'           => 'https://maps.googleapis.com/maps/api/directions/json',
@@ -33,7 +33,12 @@ return [
             'geocode-api'   => [
                 'url'           => 'https://maps.googleapis.com/maps/api/geocode/json',
                 'responseType'  => GoogleMapsAPI::JSON
-            ]
+            ],
+
+            'timezone-api' => [
+                'url'           => 'https://maps.googleapis.com/maps/api/timezone/json',
+                'responseType'  => GoogleMapsAPI::JSON
+            ],
         ]
     ],
 

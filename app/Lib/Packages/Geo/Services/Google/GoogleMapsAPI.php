@@ -30,6 +30,14 @@ abstract class GoogleMapsAPI {
             JSON    = 'application/json',
             XML     = 'application/xml';
 
+    // Response statuses
+    const   OK                  = "OK",
+            INVALID_REQUEST     = "INVALID_REQUEST",
+            OVER_QUERY_LIMIT    = "OVER_QUERY_LIMIT",
+            REQUEST_DENIED      = "REQUEST_DENIED",
+            UNKNOWN_ERROR       = "UNKNOWN_ERROR",
+            ZERO_RESULTS        = "ZERO_RESULTS";
+
     /**
      * @var array
      */
@@ -101,7 +109,6 @@ abstract class GoogleMapsAPI {
      */
     private function handleResponse(Response $requestInterface) : array
     {
-
         switch($this->getConfig('responseType')) {
             case self::JSON:
                 return $this->handleJson($requestInterface);
@@ -116,9 +123,16 @@ abstract class GoogleMapsAPI {
      * @param string $status
      * @throws GoogleMapsRequestNotOkatException
      */
-    public function statusIsOk(string $status) {
-        if ($status != "OK") {
-            throw new GoogleMapsRequestNotOkatException($status);
+    public function handleResponseStatus(string $status) {
+        switch($status) {
+            case self::OK:
+                return;
+            case self::INVALID_REQUEST:
+            case self::OVER_QUERY_LIMIT:
+            case self::REQUEST_DENIED:
+            case self::UNKNOWN_ERROR:
+            case self::ZERO_RESULTS:
+                break;
         }
     }
 
@@ -129,7 +143,7 @@ abstract class GoogleMapsAPI {
     private function handleJson(Response $requestInterface) : array
     {
         $response = json_decode($requestInterface->getBody(), true);
-        $this->statusIsOk($response['status']);
+        $this->handleResponseStatus($response['status']);
         return $response;
     }
 

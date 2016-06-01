@@ -11,7 +11,7 @@ use App\Lib\Packages\Listings\Models\ListingRoute;
  * @package App\Lib\Packages\Listings\Contracts
  * @author Carlos Granados <granados.carlos91@gmail.com>
  */
-class Ride extends AbstractListing
+class RideListing extends AbstractListing
 {
     const ListingType = 'R';
 
@@ -32,8 +32,7 @@ class Ride extends AbstractListing
      */
     public function toArray()
     {
-        $merge = ($model = $this->route()) instanceof ListingRoute ? ['route' => $model->toArray()] : [];
-        return array_merge($this->prepareToArray(), $merge);
+        return array_merge($this->prepareToArray(), ['route' => $this->route()->toArray()]);
     }
 
     /**

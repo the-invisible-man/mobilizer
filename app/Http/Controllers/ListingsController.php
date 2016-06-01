@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Lib\Packages\Listings\Contracts\AbstractListing;
 use App\Lib\Packages\Listings\ListingsGateway;
-use App\Lib\Packages\Listings\ListingTypes\Ride;
+use App\Lib\Packages\Listings\ListingTypes\RideListing;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -69,11 +69,12 @@ class ListingsController extends Controller {
      * @param Request $request
      * @return JsonResponse
      */
-    public function add(Request $request)
+    public function new(Request $request)
     {
         try {
             $data       = $this->prepareData($request->all());
-            $response   = $this->formatResponse($this->listingsGateway->create($data)->toArray());
+            $response   = $this->listingsGateway->create($data)->toArray();
+            $response   = $this->formatResponse($response);
         } catch (\Exception $e) {
             $this->log->error($e->getMessage());
             $responseCode   = 400;
@@ -81,7 +82,7 @@ class ListingsController extends Controller {
             return \Response::json($response, $responseCode);
         }
 
-        return $request['type'] == Ride::ListingType ? view('list_ride_success', $response) : view('list_house_success', $response);
+        return $request['type'] == RideListing::ListingType ? view('list_ride_success', $response) : view('list_house_success', $response);
     }
 
     /**

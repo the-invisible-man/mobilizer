@@ -14,7 +14,8 @@
         "ramsey/uuid": "^3.4",
         "predis/predis": "^1.0",
         "guzzlehttp/guzzle": "^6.2",
-        "elasticsearch/elasticsearch": "^2.1"
+        "elasticsearch/elasticsearch": "^2.1",
+        "lucadegasperi/oauth2-server-laravel": "^5.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

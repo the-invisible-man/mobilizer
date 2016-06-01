@@ -31,9 +31,9 @@ class BookingsController extends Controller {
      * @var array
      */
     private $validatorAdd = [
-        'id'            => 'required|min:36|min:36',
-        'total_people'  => 'required|numeric',
-        'message'       => 'required',
+        'id'                => 'required|min:36|min:36',
+        'total_people'      => 'required|numeric',
+        'additional_info'   => 'required',
     ];
 
     /**
@@ -61,7 +61,7 @@ class BookingsController extends Controller {
      * @param Request $request
      * @return JsonResponse
      */
-    public function add(Request $request) : JsonResponse
+    public function new(Request $request) : JsonResponse
     {
         $validate       = Validator::make($request->all(), $this->validatorAdd);
         $responseCode   = 200;

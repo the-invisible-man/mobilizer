@@ -11,7 +11,7 @@
 //
 // *Version: 1.2.1, Last updated: 2/17/2010*
 // 
-// Project Home - http://benalman.com/projects/jquery-bbq-plugin/
+// Project HomeListing - http://benalman.com/projects/jquery-bbq-plugin/
 // GitHub       - http://github.com/cowboy/jquery-bbq/
 // Source       - http://github.com/cowboy/jquery-bbq/raw/master/jquery.ba-bbq.js
 // (Minified)   - http://github.com/cowboy/jquery-bbq/raw/master/jquery.ba-bbq.min.js (4.0kb)
@@ -904,7 +904,7 @@
 //
 // *Version: 1.2, Last updated: 2/11/2010*
 // 
-// Project Home - http://benalman.com/projects/jquery-hashchange-plugin/
+// Project HomeListing - http://benalman.com/projects/jquery-hashchange-plugin/
 // GitHub       - http://github.com/cowboy/jquery-hashchange/
 // Source       - http://github.com/cowboy/jquery-hashchange/raw/master/jquery.ba-hashchange.js
 // (Minified)   - http://github.com/cowboy/jquery-hashchange/raw/master/jquery.ba-hashchange.min.js (1.1kb)

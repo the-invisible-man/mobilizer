@@ -4,8 +4,8 @@ namespace App\Lib\Packages\Listings;
 
 use App\Lib\Packages\Geo\Location\LocationGateway;
 use App\Lib\Packages\Listings\ListingDrivers\RideMetadataDriver;
-use App\Lib\Packages\Listings\ListingTypes\Home;
-use App\Lib\Packages\Listings\ListingTypes\Ride;
+use App\Lib\Packages\Listings\ListingTypes\HomeListing;
+use App\Lib\Packages\Listings\ListingTypes\RideListing;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\MySqlConnection;
 use App\Lib\Packages\Listings\Contracts\AbstractListing;
@@ -34,16 +34,16 @@ class ListingsGateway {
      * @var string[]
      */
     private $listingTypes = [
-        Ride::ListingType => Ride::class,
-        Home::ListingType => Home::class
+        RideListing::ListingType => RideListing::class,
+        HomeListing::ListingType => HomeListing::class
     ];
 
     /**
      * @var string[]
      */
     private $listingDrivers = [
-        Ride::ListingType => RideMetadataDriver::class,
-        Home::ListingType => HomeMetadataDriver::class
+        RideListing::ListingType => RideMetadataDriver::class,
+        HomeListing::ListingType => HomeMetadataDriver::class
     ];
 
     /**

@@ -3,7 +3,7 @@
 namespace App\Lib\Packages\Listings\ListingDrivers;
 
 use App\Lib\Packages\Listings\Contracts\AbstractListing;
-use App\Lib\Packages\Listings\ListingTypes\Home;
+use App\Lib\Packages\Listings\ListingTypes\HomeListing;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
 
 /**
@@ -14,9 +14,9 @@ use App\Lib\Packages\Listings\Models\ListingMetadata;
 class HomeMetadataDriver extends AbstractMetadataDriver
 {
     /**
-     * @param AbstractListing|Home $listing
+     * @param AbstractListing|HomeListing $listing
      * @param array $data
-     * @return Home
+     * @return HomeListing
      */
     public function process(AbstractListing $listing, array $data)
     {
@@ -28,11 +28,11 @@ class HomeMetadataDriver extends AbstractMetadataDriver
     }
 
     /**
-     * @param Home $listing
+     * @param HomeListing $listing
      * @param array $data
      * @return ListingMetadata
      */
-    private function createMetadata(Home $listing, array $data)
+    private function createMetadata(HomeListing $listing, array $data)
     {
         // We now have all necessary data to add metadata for a ride
         $metadata = new ListingMetadata();
@@ -54,7 +54,7 @@ class HomeMetadataDriver extends AbstractMetadataDriver
     {
         $this->validateRequired($data, function (array $data) use($listing) {
             if (!$this->isCorrectType($listing)) {
-                throw new \InvalidArgumentException("(!) [Listing -> Driver] Mismatch: RideMetadataDriver expected a Ride object to process, received a " . get_class($listing));
+                throw new \InvalidArgumentException("(!) [Listing -> Driver] Mismatch: RideMetadataDriver expected a RideListing object to process, received a " . get_class($listing));
             }
         });
     }

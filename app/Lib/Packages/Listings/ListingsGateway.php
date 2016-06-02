@@ -169,6 +169,19 @@ class ListingsGateway {
     }
 
     /**
+     * @param string $bookingId
+     * @param string $userId
+     * @return bool
+     */
+    public function ownsListing(string $bookingId, string $userId)
+    {
+        return $this->db->table('listings')
+            ->where(AbstractListing::ID, '=', $bookingId)
+            ->where(AbstractListing::FK_USER_ID, '=', $userId)
+            ->exists();
+    }
+
+    /**
      * @param $type
      * @return AbstractMetadataDriver
      */

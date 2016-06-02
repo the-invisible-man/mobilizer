@@ -2,6 +2,7 @@
 
 namespace App\Lib\Packages\Bookings\Models;
 
+use App\Lib\Packages\Geo\Location\Location;
 use Illuminate\Database\Eloquent\Model;
 use App\Lib\Packages\Tools\Traits\UuidModel;
 
@@ -17,7 +18,7 @@ class BookingMetadata extends Model
     /**
      * @var string
      */
-    protected $table = 'booking_metadata';
+    protected $table = 'bookings_metadata';
 
     /**
      * @var string
@@ -29,9 +30,7 @@ class BookingMetadata extends Model
             FK_BOOKING_ID   = 'fk_booking_id',
             FK_LOCATION_ID  = 'fk_location_id',
             BRINGS_DOG      = 'brings_dog',
-            BRINGS_CAT      = 'brings_car',
-            ADDITIONAL_INFO = 'additional_info';
-
+            BRINGS_CAT      = 'brings_cat';
     /**
      * @param string $id
      * @return $this
@@ -66,6 +65,20 @@ class BookingMetadata extends Model
     public function getFkBookingId()
     {
         return $this->getAttribute(self::FK_BOOKING_ID);
+    }
+
+    public function setLocation(Location $location)
+    {
+        $this->setAttribute('location', $location);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLocation()
+    {
+        return $this->getAttribute('location');
     }
 
     /**

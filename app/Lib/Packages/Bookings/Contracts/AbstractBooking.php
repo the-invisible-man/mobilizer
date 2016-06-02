@@ -25,14 +25,34 @@ abstract class AbstractBooking extends Model implements \JsonSerializable {
      */
     public $incrementing = false;
 
-    // Columns
+            // Columns
     const   ID              = 'id',
             FK_USER_ID      = 'fk_user_id',
             FK_LISTING_ID   = 'fk_listing_id',
             TOTAL_PEOPLE    = 'total_people',
             STATUS          = 'status',
+            TYPE            = 'type',
+            ADDITIONAL_INFO = 'additional_info',
             ACTIVE          = 'active',
-            METADATA        = 'metadata';
+            METADATA        = 'metadata',
+
+            // Booking request statuses
+            STATUS_ACCEPTED = 'accepted',
+            STATUS_DENIED   = 'denied',
+            STATUS_PENDING  = 'pending';
+
+
+    /**
+     * @var array
+     */
+    protected $fillable = [
+        self::FK_USER_ID,
+        self::FK_LISTING_ID.
+        self::TOTAL_PEOPLE,
+        self::TYPE,
+        self::ADDITIONAL_INFO,
+        self::METADATA
+    ];
 
     /**
      * @return string

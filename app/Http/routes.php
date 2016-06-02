@@ -53,7 +53,7 @@ Route::delete('listings/{listing_id}', 'ListingsController@delete');
 Route::get('bookings', 'BookingsController@all');
 Route::get('bookings/{booking_id}', 'BookingsController@get');
 Route::put('bookings/{booking_id}', 'BookingsController@edit');
-Route::post('bookings/{booking_id}', 'BookingsController@new');
+Route::post('bookings', 'BookingsController@new');
 Route::delete('bookings/{booking_id}', 'BookingsController@delete');
 
 Route::put('accounts/{account_id}', 'AccountsController@edit');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Lib\Packages\Bookings\BookingsGateway;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -18,9 +19,9 @@ use Validator;
 class BookingsController extends Controller {
 
     /**
-     * @var BookingBuilder
+     * @var BookingsGateway
      */
-    private $bookingsBuilder;
+    private $bookingsGateway;
 
     /**
      * @var \Illuminate\Database\Connection
@@ -31,22 +32,22 @@ class BookingsController extends Controller {
      * @var array
      */
     private $validatorAdd = [
-        'id'                => 'required|min:36|min:36',
+        'fk_listing_id'     => 'required|min:36|min:36',
         'total_people'      => 'required|numeric',
         'additional_info'   => 'required',
     ];
 
     /**
      * BookingsController constructor.
-     * @param BookingBuilder $bookingsBuilder
+     * @param BookingsGateway $bookingsGateway
      * @param DatabaseManager $databaseManager
      */
-    public function __construct(BookingBuilder $bookingsBuilder, DatabaseManager $databaseManager)
+    public function __construct(BookingsGateway $bookingsGateway, DatabaseManager $databaseManager)
     {
-        $this->bookingsBuilder  = $bookingsBuilder;
+        $this->bookingsGateway  = $bookingsGateway;
         $this->db               = $databaseManager->connection();
 
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -54,7 +55,19 @@ class BookingsController extends Controller {
      */
     public function all() : JsonResponse
     {
+        // We'll return all the bookings of the user that is
+        // currently signed in
+        $userId = 'fa59822a-3f55-408c-98a6-e2b7e5905664';
 
+        try {
+            $responseCode   = 200;
+            $response       = $this->bookingsGateway->getUserBookings($userId);
+        } catch (\Exception $e) {
+            $responseCode   = 400;
+            $response       = ['message' => 'Service not available'];
+        }
+
+        return \Response::json($response, $responseCode);
     }
 
     /**
@@ -63,15 +76,16 @@ class BookingsController extends Controller {
      */
     public function new(Request $request) : JsonResponse
     {
-        $validate       = Validator::make($request->all(), $this->validatorAdd);
+        $data                   = $request->all();
+        $data['fk_user_id']     = 'fa59822a-3f55-408c-98a6-e2b7e5905664';
+        $validate       = Validator::make($data, $this->validatorAdd);
         $responseCode   = 200;
 
         if ($validate->fails()) {
             $response       = ['errors' => $validate->errors()];
             $responseCode   = 400;
         } else {
-            $booking    = $this->bookingsBuilder->build($request->all());
-            $response   = ['id' => $booking->id];
+            $response    = $this->bookingsGateway->create($data);
         }
 
         return \Response::json($response, $responseCode);
@@ -107,7 +121,12 @@ class BookingsController extends Controller {
      * @param int $bookingId
      * @return JsonResponse
      */
-    public function delete(int $bookingId) : JsonResponse
+    public function cancel(int $bookingId) : JsonResponse
+    {
+
+    }
+
+    public function reject(string $bookingId)
     {
 
     }

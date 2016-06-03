@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Lib\Packages\Bookings\BookingsGateway;
+use App\Lib\Packages\Bookings\Exceptions\MismatchException;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Lib\Packages\Bookings\Models\Booking;
-use App\Lib\Packages\Bookings\BookingBuilder;
 use Validator;
 
 /**
@@ -65,7 +64,31 @@ class BookingsController extends Controller {
             $response       = $this->bookingsGateway->getUserBookings($userId);
         } catch (\Exception $e) {
             $responseCode   = 400;
-            $response       = ['message' => 'Service not available'];
+            $response       = ['message' => $e->getMessage()];
+        }
+
+        if ($request->ajax()) {
+            return \Response::json($response, $responseCode);
+        } else{
+            // return a view
+            return \Response::json($response, $responseCode);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param string $listingId
+     * @return \Illuminate\Contracts\View\Factory|JsonResponse|\Illuminate\View\View
+     */
+    public function allByListing(Request $request, string $listingId)
+    {
+        try {
+            $responseCode   = 200;
+            $userId         = '';
+            $response       = $this->bookingsGateway->getAllBookingsForListing($listingId, $userId);
+        } catch (\Exception $e) {
+            $responseCode   = 400;
+            $response       = ['message' => $e->getMessage()];
         }
 
         if ($request->ajax()) {
@@ -124,18 +147,25 @@ class BookingsController extends Controller {
      * @param string $bookingId
      * @return JsonResponse
      */
-    public function edit(Request $request, string $bookingId) : JsonResponse
+    public function edit(Request $request, string $bookingId)
     {
         $responseCode = 200;
 
         try {
+            // Make sure user owns this booking
+            $userid = '';
+            if (!$this->bookingsGateway->ownsBooking($bookingId, $userid)) {
+                throw new MismatchException("Booking to user exception: User {$userid} does not own booking {$bookingId}");
+            }
             $response = $this->bookingsGateway->edit($bookingId, $request->all())->toArray();
         } catch (\Exception $e) {
             $responseCode   = 400;
             $response       = ['message' => "Service not available"];
         }
 
-        return \Response::json($response, $responseCode);
+        if ($request->ajax()) {
+            return \Response::json($response, $responseCode);
+        }
     }
 
     /**

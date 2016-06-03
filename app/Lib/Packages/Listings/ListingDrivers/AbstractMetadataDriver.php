@@ -2,7 +2,7 @@
 
 namespace App\Lib\Packages\Listings\ListingDrivers;
 
-use App\Lib\Packages\Listings\Contracts\AbstractListing;
+use App\Lib\Packages\Listings\Contracts\BaseListing;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
 
 abstract class AbstractMetadataDriver
@@ -26,20 +26,20 @@ abstract class AbstractMetadataDriver
     /**
      * @var string
      */
-    protected $type = AbstractListing::class;
+    protected $type = BaseListing::class;
 
     /**
-     * @param AbstractListing $listing
+     * @param BaseListing $listing
      * @param array $data
-     * @return AbstractListing
+     * @return BaseListing
      */
-    abstract public function process(AbstractListing $listing, array $data);
+    abstract public function process(BaseListing $listing, array $data);
 
     /**
-     * @param AbstractListing $listing
+     * @param BaseListing $listing
      * @return bool
      */
-    protected function isCorrectType(AbstractListing $listing)
+    protected function isCorrectType(BaseListing $listing)
     {
         return is_a($listing, $this->type);
     }

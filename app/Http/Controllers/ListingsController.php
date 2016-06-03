@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Lib\Packages\Listings\Contracts\AbstractListing;
+use App\Lib\Packages\Bookings\Exceptions\MismatchException;
 use App\Lib\Packages\Listings\ListingsGateway;
 use App\Lib\Packages\Listings\ListingTypes\RideListing;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Log\Writer;
-use Symfony\Component\HttpFoundation\Response;
 use Validator;
 
 /**
@@ -30,6 +29,11 @@ class ListingsController extends Controller {
      */
     private $log;
 
+    /**
+     * ListingsController constructor.
+     * @param ListingsGateway $listingsGateway
+     * @param Writer $log
+     */
     public function __construct(ListingsGateway $listingsGateway, Writer $log)
     {
         //$this->middleware('auth');
@@ -60,9 +64,18 @@ class ListingsController extends Controller {
     /**
      * @return JsonResponse
      */
-    public function all() : JsonResponse
+    public function all()
     {
+        $responseCode = 200;
+        try {
+            $user       = 'fa59822a-3f55-408c-98a6-e2b7e5905664';
+            $response   = $this->listingsGateway->allForUser($user);
+        } catch (\Exception $e) {
+            $response       = ['message' => $e->getMessage()];
+            $responseCode   = 400;
+        }
 
+        return \Response::json($response, $responseCode);
     }
 
     /**
@@ -117,19 +130,21 @@ class ListingsController extends Controller {
 
     /**
      * @param Request $request,
-     * @param int $listingId
+     * @param string $listingId
      * @return JsonResponse
      */
-    public function get(Request $request, int $listingId)
+    public function get(Request $request, string $listingId)
     {
         $responseCode = 200;
 
         try {
-            $response = $this->listingsGateway->find($listingId);
+            $response = $this->listingsGateway->find($listingId)->toArray();
         } catch (ModelNotFoundException $e) {
             $responseCode   = 400;
             $response       = ['message' => "No listing with id of {$listingId} found"];
         }
+
+        return \Response::json($response, $responseCode);
 
         if ($request->ajax()) {
             return \Response::json($response, $responseCode);
@@ -139,20 +154,59 @@ class ListingsController extends Controller {
     }
 
     /**
-     * @param int $listingId
+     * @param Request $request
+     * @param string $listingId
      * @return JsonResponse
      */
-    public function edit(int $listingId)
+    public function edit(Request $request, string $listingId)
     {
+        $responseCode = 200;
 
+        try {
+            $user = '';
+            if ($this->listingsGateway->ownsListing($listingId, $user)) {
+                //throw new MismatchException("Cannot delete listing. Listing id {$listingId} does not belong to user {$user}");
+            }
+            $response = $this->listingsGateway->edit($listingId, $request->all())->toArray();
+        } catch (\Exception $e) {
+            $responseCode   = 400;
+            $response       = ['messages' => $e->getMessage()];
+        }
+
+        return \Response::json($response, $responseCode);
+
+        if ($request->ajax()) {
+            return \Response::json($response, $responseCode);
+        } else {
+            return view('');
+        }
     }
 
     /**
-     * @param int $listingId
+     * @param Request $request
+     * @param string $listingId
+     * @throws MismatchException
      * @return JsonResponse
      */
-    public function delete(int $listingId)
+    public function delete(Request $request, string $listingId)
     {
+        try {
+            $user = '';
+            if ($this->listingsGateway->ownsListing($listingId, $user)) {
+                throw new MismatchException("Cannot delete listing. Listing id {$listingId} does not belong to user {$user}");
+            }
+            $this->listingsGateway->delete($listingId);
+            $response       = ['status' => 'ok'];
+            $responseCode   = 200;
+        } catch (\Exception $e) {
+            $response       = ['message', $e->getMessage()];
+            $responseCode   = 400;
+        }
 
+        if ($request->ajax()) {
+            return \Response::json($response, $responseCode);
+        } else {
+            return view('');
+        }
     }
 }

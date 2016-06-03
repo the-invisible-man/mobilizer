@@ -2,7 +2,7 @@
 
 namespace App\Lib\Packages\Listings\ListingTypes;
 
-use App\Lib\Packages\Listings\Contracts\AbstractListing;
+use App\Lib\Packages\Listings\Contracts\BaseListing;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
 use App\Lib\Packages\Listings\Models\ListingRoute;
 
@@ -11,7 +11,7 @@ use App\Lib\Packages\Listings\Models\ListingRoute;
  * @package App\Lib\Packages\Listings\Contracts
  * @author Carlos Granados <granados.carlos91@gmail.com>
  */
-class RideListing extends AbstractListing
+class RideListing extends BaseListing
 {
     const ListingType = 'R';
 

@@ -2,7 +2,7 @@
 
 namespace App\Lib\Packages\Listings\ListingDrivers;
 
-use App\Lib\Packages\Listings\Contracts\AbstractListing;
+use App\Lib\Packages\Listings\Contracts\BaseListing;
 use App\Lib\Packages\Listings\ListingTypes\RideListing;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
 use App\Lib\Packages\Listings\Models\ListingRoute;
@@ -47,11 +47,11 @@ class RideMetadataDriver extends AbstractMetadataDriver
     }
 
     /**
-     * @param AbstractListing|RideListing $listing
+     * @param BaseListing|RideListing $listing
      * @param array $data
      * @return RideListing
      */
-    public function process(AbstractListing $listing, array $data)
+    public function process(BaseListing $listing, array $data)
     {
         $this->validate($listing, $data);
 
@@ -100,10 +100,10 @@ class RideMetadataDriver extends AbstractMetadataDriver
     }
 
     /**
-     * @param AbstractListing $listing
+     * @param BaseListing $listing
      * @param array $data
      */
-    private function validate(AbstractListing $listing, array  $data)
+    private function validate(BaseListing $listing, array  $data)
     {
         $this->validateRequired($data, function (array $data) use($listing) {
             if (!$this->isCorrectType($listing)) {

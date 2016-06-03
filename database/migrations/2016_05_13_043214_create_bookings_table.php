@@ -23,6 +23,8 @@ class CreateBookingsTable extends Migration
             $table->char('type', 1);
             $table->boolean('active')->default(true);
             $table->timestamps();
+
+            $table->index(['fk_user_id', 'active']);
         });
     }
 

@@ -24,6 +24,8 @@ class CreateListingsTable extends Migration
             $table->string('additional_info');
             $table->boolean('active')->default(true);
             $table->timestamps();
+
+            $table->index(['fk_user_id', 'active']);
         });
     }
 

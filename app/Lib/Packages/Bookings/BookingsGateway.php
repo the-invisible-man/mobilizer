@@ -10,7 +10,7 @@ use App\Lib\Packages\Bookings\Models\BookingMetadata;
 use App\Lib\Packages\Bookings\Models\HomeBooking;
 use App\Lib\Packages\Bookings\Models\RideBooking;
 use App\Lib\Packages\Geo\Location\LocationGateway;
-use App\Lib\Packages\Listings\Contracts\AbstractListing;
+use App\Lib\Packages\Listings\Contracts\BaseListing;
 use App\Lib\Packages\Listings\ListingsGateway;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
 use Illuminate\Contracts\Logging\Log;
@@ -62,7 +62,7 @@ class BookingsGateway {
      */
     private $required = [
         BaseBooking::FK_USER_ID    => 'required',
-        BaseBooking::FK_LISTING_ID => 'required|bookingExists',
+        BaseBooking::FK_LISTING_ID => 'required|listingExists|listingIsActive',
         BaseBooking::TOTAL_PEOPLE  => 'required|numeric|min:1|validateTotalPeople',
         BaseBooking::TYPE          => 'required|bookingType',
         'location'                 => 'required-if:type,R'
@@ -102,7 +102,7 @@ class BookingsGateway {
             return isset($this->bookingTypes[$value]);
         }, "Invalid booking type. Allowed only: [" . implode(',', array_keys($this->bookingTypes)) . "]");
 
-        $this->validatorFactory->extend('bookingExists', function ($attribute, $value) use($db)
+        $this->validatorFactory->extend('listingExists', function ($attribute, $value) use($db)
         {
             return $db->table('listings')->where('id', '=', $value)->exists();
         }, "Listing id does not exist: " . array_get($data, 'fk_listing_id', 'none'));
@@ -112,6 +112,10 @@ class BookingsGateway {
             $slotsRemaining = (int)$this->remainingSlots(array_get($data, 'fk_listing_id', '1'));
             return ((int)$value) <= $slotsRemaining;
         }, 'Invalid number of people. Tried to reserve ' . $data['total_people'] . ' people but there\'s only ' . $slotsRemaining);
+
+        $this->validatorFactory->extend('listingIsActive', function ($attribute, $value) use($db, $data){
+            return (bool) $db->table('listings')->where(BaseListing::ID, '=', $value)->value('active');
+        }, "Listing {$data['fk_listing_id']} is no longer active. Cannot book for this listing.");
 
         return $this->validatorFactory->make($data, $rules);
     }
@@ -136,6 +140,11 @@ class BookingsGateway {
         return ($max - $taken);
     }
 
+    /**
+     * @param BaseBooking $booking
+     * @param int $totalPeople
+     * @throws InvalidNumberOfPeopleException
+     */
     private function validateTotalPeopleForEdit(BaseBooking $booking, int $totalPeople)
     {
         $remaining = $this->remainingSlots($booking->getFkListingId()) + $booking->getTotalPeople();
@@ -535,5 +544,36 @@ class BookingsGateway {
         $this->db->table('bookings')
             ->where(BaseBooking::ID, '=', $bookingId)
             ->update([BaseBooking::ACTIVE => 0]);
+    }
+
+    /**
+     * @param string $listingId
+     * @param string $userId
+     * @return array
+     */
+    public function getAllBookingsForListing(string $listingId, string $userId)
+    {
+        $data = (array)$this->db->table('bookings as a')
+            ->join('bookings_metadata as b', 'b.fk_booking_id', '=', 'a.id')
+            ->join('listings as c', 'c.id', '=', 'a.fk_listing_id')
+            ->join('listings_metadata as d', 'd.fk_listing_id', '=', 'c.id')
+            ->join('locations as e', 'e.id', '=', 'b.fk_location_id', 'left')
+            ->join('locations as f', 'f.id', '=', 'c.fk_location_id')
+            ->where('a.fk_listing_id', '=', $listingId)
+            ->where('a.fk_user_id', '=', $userId)
+            ->where('a.active', '=', 1)
+            ->get($this->getSelectColumns());
+
+        if (!is_array($data) || ! count($data)) return [];
+
+        $ouput = [];
+        // Format data
+        foreach ($data as $booking) {
+            // Build booking data
+            $ouput[] = $this->formatBookingResult($booking);
+
+        }
+
+        return $ouput;
     }
 }

@@ -3,17 +3,18 @@
 namespace App\Lib\Packages\Listings\Contracts;
 
 use App\Lib\Packages\Geo\Location\Location;
+use App\Lib\Packages\Listings\Models\ListingRoute;
 use Illuminate\Database\Eloquent\Model;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
 use App\Lib\Packages\Tools\Traits\UuidModel;
 use App\User;
 
 /**
- * Class AbstractListing
+ * Class BaseListing
  * @package App\Lib\Packages\Listings\Contracts
  * @author Carlos Granados <granados.carlos91@gmail.com>
  */
-abstract class AbstractListing extends Model implements \JsonSerializable {
+class BaseListing extends Model implements \JsonSerializable {
 
     use UuidModel;
 
@@ -55,6 +56,18 @@ abstract class AbstractListing extends Model implements \JsonSerializable {
     protected $location;
 
     /**
+     * @var ListingRoute
+     */
+    protected $route;
+
+    /**
+     * @var array
+     */
+    public static $editable = [
+        'party_name', 'additional_info'
+    ];
+
+    /**
      * @param ListingMetadata $listingMetadata
      * @return $this
      */
@@ -70,8 +83,11 @@ abstract class AbstractListing extends Model implements \JsonSerializable {
     protected function prepareToArray()
     {
         $attributes = $this->attributesToArray();
+        $metadata   = ! $this->getMetadata() ? [] : $this->getMetadata()->toArray();
+        $location   = ! $this->getLocation() ? [] : $this->getLocation()->toArray();
+        $route      = ! $this->getRoute() ? [] : $this->getRoute()->toArray();
 
-        return array_merge($attributes, ['metadata' => $this->getMetadata()->toArray(), 'location' =>$this->getLocation()->toArray()]);
+        return array_merge($attributes, ['metadata' => $metadata, 'location' => $location, 'route' => $route]);
     }
 
     /**
@@ -297,6 +313,24 @@ abstract class AbstractListing extends Model implements \JsonSerializable {
     {
         $this->location = $location;
         return $this;
+    }
+
+    /**
+     * @param ListingRoute $route
+     * @return $this
+     */
+    public function setRoute(ListingRoute $route)
+    {
+        $this->route = $route;
+        return $this;
+    }
+
+    /**
+     * @return ListingRoute
+     */
+    public function getRoute()
+    {
+        return $this->route;
     }
 
     /**

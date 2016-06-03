@@ -2,15 +2,22 @@
 
 namespace App\Lib\Packages\Listings;
 
+use App\Lib\Packages\Geo\Location\Location;
 use App\Lib\Packages\Geo\Location\LocationGateway;
+use App\Lib\Packages\Listings\Exceptions\ListingNotFoundException;
 use App\Lib\Packages\Listings\ListingDrivers\RideMetadataDriver;
 use App\Lib\Packages\Listings\ListingTypes\HomeListing;
 use App\Lib\Packages\Listings\ListingTypes\RideListing;
+use App\Lib\Packages\Listings\Models\ListingMetadata;
+use App\Lib\Packages\Listings\Models\ListingRoute;
+use Illuminate\Contracts\Validation\ValidationException;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\MySqlConnection;
-use App\Lib\Packages\Listings\Contracts\AbstractListing;
+use App\Lib\Packages\Listings\Contracts\BaseListing;
 use App\Lib\Packages\Listings\ListingDrivers\AbstractMetadataDriver;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\MessageBag;
+use Illuminate\Validation\Factory as ValidatorFactory;
 use App\Lib\Packages\Listings\ListingDrivers\HomeMetadataDriver;
 
 /**
@@ -57,6 +64,11 @@ class ListingsGateway {
     private $currentDriver;
 
     /**
+     * @var ValidatorFactory
+     */
+    private $validator;
+
+    /**
      * @var array
      */
     private $required = [
@@ -71,6 +83,14 @@ class ListingsGateway {
     ];
 
     /**
+     * @var array
+     */
+    private $editsRule = [
+        'party_name'        => 'min:5',
+        'additional_info'   => 'min:10'
+    ];
+
+    /**
      * @var Application
      */
     protected $kernel;
@@ -80,19 +100,21 @@ class ListingsGateway {
      * @param DatabaseManager $databaseManager
      * @param LocationGateway $locationGateway
      * @param Application $app
+     * @param ValidatorFactory $validator
      */
-    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway, Application $app)
+    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway, Application $app, ValidatorFactory $validator)
     {
         $this->db                   = $databaseManager->connection();
         $this->locationsGateway     = $locationGateway;
         $this->kernel               = $app;
+        $this->validator            = $validator;
     }
 
     /**
      * @param array $data
-     * @return AbstractListing
+     * @return BaseListing
      */
-    public function create(array $data) : AbstractListing
+    public function create(array $data) : BaseListing
     {
         $this->validateRequiredForNew($data);
 
@@ -111,10 +133,10 @@ class ListingsGateway {
 
     /**
      * @param array $data
-     * @return AbstractListing
+     * @return BaseListing
      * @throws \Exception
      */
-    private function with(array $data) : AbstractListing
+    private function with(array $data) : BaseListing
     {
         // We're gonna wrap these writes in a transaction
         $this->db->beginTransaction();
@@ -137,28 +159,28 @@ class ListingsGateway {
 
     /**
      * @param array $data
-     * @return AbstractListing
+     * @return BaseListing
      */
-    private function insert(array $data) : AbstractListing
+    private function insert(array $data) : BaseListing
     {
         /**
-         * @var AbstractListing $listing
+         * @var BaseListing $listing
          */
         $listing    = new $this->listingTypes[$data['type']];
         $location   = $this->locationsGateway->create($data['location']);
 
         $listing->setLocation($location);
-        $data[AbstractListing::FK_LOCATION_ID] = $location->getId();
+        $data[BaseListing::FK_LOCATION_ID] = $location->getId();
 
-        $listing->setFkUserId($data[AbstractListing::FK_USER_ID]);
-        $listing->setFkLocationId($data[AbstractListing::FK_LOCATION_ID]);
-        $listing->setPartyName($data[AbstractListing::PARTY_NAME]);
-        $listing->setType($data[AbstractListing::TYPE]);
-        $listing->setMaxOccupants($data[AbstractListing::MAX_OCCUPANTS]);
-        $listing->setAdditionalInfo($data[AbstractListing::ADDITIONAL_INFO]);
+        $listing->setFkUserId($data[BaseListing::FK_USER_ID]);
+        $listing->setFkLocationId($data[BaseListing::FK_LOCATION_ID]);
+        $listing->setPartyName($data[BaseListing::PARTY_NAME]);
+        $listing->setType($data[BaseListing::TYPE]);
+        $listing->setMaxOccupants($data[BaseListing::MAX_OCCUPANTS]);
+        $listing->setAdditionalInfo($data[BaseListing::ADDITIONAL_INFO]);
 
-        $startingDate = new \DateTime($data[AbstractListing::STARTING_DATE]);
-        $endingDate   = new \DateTime($data[AbstractListing::ENDING_DATE]);
+        $startingDate = new \DateTime($data[BaseListing::STARTING_DATE]);
+        $endingDate   = new \DateTime($data[BaseListing::ENDING_DATE]);
 
         $listing->setStartingDate($startingDate);
         $listing->setEndingDate($endingDate);
@@ -176,8 +198,8 @@ class ListingsGateway {
     public function ownsListing(string $listingId, string $userId)
     {
         return $this->db->table('listings')
-            ->where(AbstractListing::ID, '=', $listingId)
-            ->where(AbstractListing::FK_USER_ID, '=', $userId)
+            ->where(BaseListing::ID, '=', $listingId)
+            ->where(BaseListing::FK_USER_ID, '=', $userId)
             ->exists();
     }
 
@@ -225,29 +247,176 @@ class ListingsGateway {
     }
 
     /**
-     * @param AbstractListing $listing
-     * @return bool
+     * @param string $listingId
+     * @param array $data
+     * @return BaseListing
+     * @throws ListingNotFoundException
      */
-    public function edit(AbstractListing $listing) : bool
+    public function edit(string $listingId, array $data) : BaseListing
     {
+        $this->db->beginTransaction();
 
+        $edits      = array_intersect_key($data, array_flip(BaseListing::$editable));
+        $validator  = $this->validator->make($data, $this->editsRule);
+
+        if ($validator->fails()) {
+            $bag = new MessageBag($validator->failed());
+            throw new ValidationException($bag);
+        }
+
+        $listing = BaseListing::find($listingId);
+
+        if (!$listing) {
+            throw new ListingNotFoundException("Listing id {$listingId} not found.");
+        }
+
+        foreach ($edits as $field => $value) {
+            $setter = 'set' . str_replace('_', '', $field);
+            $listing->{$setter}($value);
+        }
+
+        $listing->save();
+
+        $metadata = ListingMetadata::where(ListingMetadata::FK_LISTING_ID, $listing->getId())->first();
+
+        $listing->setMetadata($metadata);
+        $location = Location::find($listing->getFkLocationId());
+        $listing->setLocation($location);
+
+        if ($listing->getType() == RideListing::ListingType) {
+            $route = ListingRoute::find($metadata->getFkListingRouteId());
+            $listing->setRoute($route);
+        }
+
+        $this->db->commit();
+
+        return $listing;
+    }
+
+    public function getSelectColumns()
+    {
+        return [
+            'a.id',
+            'a.party_name',
+            'a.starting_date',
+            'a.ending_date',
+            'a.additional_info',
+            'a.max_occupants',
+            'a.type',
+
+            'b.dog_friendly',
+            'b.cat_friendly',
+            'b.time_of_day',
+
+            'c.id as location_id',
+            'c.street',
+            'c.city',
+            'c.state',
+            'c.zip',
+            'c.country',
+
+            'd.id as route_id',
+            'd.overview_path'
+        ];
     }
 
     /**
-     * @param int $listingId
-     * @return AbstractListing
+     * @param string $userId
+     * @return array
      */
-    public function find(int $listingId) : AbstractListing
+    public function allForUser(string $userId)
     {
+        $data = $this->db->table('listings as a')
+            ->join('listings_metadata as b', 'a.id', '=', 'b.fk_listing_id')
+            ->join('locations as c', 'c.id', '=', 'a.fk_location_id')
+            ->join('listing_routes as d', 'd.id', '=', 'b.fk_listing_route_id')
+            ->where('a.fk_user_id', '=', $userId)
+            ->where('a.active', '=', 1)
+            ->select($this->getSelectColumns())->get();
 
+        if (!is_array($data) || !count($data)) return [];
+
+        $out = [];
+        foreach($data as $row) {
+            $out[] = $this->formatOne($row);
+        }
+
+        return $out;
     }
 
     /**
-     * @param AbstractListing $listing
+     * @param array $data
+     * @return array
+     */
+    private function formatOne(array $data)
+    {
+        $out = [
+            'id' => $data['id'],
+            'party_name' => $data['party_name'],
+            'starting_date' => $data['starting_date'],
+            'ending_date' => $data['ending_date'],
+            'type' => $data['type'],
+            'additional_info' => $data['additional_info'],
+            'max_occupants' => $data['max_occupants'],
+            'dog_friendly' => (bool)$data['dog_friendly'],
+            'cat_friendly' => (bool)$data['cat_friendly'],
+            'time_of_day' => ListingMetadata::translateTimeOfDay($data['time_of_day']),
+            'location' => [
+                'id' => $data['location_id'],
+                'street' => $data['street'],
+                'city' => $data['city'],
+                'state' => $data['state'],
+                'zip' => $data['zip'],
+                'country' => $data['country']
+            ]
+        ];
+
+        if ($data['type'] == RideListing::ListingType) {
+            $out['route'] = [
+                'id' => $data['route_id'],
+                'overview_path' => $data['overview_path']
+            ];
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param string $listingId
+     * @return BaseListing
+     * @throws ListingNotFoundException
+     */
+    public function find(string $listingId)
+    {
+        // This is performance hit. Too many reads at once. This could
+        // be a single query with multiple joins
+
+        // Todo: make this into a single query with multiple joins
+        $listing = BaseListing::find($listingId);
+
+        if (!$listing) {
+            throw new ListingNotFoundException("Listing id {$listingId}. No such listing exists.");
+        }
+
+        $metadata = ListingMetadata::where(ListingMetadata::FK_LISTING_ID, $listingId)->first();
+        $location = Location::find($listing->getFkLocationId());
+
+        if ($listing->getType() == RideListing::ListingType) {
+            $route = ListingRoute::find($metadata->getFkListingRouteId());
+            $listing->setRoute($route);
+        }
+
+        return $listing->setMetadata($metadata)->setLocation($location);
+    }
+
+    /**
+     * @param string $listingId
      * @return bool
      */
-    public function delete(AbstractListing $listing) : bool
+    public function delete(string $listingId)
     {
-
+        $this->db->table('listings')
+            ->where(BaseListing::ID, '=', $listingId)
+            ->update([BaseListing::ACTIVE => 0]);
     }
 }

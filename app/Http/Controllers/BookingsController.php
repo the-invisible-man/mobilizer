@@ -51,9 +51,10 @@ class BookingsController extends Controller {
     }
 
     /**
-     * @return JsonResponse
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|JsonResponse|\Illuminate\View\View
      */
-    public function all() : JsonResponse
+    public function all(Request $request)
     {
         // We'll return all the bookings of the user that is
         // currently signed in
@@ -67,7 +68,12 @@ class BookingsController extends Controller {
             $response       = ['message' => 'Service not available'];
         }
 
-        return \Response::json($response, $responseCode);
+        if ($request->ajax()) {
+            return \Response::json($response, $responseCode);
+        } else{
+            // return a view
+            return view('');
+        }
     }
 
     /**
@@ -88,18 +94,23 @@ class BookingsController extends Controller {
             $response    = $this->bookingsGateway->create($data);
         }
 
-        return \Response::json($response, $responseCode);
+        if ($request->ajax()) {
+            return \Response::json($response, $responseCode);
+        } else {
+
+        }
     }
 
     /**
-     * @param int $bookingId
+     * @param string $bookingId
      * @return JsonResponse
      */
-    public function get(int $bookingId) : JsonResponse
+    public function get(string $bookingId)
     {
         $responseCode = 200;
+
         try {
-            $response = Booking::findOrFail($bookingId);
+            $response = $this->bookingsGateway->find($bookingId);
         } catch (ModelNotFoundException $e) {
             $responseCode   = 400;
             $response       = ['message' => "No booking with id of {$bookingId} found"];
@@ -109,25 +120,78 @@ class BookingsController extends Controller {
     }
 
     /**
-     * @param int $bookingId
+     * @param Request $request
+     * @param string $bookingId
      * @return JsonResponse
      */
-    public function edit(int $bookingId) : JsonResponse
+    public function edit(Request $request, string $bookingId) : JsonResponse
     {
+        $responseCode = 200;
 
+        try {
+            $response = $this->bookingsGateway->edit($bookingId, $request->all())->toArray();
+        } catch (\Exception $e) {
+            $responseCode   = 400;
+            $response       = ['message' => "Service not available"];
+        }
+
+        return \Response::json($response, $responseCode);
     }
 
     /**
-     * @param int $bookingId
+     * @param Request $request
+     * @param string $bookingId
      * @return JsonResponse
      */
-    public function cancel(int $bookingId) : JsonResponse
+    public function cancel(Request $request, string $bookingId)
     {
+        try {
+            $userId = 'fa59822a-3f55-408c-98a6-e2b7e5905664';
+            $this->bookingsGateway->cancel($bookingId, $userId);
+        } catch (\Exception $e) {
+            return \Response::json(['message' => 'Service not available'], 400);
+        }
 
+        if ($request->ajax()) {
+            return \Response::json(['status' => 'ok'], 200);
+        }
     }
 
-    public function reject(string $bookingId)
+    /**
+     * @param Request $request
+     * @param string $bookingId
+     * @return JsonResponse
+     */
+    public function accept(Request $request, string $bookingId)
     {
+        try {
+            $userId = "fa59822a-3f55-408c-98a6-e2b7e5905664";
+            $this->bookingsGateway->accept($bookingId, $userId);
+        } catch (\Exception $e) {
+            return \Response::json(['message' => 'Service not available'], 400);
+        }
 
+        if ($request->ajax()) {
+            return \Response::json(['status' => 'ok'], 200);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param string $bookingId
+     * @return JsonResponse
+     */
+    public function reject(Request $request, string $bookingId)
+    {
+        try {
+            $userId = "fa59822a-3f55-408c-98a6-e2b7e5905664";
+            $this->bookingsGateway->reject($bookingId, $userId);
+        } catch (\Exception $e) {
+            return \Response::json(['message' => 'Service not available'], 400);
+        }
+
+        if ($request->ajax()) {
+            return \Response::json(['status' => 'ok'], 200);
+        }
     }
 }

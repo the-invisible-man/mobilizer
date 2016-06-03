@@ -44,17 +44,30 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 
+// Some of this stuff is not gonna be very "RESTful", forgive me ahead of time.
+
+
 Route::get('listings', 'ListingsController@all');
 Route::post('listings', 'ListingsController@new');
 Route::get('listings/{listing_id}', 'ListingsController@get');
 Route::put('listings/{listing_id}', 'ListingsController@edit');
 Route::delete('listings/{listing_id}', 'ListingsController@delete');
 
-Route::get('bookings', 'BookingsController@all');
-Route::get('bookings/{booking_id}', 'BookingsController@get');
-Route::put('bookings/{booking_id}', 'BookingsController@edit');
-Route::post('bookings', 'BookingsController@new');
-Route::delete('bookings/{booking_id}', 'BookingsController@delete');
+
+Route::group(['prefix' => 'bookings'], function () {
+    Route::get('/', 'BookingsController@all');
+\    Route::post('/', 'BookingsController@new');
+    Route::get('{booking_id}', 'BookingsController@get');
+    Route::put('{booking_id}', 'BookingsController@edit');
+
+
+    // Booking Actions
+    Route::post("{booking_id}/accept", "BookingsController@accept");
+    Route::post("{booking_id}/reject", "BookingsController@reject");
+    Route::delete('{booking_id}', 'BookingsController@cancel');
+});
+
+
 
 Route::put('accounts/{account_id}', 'AccountsController@edit');
 Route::delete('accounts/{account_id}', 'AccountsController@delete');

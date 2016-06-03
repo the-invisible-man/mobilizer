@@ -82,7 +82,11 @@ class ListingsController extends Controller {
             return \Response::json($response, $responseCode);
         }
 
-        return $request['type'] == RideListing::ListingType ? view('list_ride_success', $response) : view('list_house_success', $response);
+        if ($request->ajax()) {
+            return $response;
+        } else {
+            return $request['type'] == RideListing::ListingType ? view('list_ride_success', $response) : view('list_house_success', $response);
+        }
     }
 
     /**
@@ -96,7 +100,7 @@ class ListingsController extends Controller {
         $response['starting_date']['text']  = (new \DateTime($response['starting_date']['date']))->format("M d, Y");
         $response['ending_date']['text']    = (new \DateTime($response['ending_date']['date']))->format("M d, Y");
         $response['user_email']             = 'granados.carlos91@gmail.com';
-        $response['leaving']                = ListingMetadata::$timeOfDayTranslations[$response['metadata']['time_of_day']];
+        $response['leaving']                = ListingMetadata::translateTimeOfDay($response['metadata']['time_of_day']);
 
         return $response;
     }
@@ -112,10 +116,11 @@ class ListingsController extends Controller {
     }
 
     /**
+     * @param Request $request,
      * @param int $listingId
      * @return JsonResponse
      */
-    public function get(int $listingId) : JsonResponse
+    public function get(Request $request, int $listingId)
     {
         $responseCode = 200;
 
@@ -126,14 +131,18 @@ class ListingsController extends Controller {
             $response       = ['message' => "No listing with id of {$listingId} found"];
         }
 
-        return \Response::json($response, $responseCode);
+        if ($request->ajax()) {
+            return \Response::json($response, $responseCode);
+        } else {
+
+        }
     }
 
     /**
      * @param int $listingId
      * @return JsonResponse
      */
-    public function edit(int $listingId) : JsonResponse
+    public function edit(int $listingId)
     {
 
     }
@@ -142,7 +151,7 @@ class ListingsController extends Controller {
      * @param int $listingId
      * @return JsonResponse
      */
-    public function delete(int $listingId) : JsonResponse
+    public function delete(int $listingId)
     {
 
     }

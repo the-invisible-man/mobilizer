@@ -7,11 +7,11 @@ use App\Lib\Packages\Tools\Traits\UuidModel;
 use App\Lib\Packages\Bookings\Models\BookingMetadata;
 
 /**
- * Class AbstractBooking
+ * Class BaseBooking
  * @package App\Lib\Packages\Bookings\Contracts
  * @author Carlos Granados <granados.carlos91@gmail.com>
  */
-abstract class AbstractBooking extends Model implements \JsonSerializable {
+class BaseBooking extends Model implements \JsonSerializable {
 
     use UuidModel;
 
@@ -38,7 +38,7 @@ abstract class AbstractBooking extends Model implements \JsonSerializable {
 
             // Booking request statuses
             STATUS_ACCEPTED = 'accepted',
-            STATUS_DENIED   = 'denied',
+            STATUS_REJECTED = 'rejected',
             STATUS_PENDING  = 'pending';
 
 
@@ -127,11 +127,11 @@ abstract class AbstractBooking extends Model implements \JsonSerializable {
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getTotalPeople()
     {
-        return $this->getAttribute(self::TOTAL_PEOPLE);
+        return (int)$this->getAttribute(self::TOTAL_PEOPLE);
     }
 
     /**

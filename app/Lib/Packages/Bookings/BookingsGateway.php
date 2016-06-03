@@ -2,11 +2,17 @@
 
 namespace App\Lib\Packages\Bookings;
 
-use App\Lib\Packages\Bookings\Contracts\AbstractBooking;
+use App\Lib\Packages\Bookings\Contracts\BaseBooking;
+use App\Lib\Packages\Bookings\Exceptions\BookingNotFoundException;
+use App\Lib\Packages\Bookings\Exceptions\InactiveBookingException;
+use App\Lib\Packages\Bookings\Exceptions\MismatchException;
 use App\Lib\Packages\Bookings\Models\BookingMetadata;
 use App\Lib\Packages\Bookings\Models\HomeBooking;
 use App\Lib\Packages\Bookings\Models\RideBooking;
 use App\Lib\Packages\Geo\Location\LocationGateway;
+use App\Lib\Packages\Listings\Contracts\AbstractListing;
+use App\Lib\Packages\Listings\ListingsGateway;
+use App\Lib\Packages\Listings\Models\ListingMetadata;
 use Illuminate\Contracts\Logging\Log;
 use Illuminate\Contracts\Validation\ValidationException;
 use Illuminate\Database\DatabaseManager;
@@ -14,6 +20,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Monolog;
+use App\Lib\Packages\Bookings\Exceptions\InvalidNumberOfPeopleException;
 
 /**
  * Class BookingsGateway
@@ -41,6 +48,11 @@ class BookingsGateway {
     private $locationGateway;
 
     /**
+     * @var ListingsGateway
+     */
+    private $listingsGateway;
+
+    /**
      * @var ValidatorFactory
      */
     private $validatorFactory;
@@ -49,11 +61,11 @@ class BookingsGateway {
      * @var array
      */
     private $required = [
-        AbstractBooking::FK_USER_ID     => 'required',
-        AbstractBooking::FK_LISTING_ID  => 'required|bookingExists',
-        AbstractBooking::TOTAL_PEOPLE   => 'required|numeric|min:1|validateTotalPeople',
-        AbstractBooking::TYPE           => 'required|bookingType',
-        'location'                      => 'required-if:type,R'
+        BaseBooking::FK_USER_ID    => 'required',
+        BaseBooking::FK_LISTING_ID => 'required|bookingExists',
+        BaseBooking::TOTAL_PEOPLE  => 'required|numeric|min:1|validateTotalPeople',
+        BaseBooking::TYPE          => 'required|bookingType',
+        'location'                 => 'required-if:type,R'
     ];
 
     /**
@@ -63,24 +75,27 @@ class BookingsGateway {
      * @param ValidatorFactory $validatorFactory
      * @param Application $app
      * @param Log $log
+     * @param ListingsGateway $listingsGateway
      */
-    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway, ValidatorFactory $validatorFactory, Application $app, Log $log)
+    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway, ValidatorFactory $validatorFactory, Application $app, Log $log, ListingsGateway $listingsGateway)
     {
         $this->db               = $databaseManager->connection();
         $this->locationGateway  = $locationGateway;
         $this->validatorFactory = $validatorFactory;
         $this->app              = $app;
         $this->log              = $log;
+        $this->listingsGateway  = $listingsGateway;
     }
 
     /**
-     * @param $data
+     * @param array $data
+     * @param array $rules
      * @return \Illuminate\Validation\Validator
      */
-    private function validator($data)
+    private function validator($data, array $rules)
     {
         $slotsRemaining = 0;
-        $db = $this->db;
+        $db             = $this->db;
 
         $this->validatorFactory->extend('bookingType', function ($attribute, $value)
         {
@@ -98,10 +113,11 @@ class BookingsGateway {
             return ((int)$value) <= $slotsRemaining;
         }, 'Invalid number of people. Tried to reserve ' . $data['total_people'] . ' people but there\'s only ' . $slotsRemaining);
 
-        return $this->validatorFactory->make($data, $this->required);
+        return $this->validatorFactory->make($data, $rules);
     }
 
     /**
+     * Todo: take into account cancelled bookings
      * @param string $id
      * @return int
      */
@@ -112,22 +128,95 @@ class BookingsGateway {
                                 ->value('max_occupants');
 
         $taken = (int)$this->db->table('bookings')
-                                ->where(AbstractBooking::FK_LISTING_ID, '=', $id)
-                                ->where(AbstractBooking::STATUS, '=', AbstractBooking::STATUS_ACCEPTED)
-                                ->sum(AbstractBooking::TOTAL_PEOPLE);
+                                ->where(BaseBooking::FK_LISTING_ID, '=', $id)
+                                ->where(BaseBooking::STATUS, '=', BaseBooking::STATUS_ACCEPTED)
+                                ->where(BaseBooking::ACTIVE, '=', 1)
+                                ->sum(BaseBooking::TOTAL_PEOPLE);
 
         return ($max - $taken);
     }
 
+    private function validateTotalPeopleForEdit(BaseBooking $booking, int $totalPeople)
+    {
+        $remaining = $this->remainingSlots($booking->getFkListingId()) + $booking->getTotalPeople();
+
+        if ($totalPeople > $remaining) {
+            throw new InvalidNumberOfPeopleException("Cannot edit total number of people to {$totalPeople}. There's only {$remaining} slots available");
+        }
+    }
+
+
+    /**
+     * Oh this will surpass all the hacks
+     *
+     * @param string $bookingId
+     * @param array $data
+     * @return BaseBooking
+     * @throws BookingNotFoundException
+     */
+    public function edit(string $bookingId, array $data)
+    {
+        $this->db->beginTransaction();
+
+        $editable   = ['total_people', 'additional_info'];
+        $edits      = array_intersect_key($data, array_flip($editable));
+        /**
+         * @var BaseBooking $booking
+         */
+        $booking    = BaseBooking::find($bookingId);
+
+        if (!$booking) {
+            throw new BookingNotFoundException("Booking id {$bookingId}, no such booking exists");
+        }
+
+        /**
+         * @var ListingMetadata $listingMetadata
+         */
+        $listingMetadata = ListingMetadata::where(ListingMetadata::FK_LISTING_ID, $booking->getFkListingId())->first();
+
+        foreach ($edits as $column => $val) {
+            if ($column == 'total_people') {
+                $this->validateTotalPeopleForEdit($booking, $val);
+            }
+            $setter = 'set' . str_replace('_', '', $column);
+            $booking->{$setter}($val);
+        }
+
+        $booking->save();
+
+        $editable   = ['brings_dog', 'brings_cat'];
+        $edits      = array_intersect_key($data, array_flip($editable));
+        $metadata   = BookingMetadata::where(BookingMetadata::FK_BOOKING_ID, $booking->getId())->first();
+
+        foreach ($edits as $column => $val) {
+            if ($column == 'brings_dog' && (bool)$val &&  ! $listingMetadata->isDogFriendly()) {
+                throw new \InvalidArgumentException("Opted to bring dog but listing does not allow dogs");
+            } elseif ($column == 'brings_cat' && (bool)$val && ! $listingMetadata->isCatFriendly()) {
+                throw new \InvalidArgumentException("Opted to bring cat but listing does not allow cats");
+            }
+
+            $setter = 'set' . str_replace('_', '', $column);
+            $metadata->{$setter}($data[$column]);
+        }
+
+        $metadata->save();
+
+        $booking->setMetadata($metadata);
+
+        $this->db->commit();
+
+        return $booking;
+    }
+
     /**
      * @param array $data
-     * @return AbstractBooking
+     * @return BaseBooking
      * @throws \Exception
      */
     public function create(array $data)
     {
         // Shit's about to get hacky af. I have 7 days or maybe 10.
-        $val = $this->validator($data);
+        $val = $this->validator($data, $this->required);
 
         if ($val->fails()) {
             $bag = new MessageBag($val->failed());
@@ -150,17 +239,17 @@ class BookingsGateway {
 
     /**
      * @param array $data
-     * @return AbstractBooking
+     * @return BaseBooking
      */
     private function processNew(array $data)
     {
         /**
-         * @var AbstractBooking $booking
+         * @var BaseBooking $booking
          */
         $booking  = new $this->bookingTypes[$data['type']]($data);
 
-        $booking->setTotalPeople($data[AbstractBooking::TOTAL_PEOPLE]);
-        $booking->setFKListingId($data[AbstractBooking::FK_LISTING_ID]);
+        $booking->setTotalPeople($data[BaseBooking::TOTAL_PEOPLE]);
+        $booking->setFKListingId($data[BaseBooking::FK_LISTING_ID]);
 
         $booking->save();
 
@@ -182,6 +271,71 @@ class BookingsGateway {
     }
 
     /**
+     * @return array
+     */
+    private function getSelectColumns()
+    {
+        return [
+            // bookings
+            'a.id',
+            'a.status',
+            'a.type',
+            'a.additional_info',
+            'a.total_people',
+
+            // bookings_metadata
+            'b.brings_dog',
+            'b.brings_cat',
+
+            // listing
+            'c.id as listing_id',
+            'c.starting_date',
+            'c.ending_date',
+            'c.party_name',
+            'c.additional_info as listing_additional_info',
+
+            // listing_metadata
+            'd.time_of_day',
+
+            // booking location
+            'e.id as booking_location_id',
+            'e.street as booking_location_street',
+            'e.city as booking_location_city',
+            'e.state as booking_location_state',
+            'e.zip as booking_location_zip',
+            'e.country as booking_location_country',
+
+            // listing location
+            'f.id as listing_location_id',
+            'f.street as listing_location_street',
+            'f.city as listing_location_city',
+            'f.state as listing_location_state',
+            'f.zip as listing_location_zip',
+            'f.country as listing_location_country'
+        ];
+    }
+
+    /**
+     * @param string $bookingId
+     * @return array|null
+     */
+    public function find(string $bookingId)
+    {
+        $data = (array)$this->db->table('bookings as a')
+            ->join('bookings_metadata as b', 'b.fk_booking_id', '=', 'a.id')
+            ->join('listings as c', 'c.id', '=', 'a.fk_listing_id')
+            ->join('listings_metadata as d', 'd.fk_listing_id', '=', 'c.id')
+            ->join('locations as e', 'e.id', '=', 'b.fk_location_id', 'left')
+            ->join('locations as f', 'f.id', '=', 'c.fk_location_id')
+            ->where('a.id', '=', $bookingId)
+            ->first($this->getSelectColumns());
+
+        if (!is_array($data) || ! count($data)) return null;
+
+        return $this->formatBookingResult($data);
+    }
+
+    /**
      * @param string $user
      * @return array
      */
@@ -195,94 +349,68 @@ class BookingsGateway {
             ->join('locations as f', 'f.id', '=', 'c.fk_location_id')
             ->where('a.fk_user_id', '=', $user)
             ->where('c.active', '=', 1)
-            ->get([
-                // bookings
-                'a.id',
-                'a.status',
-                'a.type',
-                'a.additional_info',
-                'a.total_people',
-
-                // bookings_metadata
-                'b.brings_dog',
-                'b.brings_cat',
-
-                // listing
-                'c.id as listing_id',
-                'c.starting_date',
-                'c.ending_date',
-                'c.party_name',
-                'c.additional_info as listing_additional_info',
-
-                // listing_metadata
-                'd.time_of_day',
-
-                // booking location
-                'e.id as booking_location_id',
-                'e.street as booking_location_street',
-                'e.city as booking_location_city',
-                'e.state as booking_location_state',
-                'e.zip as booking_location_zip',
-                'e.country as booking_location_country',
-
-                // listing location
-                'f.id as listing_location_id',
-                'f.street as listing_location_street',
-                'f.city as listing_location_city',
-                'f.state as listing_location_state',
-                'f.zip as listing_location_zip',
-                'f.country as listing_location_country'
-            ]);
+            ->get($this->getSelectColumns());
 
         if (!is_array($data) || ! count($data)) return [];
 
         $ouput = [];
         // Format data
-        for ($i = 0; $i < count($data); $i++) {
+        foreach ($data as $booking) {
             // Build booking data
-            $ouput[$i] = [
-                'id'                => $data[$i][AbstractBooking::ID],
-                'total_people'      => $data[$i][AbstractBooking::TOTAL_PEOPLE],
-                'status'            => $data[$i][AbstractBooking::STATUS],
-                'additional_info'   => $data[$i][AbstractBooking::ADDITIONAL_INFO],
-                'type'              => $data[$i][AbstractBooking::TYPE],
-                'brings_cat'        => (bool)$data[$i][BookingMetadata::BRINGS_DOG],
-                'brings_dog'        => (bool)$data[$i][BookingMetadata::BRINGS_CAT],
-                'listing'           => [
-                    'id'                => $data[$i]['listing_id'],
-                    'party_name'        => $data[$i]['party_name'],
-                    'starting_date'     => $data[$i]['starting_date'],
-                    'ending_date'       => $data[$i]['ending_date'],
-                    'additional_info'   => $data[$i]['listing_additional_info'],
-                    'remainingSlots'    => $this->remainingSlots($data[$i]['listing_id']),
-                    'time_of_day'       => $data[$i]['time_of_day'],
-                    'location'          => [
-                        'id'        => $data[$i]['listing_location_id'],
-                        'street'    => $data[$i]['listing_location_street'],
-                        'city'      => $data[$i]['listing_location_city'],
-                        'state'     => $data[$i]['listing_location_state'],
-                        'zip'       => $data[$i]['listing_location_zip'],
-                        'country'   => $data[$i]['listing_location_country']
-                    ]
-                ]
-            ];
-
-            // Check if it's ride, if so the booking should have
-            // a location associated to it
-            if ($data[$i][AbstractBooking::TYPE] == RideBooking::ListingType) {
-                $ouput[$i]['user_location'] = [
-                    'id'        => $data[$i]['booking_location_id'],
-                    'street'    => $data[$i]['booking_location_street'],
-                    'city'      => $data[$i]['booking_location_city'],
-                    'state'     => $data[$i]['booking_location_state'],
-                    'zip'       => $data[$i]['booking_location_zip'],
-                    'country'   => $data[$i]['booking_location_country']
-                ];
-            }
+            $ouput[] = $this->formatBookingResult($booking);
 
         }
 
         return $ouput;
+    }
+
+    /**
+     * @param array $booking
+     * @return array
+     */
+    private function formatBookingResult(array $booking)
+    {
+        $data = [
+            'id'                => $booking[BaseBooking::ID],
+            'total_people'      => $booking[BaseBooking::TOTAL_PEOPLE],
+            'status'            => $booking[BaseBooking::STATUS],
+            'additional_info'   => $booking[BaseBooking::ADDITIONAL_INFO],
+            'type'              => $booking[BaseBooking::TYPE],
+            'brings_cat'        => (bool)$booking[BookingMetadata::BRINGS_DOG],
+            'brings_dog'        => (bool)$booking[BookingMetadata::BRINGS_CAT],
+            'listing'           => [
+                'id'                => $booking['listing_id'],
+                'party_name'        => $booking['party_name'],
+                'starting_date'     => $booking['starting_date'],
+                'ending_date'       => $booking['ending_date'],
+                'additional_info'   => $booking['listing_additional_info'],
+                'remainingSlots'    => $this->remainingSlots($booking['listing_id']),
+                'time_of_day'       => ListingMetadata::translateTimeOfDay($booking['time_of_day']),
+                'location'          => [
+                    'id'        => $booking['listing_location_id'],
+                    'street'    => $booking['listing_location_street'],
+                    'city'      => $booking['listing_location_city'],
+                    'state'     => $booking['listing_location_state'],
+                    'zip'       => $booking['listing_location_zip'],
+                    'country'   => $booking['listing_location_country']
+                ]
+            ]
+        ];
+
+        // Check if it's ride, if so the booking should have
+        // a location associated to it
+        if ($booking[BaseBooking::TYPE] == RideBooking::ListingType) {
+            $data['user_location'] = [
+                'id'        => $booking['booking_location_id'],
+                'street'    => $booking['booking_location_street'],
+                'city'      => $booking['booking_location_city'],
+                'state'     => $booking['booking_location_state'],
+                'zip'       => $booking['booking_location_zip'],
+                'country'   => $booking['booking_location_country']
+            ];
+        }
+
+        return $data;
     }
 
     /**
@@ -293,36 +421,119 @@ class BookingsGateway {
     public function ownsBooking(string $bookingId, string $userId)
     {
         return $this->db->table('bookings')
-            ->where(AbstractBooking::ID, '=', $bookingId)
-            ->where(AbstractBooking::FK_USER_ID, '=', $userId)
+            ->where(BaseBooking::ID, '=', $bookingId)
+            ->where(BaseBooking::FK_USER_ID, '=', $userId)
             ->exists();
     }
 
     /**
+     * User has to own listing associated with booking
+     *
      * @param string $bookingId
+     * @param string $currentUserId
+     * @return BaseBooking
+     * @throws BookingNotFoundException
+     * @throws MismatchException
      */
-    public function reject(string $bookingId)
+    public function listingOwnerToBookingValidation(string $bookingId, string $currentUserId)
     {
-        $this->db->table('bookings')
-            ->where(AbstractBooking::ID, '=', $bookingId)
-            ->update([AbstractBooking::STATUS => AbstractBooking::STATUS_DENIED]);
+        /**
+         * @var BaseBooking $booking
+         */
+        $booking = BaseBooking::find($bookingId);
+
+        // Make sure booking is valid
+        if (!$booking) {
+            throw new BookingNotFoundException("Booking id: '{$bookingId}' - No such booking exists'");
+        }
+
+        // User must own listing associated with booking
+        $owns = $this->listingsGateway->ownsListing($booking->getFkListingId(), $currentUserId);
+
+        if (!$owns) {
+            throw new MismatchException("User to listing to booking mismatch. User {$currentUserId} does not own listing {$booking->getFkListingId()}");
+        }
+
+        return $booking;
+    }
+
+    /**
+     * User has to own booking
+     *
+     * @param string $bookingId
+     * @param string $currentUserId
+     * @return BaseBooking
+     * @throws BookingNotFoundException
+     * @throws MismatchException
+     */
+    public function bookingOwnerActionValidator(string $bookingId, string $currentUserId)
+    {
+        /**
+         * @var BaseBooking $booking
+         */
+        $booking = BaseBooking::find($bookingId);
+
+        // Make sure booking is valid
+        if (!$booking) {
+            throw new BookingNotFoundException("Booking id: '{$bookingId}' - No such booking exists'");
+        }
+
+        if ($booking->getFKUserId() !== $currentUserId) {
+            throw new MismatchException("Booking to user mismatch. User {$currentUserId} does not own booking {$booking->getFkListingId()}");
+        }
     }
 
     /**
      * @param string $bookingId
+     * @param string $currentUserId
+     * @return bool
+     * @throws BookingNotFoundException
+     * @throws MismatchException
      */
-    public function accept(string $bookingId)
+    public function reject(string $bookingId, string $currentUserId)
     {
+        // This validation should probably not be in here, but as I mentioned
+        // previously: #OneManDevTeam $tbs->#WeGot7DaysToWorkWith
+        $this->listingOwnerToBookingValidation($bookingId, $currentUserId);
+
         $this->db->table('bookings')
-            ->where(AbstractBooking::ID, '=', $bookingId)
-            ->update([AbstractBooking::STATUS => AbstractBooking::STATUS_ACCEPTED]);
+            ->where(BaseBooking::ID, '=', $bookingId)
+            ->update([BaseBooking::STATUS => BaseBooking::STATUS_REJECTED]);
     }
 
     /**
      * @param string $bookingId
+     * @param string $currentUserId
+     * @throws BookingNotFoundException
+     * @throws MismatchException
+     * @throws InactiveBookingException
      */
-    private function cancel(string $bookingId)
+    public function accept(string $bookingId, string $currentUserId)
     {
-        // User has to own booking
+        $booking = $this->listingOwnerToBookingValidation($bookingId, $currentUserId);
+
+        if (!$booking->isActive()) {
+            throw new InactiveBookingException("Cannot accept inactive booking");
+        }
+
+        $this->db->table('bookings')
+            ->where(BaseBooking::ID, '=', $bookingId)
+            ->update([BaseBooking::STATUS => BaseBooking::STATUS_ACCEPTED]);
+    }
+
+    /**
+     * @param string $bookingId
+     * @param string $currentUserId
+     * @return BaseBooking
+     * @throws BookingNotFoundException
+     * @throws MismatchException
+     */
+    public function cancel(string $bookingId, string $currentUserId)
+    {
+        $this->bookingOwnerActionValidator($bookingId, $currentUserId);
+
+        $this->db->table('bookings')
+            ->where(BaseBooking::ID, '=', $bookingId)
+            ->update([BaseBooking::ACTIVE => 0]);
     }
 }

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Lib\Packages\Bookings\Contracts\AbstractBooking;
+use App\Lib\Packages\Bookings\Contracts\BaseBooking;
 
 class CreateBookingsTable extends Migration
 {
@@ -18,7 +18,7 @@ class CreateBookingsTable extends Migration
             $table->uuid('fk_user_id')->index();
             $table->uuid('fk_listing_id')->index();
             $table->integer('total_people');
-            $table->string('status')->default(AbstractBooking::STATUS_PENDING);
+            $table->string('status')->default(BaseBooking::STATUS_PENDING);
             $table->text("additional_info");
             $table->char('type', 1);
             $table->boolean('active')->default(true);

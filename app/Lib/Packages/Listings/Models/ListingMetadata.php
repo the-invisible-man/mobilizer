@@ -48,6 +48,15 @@ class ListingMetadata extends Model
     }
 
     /**
+     * @param $key
+     * @return string|null
+     */
+    public static function translateTimeOfDay($key)
+    {
+        return isset(self::$timeOfDayTranslations[$key]) ? self::$timeOfDayTranslations[$key] : null;
+    }
+
+    /**
      * @param string $id
      * @return ListingMetadata
      */

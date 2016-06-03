@@ -169,14 +169,14 @@ class ListingsGateway {
     }
 
     /**
-     * @param string $bookingId
+     * @param string $listingId
      * @param string $userId
      * @return bool
      */
-    public function ownsListing(string $bookingId, string $userId)
+    public function ownsListing(string $listingId, string $userId)
     {
         return $this->db->table('listings')
-            ->where(AbstractListing::ID, '=', $bookingId)
+            ->where(AbstractListing::ID, '=', $listingId)
             ->where(AbstractListing::FK_USER_ID, '=', $userId)
             ->exists();
     }

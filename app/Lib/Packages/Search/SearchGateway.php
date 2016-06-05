@@ -49,15 +49,35 @@ class SearchGateway {
     }
 
     /**
-     * @param string $location
+     * @param string $user_location
      * @return array
      */
-    public function searchRide(string $location)
+    public function searchRide(string $user_location)
     {
-        $location   = $this->geoService->geocode($location);
+        $time       = microtime();
+        $location   = $this->geoService->geocode($user_location);
         $ids        = $this->searchDriver->searchRide($location->getGeoLocation());
+        $results    = $this->pullRidesFromDB($ids);
+        $total      = microtime() - $time;
 
-        return $this->pullRidesFromDB($ids);
+        return $this->formatResults($results, $user_location, $total);
+    }
+
+    /**
+     * @param array $resultSet
+     * @param string $term
+     * @param string $timeTaken
+     * @return array
+     */
+    private function formatResults(array $resultSet, string $term, string $timeTaken)
+    {
+        return [
+            'status'            => 'ok',
+            'total_time'        => $timeTaken,
+            'search_term'       => $term,
+            'number_of_hits'    => count($resultSet),
+            'results'           => $resultSet
+        ];
     }
 
     /**
@@ -94,9 +114,7 @@ class SearchGateway {
         $out = [];
 
         foreach ($result as $row) {
-            if ((int)$row['remaining_slots']) {
-                $out[] = $this->formatOne($row);
-            }
+            $out[] = $this->formatOne($row);
         }
 
         return $out;

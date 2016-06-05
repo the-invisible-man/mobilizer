@@ -2,13 +2,14 @@
 
 namespace App\Lib\Packages\Search;
 
+use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
-use App\Lib\Packages\Listings\ListingTypes\RideListing;
 use App\Lib\Packages\Search\Drivers\SearchDriverInterface;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\MySqlConnection;
 use App\Lib\Packages\Bookings\Contracts\BaseBooking;
+use Illuminate\Database\Query\JoinClause;
 
 /**
  * Class Search
@@ -19,6 +20,8 @@ use App\Lib\Packages\Bookings\Contracts\BaseBooking;
  * @author Carlos Granados <granados.carlos91@gmail.com>
  */
 class SearchGateway {
+
+    use ConfigValidatorTrait;
 
     /**
      * @var MySqlConnection
@@ -36,13 +39,21 @@ class SearchGateway {
     private $searchDriver;
 
     /**
+     * @var array
+     */
+    private $config;
+
+    /**
      * Search constructor.
      * @param DatabaseManager $databaseManager
      * @param GeoServiceInterface $geoService
      * @param SearchDriverInterface $searchDriver
+     * @param array $config
      */
-    public function __construct(DatabaseManager $databaseManager, GeoServiceInterface $geoService, SearchDriverInterface $searchDriver)
+    public function __construct(DatabaseManager $databaseManager, GeoServiceInterface $geoService, SearchDriverInterface $searchDriver, array $config)
     {
+        $this->validateConfig($config, ['max_results']);
+
         $this->database     = $databaseManager->connection();
         $this->geoService   = $geoService;
         $this->searchDriver = $searchDriver;
@@ -57,7 +68,7 @@ class SearchGateway {
         $time       = microtime();
         $location   = $this->geoService->geocode($user_location);
         $ids        = $this->searchDriver->searchRide($location->getGeoLocation());
-        $results    = $this->pullRidesFromDB($ids);
+        $results    = $this->fetchListings($ids);
         $total      = microtime() - $time;
 
         return $this->formatResults($results, $user_location, $total);
@@ -94,22 +105,21 @@ class SearchGateway {
      * @param array $ids
      * @return array
      */
-    private function pullRidesFromDB(array $ids)
+    private function fetchListings(array $ids)
     {
         $result = $this->database->table('listings as a')
-            ->join('listings_metadata as b', 'a.id', '=', 'b.fk_listing_id')
-            ->join('locations as c', 'c.id', '=', 'a.fk_location_id')
-            ->join('listing_routes as d', 'd.id', '=', 'b.fk_listing_route_id', 'left')
-            ->leftJoin('bookings as e', function ($join) {
-                $join->on('e.fk_listing_id', '=', 'a.id');
-                $join->on('e.status', '=', $this->database->raw("'" . BaseBooking::STATUS_ACCEPTED . "'"));
-            })
-            ->groupBy(['e.fk_listing_id', 'a.id'])
-            ->whereIn('a.id', $ids)
-            ->where('a.active', '=', 1)
-            ->having('remaining_slots', '>', 0)
-            ->limit(50)
-            ->select($this->getSelectColumns())->get();
+                    ->join('listings_metadata as b', 'a.id', '=', 'b.fk_listing_id')
+                    ->join('locations as c', 'c.id', '=', 'a.fk_location_id')
+                    ->leftJoin('bookings as e', function (JoinClause $join) {
+                        $join->on('e.fk_listing_id', '=', 'a.id');
+                        $join->on('e.status', '=', $this->database->raw("'" . BaseBooking::STATUS_ACCEPTED . "'"));
+                    })
+                    ->groupBy(['e.fk_listing_id', 'a.id'])
+                    ->whereIn('a.id', $ids)
+                    ->where('a.active', '=', 1)
+                    ->having('remaining_slots', '>', 0)
+                    ->limit($this->config['max_results'])
+                    ->select($this->getSelectColumns())->get();
 
         $out = [];
 
@@ -159,20 +169,12 @@ class SearchGateway {
             'time_of_day'       => ListingMetadata::translateTimeOfDay($data['time_of_day']),
             'location' => [
                 'id'        => $data['location_id'],
-                'street'    => $data['street'],
                 'city'      => $data['city'],
                 'state'     => $data['state'],
                 'zip'       => $data['zip'],
                 'country'   => $data['country']
             ]
         ];
-
-        if ($data['type'] == RideListing::ListingType) {
-            $out['route'] = [
-                'id' => $data['route_id'],
-                'overview_path' => $data['overview_path']
-            ];
-        }
 
         return $out;
     }
@@ -197,14 +199,10 @@ class SearchGateway {
             'b.time_of_day',
 
             'c.id as location_id',
-            'c.street',
             'c.city',
             'c.state',
             'c.zip',
             'c.country',
-
-            'd.id as route_id',
-            'd.overview_path'
         ];
     }
 }

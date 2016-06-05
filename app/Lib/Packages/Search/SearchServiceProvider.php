@@ -17,8 +17,9 @@ class SearchServiceProvider extends ServiceProvider {
             $db     = $app->make('db');
             $geo    = $app->make(GeoServiceInterface::class);
             $driver = $app[SearchDriverInterface::class];
+            $config = $app['config']['search.gateway'];
 
-            return new SearchGateway($db, $geo, $driver);
+            return new SearchGateway($db, $geo, $driver, $config);
         });
 
         $this->app->singleton(SearchDriverInterface::class, function (Application $app) {

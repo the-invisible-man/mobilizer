@@ -14,6 +14,10 @@ return [
     */
     'default-driver'    => ElasticsearchDriver::class,
 
+    'gateway' => [
+        'max_results'   => 50
+    ],
+
     'elasticsearch'     => [
         'hosts'     => ['192.168.10.10:9200'],
         'radius'    => '24km'

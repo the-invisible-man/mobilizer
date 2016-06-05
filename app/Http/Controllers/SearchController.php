@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Lib\Packages\Listings\ListingTypes\RideListing;
 use App\Lib\Packages\Search\SearchGateway;
 use Illuminate\Http\Request;
 
@@ -36,7 +36,11 @@ class SearchController extends Controller {
         $resultCode = 200;
 
         try {
-            $response = $this->searchGateway->searchRide($request->get('location'));
+            if ($request->get('type') == RideListing::ListingType) {
+                $response = $this->searchGateway->searchRide($request->get('location'));
+            } else {
+                $response = $this->searchGateway->searchHousing($request->get('starting_date'), $request->get('ending_date'));
+            }
         } catch (\Exception $e) {
             $response = ['message' => 'Service not available'];
             $resultCode = 400;

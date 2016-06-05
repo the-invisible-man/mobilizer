@@ -61,6 +61,16 @@ class SearchGateway {
     }
 
     /**
+     * @param string $startingDate
+     * @param string $endingDate
+     * @return array
+     */
+    public function searchHousing(string $startingDate, string $endingDate)
+    {
+        return [];
+    }
+
+    /**
      * @param array $ids
      * @return array
      */
@@ -77,6 +87,7 @@ class SearchGateway {
             ->groupBy(['e.fk_listing_id', 'a.id'])
             ->whereIn('a.id', $ids)
             ->where('a.active', '=', 1)
+            ->having('remaining_slots', '>', 0)
             ->limit(50)
             ->select($this->getSelectColumns())->get();
 

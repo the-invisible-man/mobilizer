@@ -152,6 +152,7 @@ return [
         Laravel\Socialite\SocialiteServiceProvider::class,
         App\Lib\Packages\Geo\ServiceProvider\GeoServiceProvider::class,
         App\Lib\Packages\Listings\ServiceProviders\ListingsServiceProvider::class,
+        App\Lib\Packages\Search\SearchServiceProvider::class,
 
         /*
          * Application Service Providers...

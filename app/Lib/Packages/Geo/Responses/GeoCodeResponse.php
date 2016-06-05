@@ -2,6 +2,8 @@
 
 namespace App\Lib\Packages\Geo\Responses;
 
+use App\Lib\Packages\Geo\Location\Geopoint;
+
 /**
  * Class GeoCodeResponse
  * @package App\Lib\Packages\Geo\Contracts
@@ -43,6 +45,29 @@ class GeocodeResponse {
      * @var string
      */
     private $zip;
+
+    /**
+     * @var Geopoint
+     */
+    private $geoLocation;
+
+    /**
+     * @param Geopoint $point
+     * @return $this
+     */
+    public function setGeoLocation(Geopoint $point)
+    {
+        $this->geoLocation = $point;
+        return $this;
+    }
+
+    /**
+     * @return Geopoint
+     */
+    public function getGeoLocation()
+    {
+        return $this->geoLocation;
+    }
 
     /**
      * @return string

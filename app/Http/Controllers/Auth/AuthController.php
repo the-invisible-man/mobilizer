@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Illuminate\Validation\Factory;
 use Laravel\Socialite\Facades\Socialite;
-use Validator;
+use Illuminate\Validation\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -32,13 +33,19 @@ class AuthController extends Controller
     protected $redirectTo = '/';
 
     /**
+     * @var Factory
+     */
+    protected $validator;
+
+    /**
      * Create a new authentication controller instance.
      *
-     * @return void
+     * @param Factory $validator
      */
-    public function __construct()
+    public function __construct(Factory $validator)
     {
         $this->middleware('guest', ['except' => 'logout']);
+        $this->validator = $validator;
     }
 
     /**
@@ -49,7 +56,7 @@ class AuthController extends Controller
      */
     protected function validator(array $data) : Validator
     {
-        return Validator::make($data, [
+        return $this->validator->make($data, [
             'first_name'    => 'required|max:255',
             'last_name'     => 'required|max:255',
             'email'         => 'required|email|max:255|unique:users',
@@ -82,5 +89,6 @@ class AuthController extends Controller
     {
         $user = Socialite::with('facebook')->user();
 
+        return $user;
     }
 }

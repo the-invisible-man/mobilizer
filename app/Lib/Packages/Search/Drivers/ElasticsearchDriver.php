@@ -2,22 +2,92 @@
 
 namespace App\Lib\Packages\Search\Drivers;
 
-use App\Lib\Packages\Geo\Address\Geopoint;
+use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
+use App\Lib\Packages\Geo\Location\Geopoint;
+use Elasticsearch\Client;
+use App\Lib\Packages\Search\Exceptions\ElasticsearchAggregationException;
 
 /**
  * Class ElasticsearchDriver
  * @package App\Lib\Packages\Search\Drivers
  * @author Carlos Granados <granados.carlos91@gmail.com>
  */
-class ElasticsearchDriver implements SearchDriver
+class ElasticsearchDriver implements SearchDriverInterface
 {
-    public function searchRoute(Geopoint $latLong) : array
+    use ConfigValidatorTrait;
+
+    /**
+     * @var Client
+     */
+    private $client;
+
+    /**
+     * @var array
+     */
+    private $config;
+
+    /**
+     * ElasticsearchDriver constructor.
+     * @param Client $client
+     * @param array $config
+     */
+    public function __construct(Client $client, array $config)
     {
-        // TODO: Implement searchRoute() method.
+        $this->validateConfig($config, ['hosts', 'radius']);
+
+        $this->client   = $client;
+        $this->config   = $config;
     }
 
-    public function searchHousing()
+    /**
+     * @param Geopoint $pickupLocation
+     * @return array
+     * @throws ElasticsearchAggregationException
+     */
+    public function searchRide(Geopoint $pickupLocation) : array
     {
-        // TODO: Implement searchHousing() method.
+        $out        = [];
+        $aggregator = 'group_by_listings';
+
+        $params     = [
+            'index' => 'listings',
+            'type'  => 'route',
+            'body'  => [
+                'query' => [
+                    'filtered' => [
+                        'filter' => [
+                            'geo_distance' => [
+                                'distance' => $this->config['radius'],
+                                'location' => [
+                                    "lat" => $pickupLocation->getLat(),
+                                    "lon" => $pickupLocation->getLong()
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'size'  => 0,
+                'aggs' => [
+                    $aggregator => [
+                        'terms' => [
+                            'field' => 'listing_id.raw',
+                            'size'  => 0
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $result = $this->client->search($params);
+
+        if (!array_key_exists("aggregations", $result)) {
+            throw new ElasticsearchAggregationException("Could not find aggregate index in elasticsearch results. Cannot pull buckets: " . json_encode($result));
+        }
+
+        foreach ($result["aggregations"][$aggregator]["buckets"] as $bucket) {
+            $out[] = $bucket['key'];
+        }
+
+        return $out;
     }
 }

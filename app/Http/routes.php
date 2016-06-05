@@ -27,22 +27,14 @@ Route::get('/', function () {
 */
 
 Route::group(['middleware' => ['web']], function () {
-//    Route::get('listings', 'ListingsController@all');
-//    Route::get('listings/{listing_id}', 'ListingsController@get');
-//    Route::put('listings/{listing_id}', 'ListingsController@edit');
-//    Route::post('listings/{listing_id}', 'ListingsController@new');
-//    Route::delete('listings/{listing_id}', 'ListingsController@delete');
-//
-//    Route::get('bookings', 'BookingsController@all');
-//    Route::get('bookings/{booking_id}', 'BookingsController@get');
-//    Route::put('bookings/{booking_id}', 'BookingsController@edit');
-//    Route::post('bookings/{booking_id}', 'BookingsController@new');
-//    Route::delete('bookings/{booking_id}', 'BookingsController@delete');
-//
-//    Route::put('accounts/{account_id}', 'AccountsController@edit');
-//    Route::delete('accounts/{account_id}', 'AccountsController@delete');
+    Route::put('accounts/{account_id}', 'AccountsController@edit');
+    Route::delete('accounts/{account_id}', 'AccountsController@delete');
 });
 
+Route::group(['middleware' => 'web'], function () {
+    Route::auth();
+    Route::get('/home', 'HomeController@index');
+});
 
 // Some of this stuff is not gonna be very "RESTful", forgive me ahead of time.
 
@@ -67,6 +59,7 @@ Route::group(['prefix' => 'bookings'], function () {
     Route::delete('{booking_id}', 'BookingsController@cancel');
 });
 
+Route::get("search", "SearchController@search");
 
 
 Route::put('accounts/{account_id}', 'AccountsController@edit');
@@ -77,15 +70,12 @@ Route::delete('accounts/{account_id}', 'AccountsController@delete');
 Route::get('/add-listing', 'HomeController@listing');
 Route::get('/success-add-listing', 'ListingsController@testSuccess');
 
-Route::group(['middleware' => 'web'], function () {
-    Route::auth();
-    Route::get('/home', 'HomeController@index');
-});
+
 
 Route::group(['prefix' => 'api'], function () {
     Route::get('accounts/{account_id}', 'AccountsController@get');
     Route::post('accounts/{account_id}', 'AccountsController@new');
 
 
-    Route::get('search', 'SearchController@index');
+    //Route::get('search', 'SearchController@index');
 });

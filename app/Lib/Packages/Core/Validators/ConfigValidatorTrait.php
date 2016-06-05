@@ -13,12 +13,15 @@ trait ConfigValidatorTrait {
 
     /**
      * @param array $config
+     * @param array $required
      * @return array
      * @throws ConfigNotFoundException
      */
-    public function validateConfig(array $config) : array
+    public function validateConfig(array $config, array $required = null) : array
     {
-        $notFound   = array_diff($this->requiredConfig, array_keys($config));
+        $required = $required === null ? $this->requiredConfig : $required;
+
+        $notFound   = array_diff($required, array_keys($config));
 
         if (count($notFound)) {
             throw new ConfigNotFoundException("Missing required configuration: [" . implode(',', $notFound) . "]\nReceived [" . implode(',', $config) . "]");

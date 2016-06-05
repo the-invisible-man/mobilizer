@@ -121,7 +121,6 @@ class BookingsGateway {
     }
 
     /**
-     * Todo: take into account cancelled bookings
      * @param string $id
      * @return int
      */

@@ -14,8 +14,17 @@ use App\Lib\Packages\Tools\Traits\UuidModel;
  */
 class User extends Authenticatable
 {
-
     use UuidModel;
+
+    /**
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * @var string
+     */
+    protected $table = 'users';
 
     /**
      * The attributes that are mass assignable.
@@ -34,20 +43,4 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-    /**
-     * @return Booking
-     */
-    public function bookings() : Booking
-    {
-        $this->hasMany(Booking::class);
-    }
-
-    /**
-     * @return Listing
-     */
-    public function listings() : Listing
-    {
-        $this->hasMany(Listing::class);
-    }
 }

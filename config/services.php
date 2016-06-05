@@ -36,8 +36,8 @@ return [
     ],
 
     'facebook' => [
-        'client_id'      => '1341890069171431',
-        'client_secret'  => 'd185637369c58eb72ea68a694ef4a04d',
+        'client_id'      => '255798571447653',
+        'client_secret'  => env('FACEBOOK_SECRET'),
         'redirect'       => '/home'
     ]
 ];

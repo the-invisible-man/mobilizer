@@ -83,8 +83,8 @@ class GoogleMaps implements GeoServiceInterface {
      */
     private function formatGeocodeResponse(array $response) : GeocodeResponse
     {
-        // Todo: add geopoint object to response
         $return = new GeocodeResponse();
+        $point  = new Geopoint();
 
         foreach ($response['results'][0]['address_components'] as $component) {
             switch($component['types'][0]) {
@@ -111,6 +111,11 @@ class GoogleMaps implements GeoServiceInterface {
                     break;
             }
         }
+
+        $point->setLat($response['results'][0]['geometry']['location']['lat']);
+        $point->setLong($response['results'][0]['geometry']['location']['lng']);
+
+        $return->setGeoLocation($point);
 
         return $return;
     }

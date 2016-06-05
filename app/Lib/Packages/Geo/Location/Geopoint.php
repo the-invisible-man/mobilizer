@@ -14,21 +14,21 @@ class Geopoint {
      */
     private $point;
 
-    const LAT = 0, LONG =1;
+    const LAT = 0, LONG = 1;
 
     /**
      * Geopoint constructor.
      * @param array $point
      */
-    public function __construct(array $point)
+    public function __construct(array $point = [0, 0])
     {
         $this->validate($point);
 
-        $this->point[self::LAT]     = (float)number_format((float)$point[self::LAT], 6, '.', '');
-        $this->point[self::LONG]    = (float)number_format((float)$point[self::LONG], 6, '.', '');
+        $this->setLat($point[self::LAT]);
+        $this->setLong($point[self::LONG]);
     }
 
-    private function validate(array $point) : array
+    private function validate(array $point)
     {
         // We need to know that we have at least two items in the
         // array and that they're scalars. I'm not sure whether to
@@ -42,6 +42,44 @@ class Geopoint {
         } elseif (!is_scalar($point[self::LONG])) {
             throw new \InvalidArgumentException("Cannot initialize Geopoint: Item at subset 1 is not a scalar");
         }
+    }
+
+    /**
+     * @param $lat
+     * @return $this
+     */
+    public function setLat($lat)
+    {
+        $this->point[self::LAT] = $this->format($lat);
+        return $this;
+    }
+
+    /**
+     * @param $long
+     * @return $this
+     */
+    public function setLong($long)
+    {
+        $this->point[self::LONG] = $this->format($long);
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->point;
+    }
+
+    /**
+     * @param $ll
+     * @return float
+     */
+    private function format($ll)
+    {
+        return $ll;
+        return number_format((float)$ll, 6, '.', '');
     }
 
     /**

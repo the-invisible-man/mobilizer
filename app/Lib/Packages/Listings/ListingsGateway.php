@@ -329,7 +329,7 @@ class ListingsGateway {
         $data = $this->db->table('listings as a')
             ->join('listings_metadata as b', 'a.id', '=', 'b.fk_listing_id')
             ->join('locations as c', 'c.id', '=', 'a.fk_location_id')
-            ->join('listing_routes as d', 'd.id', '=', 'b.fk_listing_route_id')
+            ->join('listing_routes as d', 'd.id', '=', 'b.fk_listing_route_id', 'left')
             ->where('a.fk_user_id', '=', $userId)
             ->where('a.active', '=', 1)
             ->select($this->getSelectColumns())->get();

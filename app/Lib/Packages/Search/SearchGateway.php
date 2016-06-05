@@ -70,6 +70,11 @@ class SearchGateway {
             ->join('listings_metadata as b', 'a.id', '=', 'b.fk_listing_id')
             ->join('locations as c', 'c.id', '=', 'a.fk_location_id')
             ->join('listing_routes as d', 'd.id', '=', 'b.fk_listing_route_id', 'left')
+            ->leftJoin('bookings as e', function ($join) {
+                $join->on('e.fk_listing_id', '=', 'a.id');
+                $join->on('e.status', '=', $this->database->raw("'" . BaseBooking::STATUS_ACCEPTED . "'"));
+            })
+            ->groupBy(['e.fk_listing_id', 'a.id'])
             ->whereIn('a.id', $ids)
             ->where('a.active', '=', 1)
             ->limit(50)
@@ -78,11 +83,8 @@ class SearchGateway {
         $out = [];
 
         foreach ($result as $row) {
-            $remaining = $this->remainingSlots($row['id']);
-            if ($remaining) {
-                $data = $this->formatOne($row);
-                $data['remaining_slots'] = $remaining;
-                $out[] = $data;
+            if ((int)$row['remaining_slots']) {
+                $out[] = $this->formatOne($row);
             }
         }
 
@@ -122,6 +124,7 @@ class SearchGateway {
             'type'              => $data['type'],
             'additional_info'   => $data['additional_info'],
             'max_occupants'     => $data['max_occupants'],
+            'remaining_slots'   => (int)$data['remaining_slots'],
             'dog_friendly'      => (bool)$data['dog_friendly'],
             'cat_friendly'      => (bool)$data['cat_friendly'],
             'time_of_day'       => ListingMetadata::translateTimeOfDay($data['time_of_day']),
@@ -158,6 +161,7 @@ class SearchGateway {
             'a.additional_info',
             'a.max_occupants',
             'a.type',
+            $this->database->raw('(if (e.fk_listing_id IS NULL, a.max_occupants, (a.max_occupants - SUM(e.total_people)))) as \'remaining_slots\''),
 
             'b.dog_friendly',
             'b.cat_friendly',

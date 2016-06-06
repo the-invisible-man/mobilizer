@@ -153,6 +153,7 @@ return [
         App\Lib\Packages\Geo\ServiceProvider\GeoServiceProvider::class,
         App\Lib\Packages\Listings\ServiceProviders\ListingsServiceProvider::class,
         App\Lib\Packages\Search\SearchServiceProvider::class,
+        Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -207,8 +208,8 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
-        'Socialize' => Laravel\Socialite\SocialiteServiceProvider::class
-
+        'Socialize' => Laravel\Socialite\SocialiteServiceProvider::class,
+        'Recaptcha' => Greggilbert\Recaptcha\Facades\Recaptcha::class,
     ],
 
 ];

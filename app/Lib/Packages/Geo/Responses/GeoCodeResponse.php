@@ -52,6 +52,21 @@ class GeocodeResponse {
     private $geoLocation;
 
     /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'street_number' => $this->getStreetNumber(),
+            'street_name'   => $this->getStreetName(),
+            'city'          => $this->getCity(),
+            'county'        => $this->getCounty(),
+            'state'         => $this->getState(),
+            'country'       => $this->getCountry()
+        ];
+    }
+
+    /**
      * @param Geopoint $point
      * @return $this
      */

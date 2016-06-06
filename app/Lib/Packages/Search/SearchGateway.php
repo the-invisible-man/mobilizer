@@ -4,6 +4,7 @@ namespace App\Lib\Packages\Search;
 
 use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
+use App\Lib\Packages\Geo\Responses\GeocodeResponse;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
 use App\Lib\Packages\Search\Drivers\SearchDriverInterface;
 use Illuminate\Database\DatabaseManager;
@@ -61,31 +62,54 @@ class SearchGateway {
 
     /**
      * @param string $user_location
+     * @param int $minRemainingSlots
      * @return array
      */
-    public function searchRide(string $user_location)
+    public function searchRide(string $user_location, int $minRemainingSlots = 1)
     {
         $time       = microtime();
         $location   = $this->geoService->geocode($user_location);
         $ids        = $this->searchDriver->searchRide($location->getGeoLocation());
-        $results    = $this->fetchListings($ids);
-        $total      = microtime() - $time;
+        $results    = $this->fetchListings($ids, $minRemainingSlots);
+        $benchmark  = microtime() - $time;
 
-        return $this->formatResults($results, $user_location, $total);
+        $filters    = ['total_people' => $minRemainingSlots];
+        $queryInfo  = $this->formatQueryInfo($user_location, $location, $benchmark, $filters, 'R');
+
+        return $this->formatResults($results, $queryInfo);
+    }
+
+    /**
+     * @param $raw
+     * @param GeocodeResponse $location
+     * @param string $benchmark
+     * @param array $filters
+     * @param string $type
+     * @return array
+     */
+    public function formatQueryInfo($raw, GeocodeResponse $location, string $benchmark, array $filters, string $type)
+    {
+        return [
+                'process_time'  => $benchmark,
+                'type'          => $type,
+                'search_term'   => [
+                    'raw'           => $raw,
+                    'geocoded'      => $location->toArray(),
+                    'filters'       => $filters
+                ]
+        ];
     }
 
     /**
      * @param array $resultSet
-     * @param string $term
-     * @param string $timeTaken
+     * @param array $queryInfo
      * @return array
      */
-    private function formatResults(array $resultSet, string $term, string $timeTaken)
+    private function formatResults(array $resultSet, array $queryInfo)
     {
         return [
             'status'            => 'ok',
-            'total_time'        => $timeTaken,
-            'search_term'       => $term,
+            'query_info'        => $queryInfo,
             'number_of_hits'    => count($resultSet),
             'results'           => $resultSet
         ];
@@ -103,13 +127,15 @@ class SearchGateway {
 
     /**
      * @param array $ids
+     * @param int $minRemainingSlots
      * @return array
      */
-    private function fetchListings(array $ids)
+    private function fetchListings(array $ids, int $minRemainingSlots = 1)
     {
         $result = $this->database->table('listings as a')
                     ->join('listings_metadata as b', 'a.id', '=', 'b.fk_listing_id')
                     ->join('locations as c', 'c.id', '=', 'a.fk_location_id')
+                    ->join('users as d', 'd.id', '=', 'a.fk_user_id')
                     ->leftJoin('bookings as e', function (JoinClause $join) {
                         $join->on('e.fk_listing_id', '=', 'a.id');
                         $join->on('e.status', '=', $this->database->raw("'" . BaseBooking::STATUS_ACCEPTED . "'"));
@@ -117,7 +143,7 @@ class SearchGateway {
                     ->groupBy(['e.fk_listing_id', 'a.id'])
                     ->whereIn('a.id', $ids)
                     ->where('a.active', '=', 1)
-                    ->having('remaining_slots', '>', 0)
+                    ->having('remaining_slots', '>=', $minRemainingSlots)
                     ->limit($this->config['max_results'])
                     ->select($this->getSelectColumns())->get();
 
@@ -160,6 +186,7 @@ class SearchGateway {
             'party_name'        => $data['party_name'],
             'starting_date'     => $data['starting_date'],
             'ending_date'       => $data['ending_date'],
+            'driver'            => $data['driver'],
             'type'              => $data['type'],
             'additional_info'   => $data['additional_info'],
             'max_occupants'     => $data['max_occupants'],
@@ -203,6 +230,8 @@ class SearchGateway {
             'c.state',
             'c.zip',
             'c.country',
+
+            'd.first_name as driver'
         ];
     }
 }

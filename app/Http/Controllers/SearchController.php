@@ -36,8 +36,8 @@ class SearchController extends Controller {
         $resultCode = 200;
 
         try {
-            if ($request->get('type') == RideListing::ListingType) {
-                $response = $this->searchGateway->searchRide($request->get('location'));
+            if ($request->get('type', RideListing::ListingType) == RideListing::ListingType) {
+                $response = $this->searchGateway->searchRide($request->get('location'), $request->get('total_people', 1));
             } else {
                 $response = $this->searchGateway->searchHousing($request->get('starting_date'), $request->get('ending_date'));
             }
@@ -46,6 +46,10 @@ class SearchController extends Controller {
             $resultCode = 400;
         }
 
-        return \Response::json($response, $resultCode);
+        if ($request->ajax() || $resultCode != 200) {
+            return \Response::json($response, $resultCode);
+        }
+
+        return view('search', $response);
     }
 }

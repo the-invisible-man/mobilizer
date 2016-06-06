@@ -139,23 +139,23 @@ $('.booking-item-price-calc .checkbox label').click(function() {
 });
 
 
-$('div.bg-parallax').each(function() {
-    var $obj = $(this);
-    if($(window).width() > 992 ){
-        $(window).scroll(function() {
-            var animSpeed;
-            if ($obj.hasClass('bg-blur')) {
-                animSpeed = 10;
-            } else {
-                animSpeed = 15;
-            }
-            var yPos = -($(window).scrollTop() / animSpeed);
-            var bgpos = '50% ' + yPos + 'px';
-            $obj.css('background-position', bgpos);
-
-        });
-    }
-});
+//$('div.bg-parallax').each(function() {
+//    var $obj = $(this);
+//    if($(window).width() > 992 ){
+//        $(window).scroll(function() {
+//            var animSpeed;
+//            if ($obj.hasClass('bg-blur')) {
+//                animSpeed = 10;
+//            } else {
+//                animSpeed = 15;
+//            }
+//            var yPos = -($(window).scrollTop() / animSpeed);
+//            var bgpos = '0% ' + yPos + 'px';
+//            $obj.css('background-position', bgpos);
+//
+//        });
+//    }
+//});
 
 
 
@@ -212,7 +212,7 @@ $(document).ready(
    var footerTop = $('#main-footer').position().top + footerHeight;
    
    if (footerTop < docHeight) {
-    $('#main-footer').css('margin-top', (docHeight - footerTop) + 'px');
+    //$('#main-footer').css('margin-top', (docHeight - footerTop) + 'px');
    }
     }
 

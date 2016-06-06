@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app_with_header')
 
 @section('content')
     <div id="app" about="ride-list"></div>

@@ -139,23 +139,23 @@ $('.booking-item-price-calc .checkbox label').click(function() {
 });
 
 
-$('div.bg-parallax').each(function() {
-    var $obj = $(this);
-    if($(window).width() > 992 ){
-        $(window).scroll(function() {
-            var animSpeed;
-            if ($obj.hasClass('bg-blur')) {
-                animSpeed = 10;
-            } else {
-                animSpeed = 15;
-            }
-            var yPos = -($(window).scrollTop() / animSpeed);
-            var bgpos = '50% ' + yPos + 'px';
-            $obj.css('background-position', bgpos);
-
-        });
-    }
-});
+//$('div.bg-parallax').each(function() {
+//    var $obj = $(this);
+//    if($(window).width() > 992 ){
+//        $(window).scroll(function() {
+//            var animSpeed;
+//            if ($obj.hasClass('bg-blur')) {
+//                animSpeed = 10;
+//            } else {
+//                animSpeed = 15;
+//            }
+//            var yPos = -($(window).scrollTop() / animSpeed);
+//            var bgpos = '50% ' + yPos + 'px';
+//            $obj.css('background-position', bgpos);
+//
+//        });
+//    }
+//});
 
 
 
@@ -348,10 +348,10 @@ $('.popup-iframe').magnificPopup({
 $('.form-group-select-plus').each(function() {
     var self = $(this),
         btnGroup = self.find('.btn-group').first(),
-        select = self.find('select');
+        input = self.find('input');
     btnGroup.children('label').last().click(function() {
         btnGroup.addClass('hidden');
-        select.removeClass('hidden');
+        input.removeClass('hidden');
     });
 });
 // Responsive videos

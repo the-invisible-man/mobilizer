@@ -26,6 +26,8 @@ Route::get('/', function () {
 |
 */
 
+Route::get('/', 'HomeController@index');
+
 Route::group(['middleware' => ['web']], function () {
     Route::put('accounts/{account_id}', 'AccountsController@edit');
     Route::delete('accounts/{account_id}', 'AccountsController@delete');

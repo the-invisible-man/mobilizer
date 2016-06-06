@@ -26,6 +26,8 @@ class CreateListingsTable extends Migration
             $table->timestamps();
 
             $table->index(['fk_user_id', 'active']);
+            $table->index(['id', 'active']);
+            $table->index(['starting_date', 'ending_date']);
         });
     }
 

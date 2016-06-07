@@ -184,8 +184,8 @@ class SearchGateway {
         $out = [
             'id'                => $data['id'],
             'party_name'        => $data['party_name'],
-            'starting_date'     => $data['starting_date'],
-            'ending_date'       => $data['ending_date'],
+            'starting_date'     => (new \DateTime($data['starting_date']))->format('M d, Y'),
+            'ending_date'       => (new \DateTime($data['ending_date']))->format('M d, Y'),
             'driver'            => $data['driver'],
             'type'              => $data['type'],
             'additional_info'   => $data['additional_info'],

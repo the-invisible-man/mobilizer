@@ -22,12 +22,12 @@
 
                         <div class="container" style="color:#ffffff !important;">
                             <div class="row" data-gutter="60">
-                                <div class="col-md-4">
+                                <div class="col-md-4" style="text-align: justify">
                                     <h3 style="color:#ffffff !important;">Get Mobilized</h3>
                                     <p>Welcome to the mobilizer platform by Polivet. We are a political grassroots software powerhouse that delivers solutions for the benefit of the 99%.</p>
-                                    <p>Sign up to use our powerfull tools for planning, booking, or listing your journey to the Democratic Naional Convention. #FeelTheBern #SeeYouInPhilly</p>
+                                    <p>Sign up to use our powerful tools for planning, booking, or listing your journey to the Democratic National Convention. #FeelTheBern #SeeYouInPhilly</p>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" style="margin-bottom: 30px">
                                     <h3 style="color:#ffffff !important;">Login</h3>
                                     <form role="form" method="POST" action="{{ url('/login') }}">
                                         {!! csrf_field() !!}
@@ -49,12 +49,15 @@
                                                 </span>
                                             @endif
                                         </div>
-                                        <input class="btn btn-primary" type="submit" value="Sign in" />
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa fa-btn fa-sign-in"></i>Login
+                                        </button>
+                                        <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
                                     </form>
                                 </div>
                                 <div class="col-md-4">
                                     <h3 style="color:#ffffff !important;">New to #SeeYouInPhilly?</h3>
-                                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
+                                    <form role="form" method="POST" action="{{ url('/register') }}">
                                         {!! csrf_field() !!}
                                         <div class="form-group form-group-icon-left{{ $errors->has('first_name') ? ' has-error' : '' }}"><i class="fa fa-user input-icon input-icon-show"></i>
                                             <label>First Name</label>

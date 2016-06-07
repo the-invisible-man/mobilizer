@@ -28,8 +28,8 @@
                     // Open on click
                     $el.on(settings.action, settings.this, function() {
                         if ($(this).hasClass('active-drop')) {
-                            $(this).removeClass('active-drop');
-                            return false;
+                            //$(this).removeClass('active-drop');
+                            return true;
                         }
                         settings.beforeHide.call(this);
                         $('.active-drop').removeClass('active-drop');

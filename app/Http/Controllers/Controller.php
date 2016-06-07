@@ -10,4 +10,19 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    /**
+     * @return array
+     */
+    protected function userInfo()
+    {
+        $data = ['auth' => ['status' => false]];
+
+        if (\Auth::check()) {
+            $data['auth']['status'] = true;
+            $data['auth']['userInfo'] = \Auth::user()->toArray();
+        }
+
+        return $data;
+    }
 }

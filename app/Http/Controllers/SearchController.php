@@ -38,6 +38,7 @@ class SearchController extends Controller {
         try {
             if ($request->get('type', RideListing::ListingType) == RideListing::ListingType) {
                 $response = $this->searchGateway->searchRide($request->get('location'), $request->get('total_people', 1));
+                $response = array_merge($response, $this->userInfo());
             } else {
                 $response = $this->searchGateway->searchHousing($request->get('starting_date'), $request->get('ending_date'));
             }

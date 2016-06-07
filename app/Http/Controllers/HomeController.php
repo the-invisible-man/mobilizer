@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return view('home', $this->userInfo());
     }
 
     public function listing(Request $request)
@@ -31,5 +31,18 @@ class HomeController extends Controller
         $type = $request->all();
 
         return $type['type'] == 'r' ? view('list_ride') : view('list_home');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function ride()
+    {
+        return view('about_ride_listing', $this->userInfo());
+    }
+
+    public function housing()
+    {
+        return view('about_home_listing', $this->userInfo());
     }
 }

@@ -26,7 +26,7 @@ Route::get('/', function () {
 |
 */
 
-Route::get('/', 'HomeController@index');
+// Some of this stuff is not gonna be very "RESTful", forgive me ahead of time.
 
 Route::group(['middleware' => ['web']], function () {
     Route::put('accounts/{account_id}', 'AccountsController@edit');
@@ -35,18 +35,23 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
-    Route::get('/home', 'HomeController@index');
+    Route::get('/', 'HomeController@index');
+    Route::get("search", "SearchController@search");
+    Route::get("about_rides", "HomeController@ride");
+    Route::get("about_housing", "HomeController@housing");
+
+    Route::group(['prefix' => 'listings'], function () {
+        Route::get('/', 'ListingsController@all');
+        Route::post('/', ['middleware' => 'auth', 'uses' => 'ListingsController@new']);
+        Route::get('{listing_id}', 'ListingsController@get');
+        Route::put('{listing_id}', ['middleware' => 'auth', 'uses' => 'ListingsController@edit']);
+        Route::delete('{listing_id}', ['middleware' => 'auth', 'uses' => 'ListingsController@delete']);
+    });
+
+    Route::get('/add-listing', ['middleware' => 'auth', 'uses' => 'HomeController@listing']);
+    Route::get('/success-add-listing', 'ListingsController@testSuccess');
 });
 
-// Some of this stuff is not gonna be very "RESTful", forgive me ahead of time.
-
-Route::group(['prefix' => 'listings'], function () {
-    Route::get('/', 'ListingsController@all');
-    Route::post('/', 'ListingsController@new');
-    Route::get('{listing_id}', 'ListingsController@get');
-    Route::put('{listing_id}', 'ListingsController@edit');
-    Route::delete('{listing_id}', 'ListingsController@delete');
-});
 
 Route::group(['prefix' => 'bookings'], function () {
     Route::get('/', 'BookingsController@all');
@@ -61,16 +66,11 @@ Route::group(['prefix' => 'bookings'], function () {
     Route::delete('{booking_id}', 'BookingsController@cancel');
 });
 
-Route::get("search", "SearchController@search");
+
 
 
 Route::put('accounts/{account_id}', 'AccountsController@edit');
 Route::delete('accounts/{account_id}', 'AccountsController@delete');
-
-
-
-Route::get('/add-listing', 'HomeController@listing');
-Route::get('/success-add-listing', 'ListingsController@testSuccess');
 
 
 

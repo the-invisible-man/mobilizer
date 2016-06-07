@@ -22,8 +22,8 @@
                 <a class="logo" href="index.html">
                     <img src="img/assets/coders_for_sanders_polivet_small.png" alt="Coders For Sanders" title="Built With Lots of Love By Coders For Sanders" />
                 </a>
-                <ul class="list list-horizontal list-space" style="padding-left:75px;">
-                    <li>
+                <ul class="list list-horizontal social-icons">
+                    <li style="">
                         <a class="fa fa-facebook box-icon-normal round animate-icon-bottom-to-top" href="#"></a>
                     </li>
                     <li>

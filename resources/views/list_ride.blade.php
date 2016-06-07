@@ -35,7 +35,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label>Approximate Time</label>
+                                    <label>Approximate Time Leaving</label>
                                     <select name="time_of_day" class="form-control" required>
                                         <option value="0">Early Morning</option>
                                         <option value="1" selected>Noon</option>

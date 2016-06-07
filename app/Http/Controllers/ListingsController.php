@@ -36,8 +36,6 @@ class ListingsController extends Controller {
      */
     public function __construct(ListingsGateway $listingsGateway, Writer $log)
     {
-        //$this->middleware('auth');
-
         $this->listingsGateway  = $listingsGateway;
         $this->log              = $log;
     }
@@ -68,7 +66,7 @@ class ListingsController extends Controller {
     {
         $responseCode = 200;
         try {
-            $user       = 'fa59822a-3f55-408c-98a6-e2b7e5905664';
+            $user       = \Auth::user()->id;
             $response   = $this->listingsGateway->allForUser($user);
         } catch (\Exception $e) {
             $response       = ['message' => $e->getMessage()];
@@ -124,7 +122,7 @@ class ListingsController extends Controller {
      */
     public function prepareData(array $data) : array
     {
-        $data['fk_user_id'] = "fa59822a-3f55-408c-98a6-e2b7e5905664";
+        $data['fk_user_id'] = \Auth::user()->id;
         return $data;
     }
 
@@ -163,7 +161,7 @@ class ListingsController extends Controller {
         $responseCode = 200;
 
         try {
-            $user = '';
+            $user = \Auth::user()->id;
             if ($this->listingsGateway->ownsListing($listingId, $user)) {
                 //throw new MismatchException("Cannot delete listing. Listing id {$listingId} does not belong to user {$user}");
             }
@@ -191,7 +189,7 @@ class ListingsController extends Controller {
     public function delete(Request $request, string $listingId)
     {
         try {
-            $user = '';
+            $user = \Auth::user()->id;
             if ($this->listingsGateway->ownsListing($listingId, $user)) {
                 throw new MismatchException("Cannot delete listing. Listing id {$listingId} does not belong to user {$user}");
             }

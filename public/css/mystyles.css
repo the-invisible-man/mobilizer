@@ -110,3 +110,15 @@
         display: inline;
     }
 }
+.social-icons {
+    text-align: center;
+    width:100%;
+    height: 40px;
+    margin: auto;
+}
+.social-icons li {
+    display:inline-block;
+    *display:inline;
+    *zoom:1;
+    float: none !important;
+}

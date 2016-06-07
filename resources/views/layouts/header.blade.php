@@ -23,7 +23,7 @@
                         </div>
                         <div class="col-md-4 col-md-offset-4">
                             <div class="top-user-area clearfix">
-                                <ul class="top-user-area-list list list-horizontal list-border">
+                                <ul class="top-user-area-list list list-horizontal list-border social-icons">
                                     @if (isset($auth) && $auth['status'])
                                     <li class="top-user-area-avatar list nav-drop">
                                         <a href="#">
@@ -43,8 +43,8 @@
                                     @else
                                         <li><a href="/login" ><span class="btn btn-primary">Login</span></a></li>
                                     @endif
-                                    <li><span class="btn btn-primary">List Ride</span></li>
-                                    <li><span class="btn btn-primary">List Home</span></li>
+                                    <li><a href="/about_rides"><span class="btn btn-primary">List Ride</span></a></li>
+                                    <li><a href="/about_housing"><span class="btn btn-primary">List Home</span></a></li>
                                 </ul>
                             </div>
                         </div>

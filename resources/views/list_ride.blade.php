@@ -2,9 +2,10 @@
 
 @section('content')
     <div id="app" about="ride-list"></div>
+    <div class="gap"></div>
     <div class="container pad-header">
         <div class="row">
-            <div class="col-md-8 col-md-offset-4">
+            <div class="col-md-10 col-md-offset-2">
                 <h2>List My Ride</h2>
             </div>
         </div>
@@ -12,12 +13,13 @@
     <div class="container">
         <div class="row">
             <form role="form" name="list_user_ride" method="post" action="/listings" id="list_user_ride_form">
+                {!! csrf_field() !!}
                 <input type="hidden" value="0" id="overview_path" name="overview_path"/>
                 <input type="hidden" value="R" id="type" name="type"/>
                 <div class="col-md-8 col-md-offset-2">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="well well-sm"><span class="glyphicon glyphicon-asterisk"></span>Hey! Just fill out the form below, <strong>all fields are required.</strong></div>
+                            <div class="well well-sm"><span class="glyphicon glyphicon-asterisk"></span>Fill out the form below, <strong>all fields are required.</strong></div>
                             <div class="form-group">
                                 <label for="InputName">Party Name <span class="sub_text">(A fun little name to give your journey to the DNC)</span></label>
                                 <div class="input-group">

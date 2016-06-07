@@ -5,6 +5,7 @@ namespace App\Lib\Packages\Geo\TimeEstimation;
 use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
 use Illuminate\Cache\Repository as CacheRepository;
+use App\Lib\Packages\Geo\Location\Location;
 
 /**
  * Class TripDurationEstimator
@@ -45,23 +46,67 @@ class TripDurationEstimator
     }
 
     /**
-     * @param string $startingZip
-     * @param string $destinationZip
+     * @param string $origin
+     * @param string $destination
      * @return int|string
      */
-    public function zip(string $startingZip, string $destinationZip)
+    public function estimate(string $origin, string $destination)
     {
-        $key = $this->cacheKeyForZip($startingZip, $destinationZip);
+        $key = $this->cacheKeyForZip($origin, $destination);
 
         if ($this->cache->has($key)) {
             return $this->cache->get($key);
         }
 
-        $duration = $this->grabFreshFromZip($startingZip, $destinationZip);
+        $duration = $this->grabFreshFromZip($origin, $destination);
 
         $this->cache->put($key, $duration, $this->config['cache_ttl']);
 
         return $duration;
+    }
+
+    /**
+     * @param Location $driverOrigin
+     * @param Location $destination
+     * @param \DateTime $departureDateTime
+     * @return \DateTime
+     */
+    public function estimateArrivalDateTime(Location $driverOrigin, Location $destination, \DateTime $departureDateTime)
+    {
+        // We need the lat and long of the driver's starting location and pickup location
+        $origin = $this->geoService->geocode($driverOrigin);
+        $pickup = $this->geoService->geocode($destination);
+
+
+        // Now let's figure out the timezone of the driver's starting location.
+        $originTimeZone         = $this->geoService->getTimeZone($origin->getGeoLocation(), strtotime($departureDateTime->format('d M Y')));
+        $destinationTimeZone    = $this->geoService->getTimeZone($pickup->getGeoLocation(), strtotime($departureDateTime->format('d M Y')));
+
+        // Now create a new datetime object from the original datetime
+        // but initialize with timezone of the driver's origin
+        $final = new \DateTime($departureDateTime->format('Y-n-d H:i:s'), new \DateTimeZone($originTimeZone->getTimeZoneId()));
+
+        // Now calculate how many minutes to drive from origin to pick up
+        // location and create a DateInterval from the minutes.
+        $tripDuration   = (int)$this->estimate($driverOrigin, $destination);
+        $duration       = new \DateInterval("PT" . $tripDuration . "M");
+
+        // If the duration is less than a minute then we can't go any further
+        // so we'll just return the final datetime as is.
+        if ($tripDuration < 1) {
+            return $final;
+        }
+
+        // Increase the departure time by the number of minutes
+        // that the trip from the origin to the pick up location
+        // will last.
+        $final->add($duration);
+
+        // Now we can convert to the timezone of the pick up location
+        $final->setTimezone(new \DateTimeZone($destinationTimeZone->getTimeZoneId()));
+
+        // And voila!
+        return $final;
     }
 
     /**

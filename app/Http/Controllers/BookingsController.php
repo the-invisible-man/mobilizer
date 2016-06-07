@@ -46,7 +46,9 @@ class BookingsController extends Controller {
         $this->bookingsGateway  = $bookingsGateway;
         $this->db               = $databaseManager->connection();
 
-        //$this->middleware('auth');
+        if (\Auth::check()) {
+            $this->bookingsGateway->setCurrentUser(\Auth::user());
+        }
     }
 
     /**
@@ -55,13 +57,9 @@ class BookingsController extends Controller {
      */
     public function all(Request $request)
     {
-        // We'll return all the bookings of the user that is
-        // currently signed in
-        $userId = 'fa59822a-3f55-408c-98a6-e2b7e5905664';
-
         try {
             $responseCode   = 200;
-            $response       = $this->bookingsGateway->getUserBookings($userId);
+            $response       = $this->bookingsGateway->getUserBookings();
         } catch (\Exception $e) {
             $responseCode   = 400;
             $response       = ['message' => $e->getMessage()];
@@ -103,12 +101,12 @@ class BookingsController extends Controller {
      * @param Request $request
      * @return JsonResponse
      */
-    public function new(Request $request) : JsonResponse
+    public function new(Request $request)
     {
         $data                   = $request->all();
-        $data['fk_user_id']     = 'fa59822a-3f55-408c-98a6-e2b7e5905664';
-        $validate       = Validator::make($data, $this->validatorAdd);
-        $responseCode   = 200;
+        $data['fk_user_id']     = \Auth::user()->getId();
+        $validate               = Validator::make($data, $this->validatorAdd);
+        $responseCode           = 200;
 
         if ($validate->fails()) {
             $response       = ['errors' => $validate->errors()];

@@ -12,6 +12,7 @@
             <div class="col-md-3">
                 <div class="booking-item-dates-change mb30">
                     <form method="get" action="/search">
+                        <input type="hidden" name="original_query" value="{{$query_info['search_term']['raw']}}" id="original_query"/>
                         <input type="hidden" name="type" value="{{$query_info['type']}}" />
                         <div class="form-group form-group-icon-left"><i class="fa fa-map-marker input-icon input-icon-hightlight"></i>
                             <label>Picked up from</label>
@@ -29,7 +30,7 @@
                 <ul class="booking-list">
                     @if (count($results))
                     @foreach ($results as $result)
-                        <li>
+                        <li id="listing_result" about="{{$result['id']}}">
                             <a class="booking-item" href="#">
                                 <div class="row">
                                     <div class="col-md-4 col-xs-12">
@@ -66,5 +67,21 @@
             </div>
         </div>
         <div class="gap"></div>
+    </div>
+    <div class="modal fade" id="listing_info_window" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">(!)Validation Error!</h4>
+                </div>
+                <div class="modal-body" id="submit_error_modal_content">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">ok</button>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

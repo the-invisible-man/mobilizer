@@ -169,4 +169,22 @@ class BaseBooking extends Model implements \JsonSerializable {
     {
         return $this->getActive();
     }
+
+    /**
+     * @return string
+     */
+    public function getAdditionalInfo()
+    {
+        return $this->getAttribute(self::ADDITIONAL_INFO);
+    }
+
+    /**
+     * @param string $info
+     * @return $this
+     */
+    public function setAdditionalInfo(string $info)
+    {
+        $this->setAttribute(self::ADDITIONAL_INFO, $info);
+        return $this;
+    }
 }

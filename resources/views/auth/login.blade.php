@@ -55,7 +55,7 @@
                                         <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
                                     </form>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" style="margin-bottom: 30px">
                                     <h3 style="color:#ffffff !important;">New to #SeeYouInPhilly?</h3>
                                     <form role="form" method="POST" action="{{ url('/register') }}">
                                         {!! csrf_field() !!}

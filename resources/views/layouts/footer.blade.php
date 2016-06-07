@@ -10,9 +10,9 @@
                 <ul class="list list-footer">
                     <li><a href="#">About</a>
                     </li>
-                    <li><a href="#">List Your Ride</a>
+                    <li><a href="/about_rides">List Your Ride</a>
                     </li>
-                    <li><a href="#">List Your Home</a>
+                    <li><a href="/about_housing">List Your Home</a>
                     </li>
                     <li><a href="#">Blog</a>
                     </li>
@@ -65,6 +65,8 @@
 <script src="js/gridrotator.js"></script>
 <script src="js/custom.js"></script>
 <script src="js/pace.min.js"></script>
+<script src="/js/jquery-deparam.js"></script>
+
 
 <!-- APP Components -->
 <script src="/js/ride-book.js"></script>

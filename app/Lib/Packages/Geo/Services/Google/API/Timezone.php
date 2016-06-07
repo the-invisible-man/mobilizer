@@ -15,18 +15,15 @@ class Timezone extends GoogleMapsAPI
     /**
      * Resolves timezone by lat long
      * @param Geopoint $geopoint
-     * @param string $timestamp
+     * @param int $timestamp
      * @return string
      */
-    public function resolveTimezone(Geopoint $geopoint, string $timestamp = null) : string
+    public function resolveTimezone(Geopoint $geopoint, int $timestamp = null)
     {
         $data = [
-            'location' => $geopoint->getLat() . ", " . $geopoint->getLong()
+            'location'  => $geopoint->getLat() . ", " . $geopoint->getLong(),
+            'timestamp' => is_null($timestamp) ? time() : $timestamp
         ];
-
-        if ($timestamp !== null) {
-            $data['timestamp'] = $timestamp;
-        }
 
         return $this->do($data);
     }

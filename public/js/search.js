@@ -9,6 +9,9 @@
                 var packages = {
                     SearchComponent: {
                         autocompleteElementId: "autocomplete"
+                    },
+                    ResultController: {
+                        resultElementId: "listing_result"
                     }
                 };
 
@@ -27,10 +30,19 @@
     }
 
     SearchActions.SearchComponent = {};
+    SearchActions.ResultController = {};
 
     SearchActions.SearchComponent._register = function (config){
         var autocomplete        = new google.maps.places.Autocomplete((document.getElementById(config['autocompleteElementId'])), {type: ['geocode']});
 
-    }
+    };
+
+    SearchActions.ResultController._register = function (config) {
+
+        // Bind actions of each result
+        $(document.getElementById(config['resultElementId'])).click(function () {
+
+        });
+    };
 
 }(window.jQuery));

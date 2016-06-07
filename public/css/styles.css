@@ -1920,7 +1920,7 @@ body {
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
-  background-position: center 50%;
+  background-position: center;
 }
 .bg-holder > .bg-video {
   width: 100%;
@@ -1967,7 +1967,6 @@ body {
   background: #127cdc;
 }
 .bg-holder > .bg-parallax {
-  background-position: 0% 90%;
   background-attachment: fixed;
 }
 @media (max-width:992px) {

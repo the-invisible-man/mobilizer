@@ -122,7 +122,7 @@ class ListingsController extends Controller {
      */
     public function prepareData(array $data) : array
     {
-        $data['fk_user_id'] = \Auth::user()->id;
+        $data['fk_user_id'] = \Auth::user()->getId();
         return $data;
     }
 
@@ -162,8 +162,8 @@ class ListingsController extends Controller {
 
         try {
             $user = \Auth::user()->id;
-            if ($this->listingsGateway->ownsListing($listingId, $user)) {
-                //throw new MismatchException("Cannot delete listing. Listing id {$listingId} does not belong to user {$user}");
+            if (!$this->listingsGateway->ownsListing($listingId, $user)) {
+                throw new MismatchException("Cannot delete listing. Listing id {$listingId} does not belong to user {$user}");
             }
             $response = $this->listingsGateway->edit($listingId, $request->all())->toArray();
         } catch (\Exception $e) {

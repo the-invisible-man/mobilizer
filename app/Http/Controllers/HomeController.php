@@ -30,7 +30,7 @@ class HomeController extends Controller
     {
         $type = $request->all();
 
-        return $type['type'] == 'r' ? view('list_ride') : view('list_home');
+        return $type['type'] == 'r' ? view('list_ride', $this->userInfo()) : view('list_home', $this->userInfo());
     }
 
     /**

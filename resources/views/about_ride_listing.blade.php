@@ -24,33 +24,33 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <p style="color:#ffffff; text-align: center; margin-top:30px; margin-bottom: 30px;">When you list your ride we match you with other berners along your route who need a ride so you can split costs and save in this economy.</p>
+                                    <p style="color:#ffffff; text-align: center; margin-top:30px; margin-bottom: 30px;">When you list your ride we match you with other berners along your route who need a ride so you can split costs and save money in this economy.</p>
                                     <h2 style="color:#ffffff !important; margin-bottom: 30px; text-align: center; margin-top: 30px;">How it works</h2>
                                     <div style="color:#ffffff; font-size: 15px; text-align: center; align-content: center">
                                         <div class="row">
                                             <div class="col-md-3" style="margin-bottom:15px;">
-                                                <p>Tell us where you're coming from</p>
                                                 <p><i class="fa fa-map-marker box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
+                                                <p>Tell us where you're coming from</p>
                                             </div>
                                             <div class="col-md-3" style="margin-bottom:15px;">
-                                                <p>How many people you can bring?</p>
                                                 <p><i class="fa fa-users box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
+                                                <p>How many people you can bring?</p>
                                             </div>
                                             <div class="col-md-3" style="margin-bottom:15px;">
-                                                <p>Tell us what dates you'll be gone</p>
                                                 <p><i class="fa fa-calendar box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
+                                                <p>Tell us what dates you'll be gone</p>
                                             </div>
                                             <div class="col-md-3" style="margin-bottom:15px;">
-                                                <p>Do you allow pets?</p>
                                                 <p><i class="fa fa-paw box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
+                                                <p>Do you allow pets?</p>
                                             </div>
                                             <div class="col-md-6" style="margin-bottom:15px;">
-                                                <p>You will receive ride requests to your email</p>
                                                 <p><i class="fa fa-envelope box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
+                                                <p>You will receive ride requests to your email</p>
                                             </div>
                                             <div class="col-md-6" style="margin-bottom:15px;">
-                                                <p>Get in contact with each other</p>
                                                 <p><i class="fa fa-wechat box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
+                                                <p>Get in contact with each other</p>
                                             </div>
                                         </div>
                                     </div>

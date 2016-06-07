@@ -62,7 +62,8 @@ class GeocodeResponse {
             'city'          => $this->getCity(),
             'county'        => $this->getCounty(),
             'state'         => $this->getState(),
-            'country'       => $this->getCountry()
+            'country'       => $this->getCountry(),
+            'geoLocation'   => $this->getGeoLocation()->toArray()
         ];
     }
 

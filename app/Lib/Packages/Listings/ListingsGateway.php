@@ -2,8 +2,10 @@
 
 namespace App\Lib\Packages\Listings;
 
+use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
 use App\Lib\Packages\Geo\Location\Location;
 use App\Lib\Packages\Geo\Location\LocationGateway;
+use App\Lib\Packages\Geo\TimeEstimation\TripDurationEstimator;
 use App\Lib\Packages\Listings\Exceptions\ListingNotFoundException;
 use App\Lib\Packages\Listings\ListingDrivers\RideMetadataDriver;
 use App\Lib\Packages\Listings\ListingTypes\HomeListing;
@@ -69,6 +71,11 @@ class ListingsGateway {
     private $validator;
 
     /**
+     * @var TripDurationEstimator
+     */
+    private $tripDurationEstimator;
+
+    /**
      * @var array
      */
     private $required = [
@@ -101,13 +108,15 @@ class ListingsGateway {
      * @param LocationGateway $locationGateway
      * @param Application $app
      * @param ValidatorFactory $validator
+     * @param TripDurationEstimator $tripDurationEstimator
      */
-    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway, Application $app, ValidatorFactory $validator)
+    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway, Application $app, ValidatorFactory $validator, TripDurationEstimator $tripDurationEstimator)
     {
-        $this->db                   = $databaseManager->connection();
-        $this->locationsGateway     = $locationGateway;
-        $this->kernel               = $app;
-        $this->validator            = $validator;
+        $this->db                       = $databaseManager->connection();
+        $this->locationsGateway         = $locationGateway;
+        $this->kernel                   = $app;
+        $this->validator                = $validator;
+        $this->tripDurationEstimator    = $tripDurationEstimator;
     }
 
     /**
@@ -392,6 +401,9 @@ class ListingsGateway {
         // be a single query with multiple joins
 
         // Todo: make this into a single query with multiple joins
+        /**
+         * @var BaseListing $listing
+         */
         $listing = BaseListing::find($listingId);
 
         if (!$listing) {

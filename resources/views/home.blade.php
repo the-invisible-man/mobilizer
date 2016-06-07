@@ -57,7 +57,7 @@
                                         </form>
                                     </div>
                                     <div class="tab-pane fade" id="tab-3">
-                                        <h2>Crash at Someone's Place</h2>
+                                        <h2>Crash a Cozy Home</h2>
                                         <form>
                                             <div class="row">
                                                 <div class="col-md-4">

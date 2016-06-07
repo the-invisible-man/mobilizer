@@ -4,15 +4,17 @@ namespace App\Lib\Packages\Geo\Services\Google;
 
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
 use App\Lib\Packages\Geo\Location\Geopoint;
+use App\Lib\Packages\Geo\Responses\TimeZoneResponse;
 use App\Lib\Packages\Geo\Services\Google\API\Geocode;
 use App\Lib\Packages\Geo\Services\Google\API\Directions;
 use App\Lib\Packages\Geo\Responses\GeocodeResponse;
+use App\Lib\Packages\Geo\Services\Google\API\Timezone;
 
 /**
  * Class GoogleMaps
  *
  * This class merges the functionality of each Google Maps
- * API in a single object that obeys the GeoServiceInterface contract
+ * API in a single object that implements the GeoServiceInterface contract
  *
  * @package App\Lib\Packages\Geo\GeoServices
  * @author Carlos Granados <granados.carlos91@gmail.com>
@@ -20,7 +22,7 @@ use App\Lib\Packages\Geo\Responses\GeocodeResponse;
 class GoogleMaps implements GeoServiceInterface {
 
     /**
-     * @var GoogleMapsAPI[]|Directions[]|Geocode[]
+     * @var GoogleMapsAPI[]|Directions[]|Geocode[]|Timezone[]
      */
     private $services;
 
@@ -28,11 +30,25 @@ class GoogleMaps implements GeoServiceInterface {
      * GoogleMaps constructor.
      * @param Directions $directions
      * @param Geocode $geocode
+     * @param Timezone $timezone
      */
-    public function __construct(Directions $directions, Geocode $geocode)
+    public function __construct(Directions $directions, Geocode $geocode, Timezone $timezone)
     {
-        $this->services[Directions::class]   = $directions;
-        $this->services[Geocode::class]      = $geocode;
+        $this->services[Directions::class]  = $directions;
+        $this->services[Geocode::class]     = $geocode;
+        $this->services[Timezone::class]    = $timezone;
+    }
+
+    /**
+     * @param Geopoint $geopoint
+     * @param int $timestamp
+     * @return string
+     */
+    public function getTimezone(Geopoint $geopoint, int $timestamp = null)
+    {
+        $timezone = $this->services[Timezone::class]->resolveTimezone($geopoint, $timestamp);
+
+        return $this->formatTimeZoneResponse($timezone);
     }
 
     /**
@@ -54,7 +70,7 @@ class GoogleMaps implements GeoServiceInterface {
      * @param string $travelMode
      * @return string
      */
-    public function estimateTripDurationByZip(string $startingZip, string $destinationZip, $format = Directions::AS_MINUTES, $travelMode = Directions::DRIVING) : string
+    public function estimateTripDurationByZip(string $startingZip, string $destinationZip, string $format = Directions::AS_MINUTES, string $travelMode = Directions::DRIVING)
     {
         $response = $this->directions($startingZip, $destinationZip, $travelMode);
 
@@ -75,6 +91,18 @@ class GoogleMaps implements GeoServiceInterface {
     public function geocode(string $address) : GeocodeResponse
     {
         return $this->formatGeocodeResponse($this->services[Geocode::class]->geocode($address));
+    }
+
+    /**
+     * @param array $response
+     * @return TimeZoneResponse
+     */
+    private function formatTimeZoneResponse(array $response)
+    {
+        return (new TimeZoneResponse())->setDstOffset(array_get($response, 'dstOffset'))
+                                       ->setRawOffset(array_get($response, 'rawOffset'))
+                                       ->setTimeZoneId(array_get($response, 'timeZoneId'))
+                                       ->setTimeZoneName(array_get($response, 'timeZoneName'));
     }
 
     /**

@@ -81,3 +81,8 @@ Route::group(['prefix' => 'api'], function () {
 
     //Route::get('search', 'SearchController@index');
 });
+
+Route::get('test', function () {
+    $location = \App\Lib\Packages\Geo\Location\Location::find('c80ea16d-2093-4965-b087-63710756ef68');
+    echo $location->__toString();
+});

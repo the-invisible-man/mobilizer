@@ -17,7 +17,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h1 style="color:#cccccc">Share your home. Join the revolution.</h1>
+                                    <h1 style="color:#cccccc">Share your home. Fuel the revolution.</h1>
                                 </div>
                             </div>
                         </div>
@@ -29,28 +29,28 @@
                                     <div style="color:#ffffff; font-size: 15px; text-align: center; align-content: center">
                                         <div class="row">
                                             <div class="col-md-3" style="margin-bottom:15px;">
-                                                <p>Enter the location of your home</p>
                                                 <p><i class="fa fa-home box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
+                                                <p>Enter the location of your home</p>
                                             </div>
                                             <div class="col-md-3" style="margin-bottom:15px;">
-                                                <p>How many people can you host?</p>
                                                 <p><i class="fa fa-users box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
+                                                <p>How many people can you host?</p>
                                             </div>
                                             <div class="col-md-3" style="margin-bottom:15px;">
-                                                <p>Tell us what dates you can host</p>
                                                 <p><i class="fa fa-calendar box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
+                                                <p>Tell us what dates you can host</p>
                                             </div>
                                             <div class="col-md-3" style="margin-bottom:15px;">
-                                                <p>Do you allow pets?</p>
                                                 <p><i class="fa fa-paw box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
+                                                <p>Do you allow pets?</p>
                                             </div>
                                             <div class="col-md-6" style="margin-bottom:15px;">
-                                                <p>You will receive housing requests to your email</p>
                                                 <p><i class="fa fa-envelope box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
+                                                <p>You will receive housing requests to your email</p>
                                             </div>
                                             <div class="col-md-6" style="margin-bottom:15px;">
-                                                <p>Get in contact with each other</p>
                                                 <p><i class="fa fa-wechat box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
+                                                <p>Get in contact with each other</p>
                                             </div>
                                         </div>
                                     </div>

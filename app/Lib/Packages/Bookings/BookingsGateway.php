@@ -2,6 +2,7 @@
 
 namespace App\Lib\Packages\Bookings;
 
+use App\Jobs\SendBookingNotificationEmail;
 use App\Lib\Packages\Bookings\Contracts\BaseBooking;
 use App\Lib\Packages\Bookings\Exceptions\BookingNotFoundException;
 use App\Lib\Packages\Bookings\Exceptions\InactiveBookingException;
@@ -13,10 +14,12 @@ use App\Lib\Packages\Geo\Location\LocationGateway;
 use App\Lib\Packages\Listings\Contracts\BaseListing;
 use App\Lib\Packages\Listings\ListingsGateway;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
+use App\User;
 use Illuminate\Contracts\Logging\Log;
 use Illuminate\Contracts\Validation\ValidationException;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Monolog;
@@ -28,6 +31,8 @@ use App\Lib\Packages\Bookings\Exceptions\InvalidNumberOfPeopleException;
  * @author Carlos Granados <granados.carlos91@gmail.com>
  */
 class BookingsGateway {
+
+    use DispatchesJobs;
 
     /**
      * @var \Illuminate\Database\Connection
@@ -67,6 +72,11 @@ class BookingsGateway {
         BaseBooking::TYPE          => 'required|bookingType',
         'location'                 => 'required-if:type,R'
     ];
+
+    /**
+     * @var User
+     */
+    private $user = null;
 
     /**
      * BookingsGateway constructor.
@@ -118,6 +128,27 @@ class BookingsGateway {
         }, "Listing {$data['fk_listing_id']} is no longer active. Cannot book for this listing.");
 
         return $this->validatorFactory->make($data, $rules);
+    }
+
+    /**
+     * @param User $user
+     * @return $this
+     */
+    public function setCurrentUser(User $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * @return User $user
+     */
+    public function getCurrentUser()
+    {
+        if (is_null($this->user)){
+            throw new \InvalidArgumentException("Cannot provide a user object because a user object has not been set");
+        }
+        return $this->user;
     }
 
     /**
@@ -242,6 +273,9 @@ class BookingsGateway {
 
         $this->db->commit();
 
+        // Push notification email to queue
+        $this->dispatch(new SendBookingNotificationEmail($this->getCurrentUser(), $booking, $booking->getMetadata(), $booking->getMetadata()->getLocation()));
+
         return $booking;
     }
 
@@ -269,6 +303,7 @@ class BookingsGateway {
         if ($booking instanceof RideBooking) {
             $location = $this->locationGateway->create($data['location']);
             $metadata->setFkLocationId($location->getId());
+            $metadata->setLocation($location);
         }
 
         $metadata->save();
@@ -344,11 +379,13 @@ class BookingsGateway {
     }
 
     /**
-     * @param string $user
+     * @param string $userId
      * @return array
      */
-    public function getUserBookings(string $user)
+    public function getUserBookings(string $userId = null)
     {
+        $user = ! is_null($userId) ?: $this->getCurrentUser()->getId();
+
         $data = (array)$this->db->table('bookings as a')
             ->join('bookings_metadata as b', 'b.fk_booking_id', '=', 'a.id')
             ->join('listings as c', 'c.id', '=', 'a.fk_listing_id')
@@ -516,8 +553,10 @@ class BookingsGateway {
      * @throws MismatchException
      * @throws InactiveBookingException
      */
-    public function accept(string $bookingId, string $currentUserId)
+    public function accept(string $bookingId, string $currentUserId = null)
     {
+        $currentUserId = ! is_null($currentUserId) ?: $this->getCurrentUser()->getId();
+
         $booking = $this->listingOwnerToBookingValidation($bookingId, $currentUserId);
 
         if (!$booking->isActive()) {

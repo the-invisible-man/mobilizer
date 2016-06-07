@@ -74,7 +74,7 @@ class BookingMetadata extends Model
     }
 
     /**
-     * @return mixed
+     * @return Location
      */
     public function getLocation()
     {

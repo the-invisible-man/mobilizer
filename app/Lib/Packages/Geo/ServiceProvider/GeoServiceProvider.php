@@ -49,7 +49,7 @@ class GeoServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(Timezone::class, function (Application $app) {
-            $config             = $app['config']['geo-drivers.google.timezone-api'];
+            $config             = $app['config']['geo.drivers.google.timezone-api'];
             $config['apiKey']   = $app['config']['geo.drivers.google.key'];
             $httpClient         = new Client();
 

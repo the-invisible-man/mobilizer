@@ -31,6 +31,13 @@ class Location extends Model
     protected $table = 'locations';
 
     /**
+     * @var array
+     */
+    protected $standardComponents = [
+        self::STREET, self::CITY, self::STATE, self::ZIP, self::COUNTRY
+    ];
+
+    /**
      * We are using uuid's and not auto-incrementing integers
      * @var bool
      */
@@ -42,9 +49,15 @@ class Location extends Model
     public function __toString() : string
     {
         // Build address string:
-        $street = strlen($this->getStreet()) ? $this->getStreet() . ',' : '';
+        $components = [];
 
-        return "{$street}, {$this->getCity()}, {$this->getState()}, {$this->getZip()}, {$this->getCountry()}";
+        foreach ($this->standardComponents as $component) {
+            $str = $this->getAttribute($component);
+
+            if (strlen($str)) $components[] = $str;
+        }
+
+        return implode(', ', $components);
     }
 
     /**

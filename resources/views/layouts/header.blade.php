@@ -12,7 +12,7 @@
     </script>
     <!-- /FACEBOOK WIDGET -->
     <div class="global-wrap">
-        <header id="main-header">
+        <header id="main-header" style="background-image:url(/img/photography/1-sLZF6kIWiyaNytLqWjP_HA.jpeg); background-position: center 70%;">
             <div class="header-top">
                 <div class="container">
                     <div class="row">
@@ -25,21 +25,21 @@
                             <div class="top-user-area clearfix">
                                 <ul class="top-user-area-list list list-horizontal list-border social-icons">
                                     @if (isset($auth) && $auth['status'])
-                                    <li class="top-user-area-avatar list nav-drop">
-                                        <a href="#">
-                                            <img class="origin round" src="/img/40x40.png" alt="{{$auth['userInfo']['first_name']}}" title="{{$auth['userInfo']['first_name']}}" />Hi, {{$auth['userInfo']['first_name']}} <i class="fa fa-angle-down"></i></i>
-                                        </a>
-                                        <ul class="list nav-drop-menu">
-                                            <li><a href="#">My Bookings</a>
-                                            </li>
-                                            <li><a href="#">My Listings</a>
-                                            </li>
-                                            <li><a href="#">Settings</a>
-                                            </li>
-                                            <li><a href="/logout">Sign Out</a>
-                                            </li>
-                                        </ul>
-                                    </li>
+                                        <li class="top-user-area-avatar list nav-drop">
+                                            <a href="#">
+                                                <img class="origin round" src="/img/40x40.png" alt="{{$auth['userInfo']['first_name']}}" title="{{$auth['userInfo']['first_name']}}" />Hi, {{$auth['userInfo']['first_name']}} <i class="fa fa-angle-down"></i></i>
+                                            </a>
+                                            <ul class="list nav-drop-menu">
+                                                <li><a href="#">My Bookings</a>
+                                                </li>
+                                                <li><a href="#">My Listings</a>
+                                                </li>
+                                                <li><a href="#">Settings</a>
+                                                </li>
+                                                <li><a href="/logout">Sign Out</a>
+                                                </li>
+                                            </ul>
+                                        </li>
                                     @else
                                         <li><a href="/login" ><span class="btn btn-primary">Login</span></a></li>
                                     @endif

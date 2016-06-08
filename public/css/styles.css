@@ -2148,7 +2148,6 @@ img.pp-img {
 .header-top {
   padding: 10px 0;
   min-height: 65px;
-  background: #4d4d4d;
 }
 @media (max-width:992px) {
   .header-top {

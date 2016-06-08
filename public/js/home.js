@@ -8,7 +8,8 @@
             if ($("#app").attr('about') == PACKAGE_NAME) {
                 var packages = {
                     SearchComponent: {
-                        autocompleteElementId: "autocomplete"
+                        autocompleteElementId: "autocomplete",
+                        rideFormName: "ride_search_form"
                     }
                 };
 
@@ -29,7 +30,8 @@
     HomeActions.SearchComponent = {};
 
     HomeActions.SearchComponent._register = function (config){
-        var autocomplete        = new google.maps.places.Autocomplete((document.getElementById(config['autocompleteElementId'])), {type: ['geocode']});
+        var searchField         = document.getElementById(config['autocompleteElementId']);
+        var autocomplete        = new google.maps.places.Autocomplete(searchField, {type: ['geocode']});
 
         $("input[type=radio][name=ride_total_people_radio]").change(function () {
             $("#ride_total_people").val($(this).val())
@@ -37,6 +39,14 @@
 
         $("#ride_total_people_select").change(function () {
             $("#ride_total_people").val($(this).val())
+        });
+
+        $("#ride_search_form").submit(function () {
+            if (!$(searchField).val().length) {
+                $("#ride_search_error").html();
+                $("#ride_search_error").html('<strong>Enter an address into the search field</strong>');
+                return false;
+            }
         });
     }
 

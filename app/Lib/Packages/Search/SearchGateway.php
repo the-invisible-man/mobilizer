@@ -186,7 +186,7 @@ class SearchGateway {
             'party_name'        => $data['party_name'],
             'starting_date'     => (new \DateTime($data['starting_date']))->format('M d, Y'),
             'ending_date'       => (new \DateTime($data['ending_date']))->format('M d, Y'),
-            'driver'            => $data['driver'],
+            'host'              => $data['host'],
             'type'              => $data['type'],
             'additional_info'   => $data['additional_info'],
             'max_occupants'     => $data['max_occupants'],
@@ -200,7 +200,7 @@ class SearchGateway {
                 'state'     => $data['state'],
                 'zip'       => $data['zip'],
                 'country'   => $data['country']
-            ]
+            ],
         ];
 
         return $out;
@@ -231,7 +231,7 @@ class SearchGateway {
             'c.zip',
             'c.country',
 
-            'd.first_name as driver'
+            'd.first_name as host'
         ];
     }
 }

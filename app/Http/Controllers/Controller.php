@@ -19,8 +19,8 @@ class Controller extends BaseController
         $data = ['auth' => ['status' => false]];
 
         if (\Auth::check()) {
-            $data['auth']['status'] = true;
-            $data['auth']['userInfo'] = \Auth::user()->toArray();
+            $data['auth']['status']     = true;
+            $data['auth']['userInfo']   = \Auth::user()->toArray();
         }
 
         return $data;

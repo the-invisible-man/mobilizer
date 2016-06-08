@@ -87,6 +87,10 @@ class BaseListing extends Model implements \JsonSerializable {
         $location   = ! $this->getLocation() ? [] : $this->getLocation()->toArray();
         $route      = ! $this->getRoute() ? [] : $this->getRoute()->toArray();
 
+        if (isset($metadata['time_of_day'])) {
+            $metadata['time_of_day_string'] = ListingMetadata::translateTimeOfDay($metadata['time_of_day']);
+        }
+
         return array_merge($attributes, ['metadata' => $metadata, 'location' => $location, 'route' => $route]);
     }
 

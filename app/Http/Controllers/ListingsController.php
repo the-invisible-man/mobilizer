@@ -6,6 +6,7 @@ use App\Lib\Packages\Bookings\Exceptions\MismatchException;
 use App\Lib\Packages\Listings\ListingsGateway;
 use App\Lib\Packages\Listings\ListingTypes\RideListing;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
+use App\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -136,7 +137,29 @@ class ListingsController extends Controller {
         $responseCode = 200;
 
         try {
-            $response = $this->listingsGateway->find($listingId)->toArray();
+            $listing    = $this->listingsGateway->find($listingId);
+            $response   = array_merge($listing->toArray(), $this->userInfo());
+            $user       = User::find($response['fk_user_id']);
+
+            if ($user instanceof User) {
+                $response['host'] = $user->getFirstName();
+            }
+
+            $response['starting_date_raw'] = (new \DateTime($response['starting_date']))->format('M d, Y');
+            $response['remaining_slots'] = $this->listingsGateway->remainingSlots($listing->getId());
+
+            if ($listing->getType() == RideListing::ListingType && strlen($request->get('location'))) {
+                $pickuptime = $this->listingsGateway->estimateArrivalTime($listing, $request->get('location'));
+
+                // Pick up time is local time of 'location'
+                if ($pickuptime instanceof \DateTime) {
+                    $response['pickup_time']['raw']     = $pickuptime->format('Y-m-d H:i:s');
+                    $response['pickup_time']['date']    = $pickuptime->format('M d, Y');
+                    $response['pickup_time']['time']    = $pickuptime->format('h:i A');
+                } else {
+                    $response['pickup_time'] = null;
+                }
+            }
         } catch (ModelNotFoundException $e) {
             $responseCode   = 400;
             $response       = ['message' => "No listing with id of {$listingId} found"];

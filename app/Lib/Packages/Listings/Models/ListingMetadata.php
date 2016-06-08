@@ -30,6 +30,17 @@ class ListingMetadata extends Model
     ];
 
     /**
+     * Time of day as actual times [hour, minute, second]
+     * @var array
+     */
+    public static $timeOfDayNumerical = [
+        0 => [5, 30, 0],
+        1 => [12, 30, 0],
+        2 => [17, 30, 0],
+        3 => [20, 30, 0]
+    ];
+
+    /**
      * @var string
      */
     protected $table = 'listings_metadata';
@@ -49,11 +60,21 @@ class ListingMetadata extends Model
 
     /**
      * @param $key
-     * @return string|null
+     * @param bool $datetime
+     * @return string|null|\DateTime
      */
-    public static function translateTimeOfDay($key)
+    public static function translateTimeOfDay($key, bool $datetime = false)
     {
-        return isset(self::$timeOfDayTranslations[$key]) ? self::$timeOfDayTranslations[$key] : null;
+        if (!isset(self::$timeOfDayTranslations[$key])) return null;
+
+        if ($datetime) {
+            $date   = new \DateTime();
+            $time   = self::$timeOfDayNumerical[$key];
+            $date->setTime($time[0], $time[1], $time[2]);
+            return $date;
+        }
+
+        return self::$timeOfDayTranslations[$key];
     }
 
     /**

@@ -132,9 +132,6 @@
     };
 
     RideListing.FormComponent.validateForm = function (data) {
-
-        console.dir(data);
-
         var requiredFields = {'party_name':"a party name", 'start':"a starting location", 'time_of_day':"the time approximation of when you're planning to leave", 'end':"the date you're coming back", 'max_occupants':"the maximum number of people you can bring, 1 at minimum.", 'location':"a starting location", 'additional_info':"additional information in the text box."};
         var messages = [];
         var validators = {

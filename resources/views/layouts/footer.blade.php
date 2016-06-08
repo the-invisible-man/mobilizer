@@ -66,9 +66,10 @@
 <script src="js/custom.js"></script>
 <script src="js/pace.min.js"></script>
 <script src="/js/jquery-deparam.js"></script>
-
+<script src="/js/jsonhttprequest.js"></script>
 
 <!-- APP Components -->
+<script src="/js/mobilizer-api.js"></script>
 <script src="/js/ride-book.js"></script>
 <script src="/js/search.js"></script>
 <script src="/js/home.js"></script>

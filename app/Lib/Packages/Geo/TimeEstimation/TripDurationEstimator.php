@@ -5,7 +5,6 @@ namespace App\Lib\Packages\Geo\TimeEstimation;
 use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
 use Illuminate\Cache\Repository as CacheRepository;
-use App\Lib\Packages\Geo\Location\Location;
 
 /**
  * Class TripDurationEstimator
@@ -52,31 +51,30 @@ class TripDurationEstimator
      */
     public function estimate(string $origin, string $destination)
     {
-        $key = $this->cacheKeyForZip($origin, $destination);
+        //$key = $this->cacheKeyForZip($origin, $destination);
 
-        if ($this->cache->has($key)) {
-            return $this->cache->get($key);
-        }
+//        if ($this->cache->has($key)) {
+//            return $this->cache->get($key);
+//        }
 
         $duration = $this->grabFreshFromZip($origin, $destination);
 
-        $this->cache->put($key, $duration, $this->config['cache_ttl']);
+        //$this->cache->put($key, $duration, $this->config['cache_ttl']);
 
         return $duration;
     }
 
     /**
-     * @param Location $driverOrigin
-     * @param Location $destination
+     * @param string $driverOrigin
+     * @param string $destination
      * @param \DateTime $departureDateTime
      * @return \DateTime
      */
-    public function estimateArrivalDateTime(Location $driverOrigin, Location $destination, \DateTime $departureDateTime)
+    public function estimateArrivalDateTime(string $driverOrigin, string $destination, \DateTime $departureDateTime)
     {
         // We need the lat and long of the driver's starting location and pickup location
         $origin = $this->geoService->geocode($driverOrigin);
         $pickup = $this->geoService->geocode($destination);
-
 
         // Now let's figure out the timezone of the driver's starting location.
         $originTimeZone         = $this->geoService->getTimeZone($origin->getGeoLocation(), strtotime($departureDateTime->format('d M Y')));

@@ -21,6 +21,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use App\Lib\Packages\Listings\ListingDrivers\HomeMetadataDriver;
+use App\Lib\Packages\Bookings\Contracts\BaseBooking;
 
 /**
  * Class ListingsGateway
@@ -388,6 +389,42 @@ class ListingsGateway {
         }
 
         return $out;
+    }
+
+    /**
+     * @param BaseListing $listing
+     * @param string $location
+     * @return \DateTime
+     */
+    public function estimateArrivalTime(BaseListing $listing, string $location)
+    {
+        // We'll add approximate arrival time to 'location'
+        // based on the driver's departure time
+        $departureTime = ListingMetadata::translateTimeOfDay($listing->getMetadata()->getTimeOfDay(), true);
+        $departureDate = new \DateTime($listing->getStartingDate());
+
+        $departureTime->setDate($departureDate->format('Y'), $departureDate->format('m'), $departureDate->format('d'));
+
+        return $this->tripDurationEstimator->estimateArrivalDateTime($listing->getLocation(), $location, $departureTime);
+    }
+
+    /**
+     * @param string $id
+     * @return int
+     */
+    public function remainingSlots($id) : int
+    {
+        $max =  (int)$this->db->table('listings')
+            ->where('id', '=', $id)
+            ->value('max_occupants');
+
+        $taken = (int)$this->db->table('bookings')
+            ->where(BaseBooking::FK_LISTING_ID, '=', $id)
+            ->where(BaseBooking::STATUS, '=', BaseBooking::STATUS_ACCEPTED)
+            ->where(BaseBooking::ACTIVE, '=', 1)
+            ->sum(BaseBooking::TOTAL_PEOPLE);
+
+        return ($max - $taken);
     }
 
     /**

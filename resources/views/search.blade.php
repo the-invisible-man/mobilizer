@@ -20,7 +20,7 @@
                         </div>
                         <div class="form-group form-group-icon-left"><i class="fa fa-users input-icon input-icon-hightlight"></i>
                             <label>Passengers</label>
-                            <input class="form-control" name="total_people" value="{{$query_info['search_term']['filters']['total_people']}}" type="text" />
+                            <input class="form-control" name="total_people" id="total_people" value="{{$query_info['search_term']['filters']['total_people']}}" type="text" />
                         </div>
                         <input class="btn btn-primary" type="submit" value="Update Search" />
                     </form>
@@ -30,7 +30,7 @@
                 <ul class="booking-list">
                     @if (count($results))
                     @foreach ($results as $result)
-                        <li id="listing_result" about="{{$result['id']}}">
+                        <li class="listing_result" about="{{$result['id']}}">
                             <a class="booking-item" href="#">
                                 <div class="row">
                                     <div class="col-md-4 col-xs-12">
@@ -48,7 +48,7 @@
                                         <div class="col-md-6 col-xs-6" style="font-weight: bold">
                                             {{$result['starting_date']}}<br>
                                             {{$result['ending_date']}}<br>
-                                            {{$result['driver']}}<br>
+                                            {{$result['host']}}<br>
                                             {{$result['location']['city']}}, {{$result['location']['state']}}<br>
                                             {{$result['remaining_slots']}}
                                         </div>
@@ -71,15 +71,18 @@
     <div class="modal fade" id="listing_info_window" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">(!)Validation Error!</h4>
+                <div class="modal-header listing-modal-top">
+                    <h4 class="modal-title" id="party_name_placeholder"></h4>
+                    <div class="additional_info_placeholder">
+                        <strong>About this ride:</strong><br>
+                        <span id="listing_info_window_additional_info"></span>
+                    </div>
                 </div>
-                <div class="modal-body" id="submit_error_modal_content">
+                <div class="modal-body" id="listing_content">
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">ok</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

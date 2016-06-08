@@ -122,3 +122,26 @@
     *zoom:1;
     float: none !important;
 }
+.listing-modal-top {
+    background-image:url(/img/email_templates/49b9a74707b049aaa40b14af36abb9cd.png);
+    height: 250px;
+    padding:0;
+    padding-top:30px;
+}
+#party_name_placeholder {
+    text-align: center;
+    font-weight: bold;
+}
+.additional_info_placeholder {
+    width:100%;
+    height:130px;
+    margin:auto;
+    background-color:rgba(0,0,0,0.5);
+    margin-top:20px;
+    padding:10px 20px 10px 20px;
+    color:#ffffff;
+    text-align: justify;
+}
+.pac-container {
+    z-index: 1051 !important;
+}

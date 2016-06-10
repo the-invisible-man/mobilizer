@@ -2,7 +2,7 @@
 
 namespace App\Lib\Packages\Search\Drivers;
 
-use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
+use App\Lib\Packages\Core\Validators\ValidatesConfig;
 use App\Lib\Packages\Geo\Location\Geopoint;
 use Elasticsearch\Client;
 use App\Lib\Packages\Search\Exceptions\ElasticsearchAggregationException;
@@ -14,7 +14,7 @@ use App\Lib\Packages\Search\Exceptions\ElasticsearchAggregationException;
  */
 class ElasticsearchDriver implements SearchDriverInterface
 {
-    use ConfigValidatorTrait;
+    use ValidatesConfig;
 
     /**
      * @var Client

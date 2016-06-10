@@ -154,6 +154,7 @@ return [
         App\Lib\Packages\Listings\ServiceProviders\ListingsServiceProvider::class,
         App\Lib\Packages\Search\SearchServiceProvider::class,
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
+        App\Lib\Packages\EmailRelay\RelayServiceProvider::class,
 
         /*
          * Application Service Providers...

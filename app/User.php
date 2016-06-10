@@ -63,7 +63,7 @@ class User extends Authenticatable
      */
     public function getLastName()
     {
-        return $this->getAttribute('lsat_name');
+        return $this->getAttribute('last_name');
     }
 
     /**

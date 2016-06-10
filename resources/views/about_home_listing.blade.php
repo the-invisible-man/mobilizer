@@ -28,21 +28,17 @@
                                     <h2 style="color:#ffffff !important; margin-bottom: 30px; text-align: center; margin-top: 30px;">How it works</h2>
                                     <div style="color:#ffffff; font-size: 15px; text-align: center; align-content: center">
                                         <div class="row">
-                                            <div class="col-md-3" style="margin-bottom:15px;">
+                                            <div class="col-md-4" style="margin-bottom:15px;">
                                                 <p><i class="fa fa-home box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
                                                 <p>Enter the location of your home</p>
                                             </div>
-                                            <div class="col-md-3" style="margin-bottom:15px;">
+                                            <div class="col-md-4" style="margin-bottom:15px;">
                                                 <p><i class="fa fa-users box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
                                                 <p>How many people can you host?</p>
                                             </div>
-                                            <div class="col-md-3" style="margin-bottom:15px;">
+                                            <div class="col-md-4" style="margin-bottom:15px;">
                                                 <p><i class="fa fa-calendar box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
                                                 <p>Tell us what dates you can host</p>
-                                            </div>
-                                            <div class="col-md-3" style="margin-bottom:15px;">
-                                                <p><i class="fa fa-paw box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>
-                                                <p>Do you allow pets?</p>
                                             </div>
                                             <div class="col-md-6" style="margin-bottom:15px;">
                                                 <p><i class="fa fa-envelope box-icon-large box-icon-black box-icon-to-inverse box-icon-center animate-icon-border-fadeout"></i></p>

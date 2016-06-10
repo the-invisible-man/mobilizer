@@ -20,6 +20,6 @@ return [
 
     'elasticsearch'     => [
         'hosts'     => ['192.168.10.10:9200'],
-        'radius'    => '24km'
+        'radius'    => '16km'
     ]
 ];

@@ -108,18 +108,19 @@ class BookingsController extends Controller {
         $validate               = Validator::make($data, $this->validatorAdd);
         $responseCode           = 200;
 
-        if ($validate->fails()) {
-            $response       = ['errors' => $validate->errors()];
-            $responseCode   = 400;
-        } else {
-            $response    = $this->bookingsGateway->create($data);
+        try {
+            if ($validate->fails()) {
+                $response = ['errors' => $validate->errors()];
+                $responseCode = 400;
+            } else {
+                $response = $this->bookingsGateway->create($data);
+            }
+        } catch (\Exception $e) {
+            $response = ['errors' => $e->getMessage()];
+            $responseCode = 400;
         }
 
-        if ($request->ajax()) {
-            return \Response::json($response, $responseCode);
-        } else {
-
-        }
+        return \Response::json($response, $responseCode);
     }
 
     /**

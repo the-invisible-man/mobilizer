@@ -2,7 +2,7 @@
 
 namespace App\Lib\Packages\Geo\TimeEstimation;
 
-use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
+use App\Lib\Packages\Core\Validators\ValidatesConfig;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
 use Illuminate\Cache\Repository as CacheRepository;
 
@@ -13,7 +13,7 @@ use Illuminate\Cache\Repository as CacheRepository;
  */
 class TripDurationEstimator
 {
-    use ConfigValidatorTrait;
+    use ValidatesConfig;
 
     /**
      * @var GeoServiceInterface

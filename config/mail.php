@@ -122,4 +122,16 @@ return [
 
     'sendmail' => '/usr/sbin/sendmail -bs',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Relay Server
+    |--------------------------------------------------------------------------
+    |
+    | Users communicate among each other through a relay email service
+    | that keeps the real email addresses hidden.
+    |
+    */
+    'relay' => [
+        'host' => 'relay.seeyouinphilly.com'
+    ]
 ];

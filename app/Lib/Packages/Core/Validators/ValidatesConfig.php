@@ -4,7 +4,7 @@ namespace App\Lib\Packages\Core\Validators;
 
 use App\Lib\Packages\Core\Exceptions\ConfigNotFoundException;
 
-trait ConfigValidatorTrait {
+trait ValidatesConfig {
 
     /**
      * @var array

@@ -2,7 +2,7 @@
 
 namespace App\Lib\Packages\Search;
 
-use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
+use App\Lib\Packages\Core\Validators\ValidatesConfig;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
 use App\Lib\Packages\Geo\Responses\GeocodeResponse;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
@@ -22,7 +22,7 @@ use Illuminate\Database\Query\JoinClause;
  */
 class SearchGateway {
 
-    use ConfigValidatorTrait;
+    use ValidatesConfig;
 
     /**
      * @var MySqlConnection

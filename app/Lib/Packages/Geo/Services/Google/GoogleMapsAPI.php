@@ -3,7 +3,7 @@
 namespace App\Lib\Packages\Geo\Services\Google;
 
 use App\Lib\Packages\Core\Exceptions\ConfigNotFoundException;
-use App\Lib\Packages\Core\Validators\ConfigValidatorTrait;
+use App\Lib\Packages\Core\Validators\ValidatesConfig;
 use Guzzle\Http\Client;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Message\Response;
@@ -21,7 +21,7 @@ use App\Lib\Packages\Geo\Services\Google\Exceptions\GoogleMapsRequestNotOkatExce
  */
 abstract class GoogleMapsAPI {
 
-    use ConfigValidatorTrait;
+    use ValidatesConfig;
 
     const   POST    = 'POST',
             GET     = 'GET',

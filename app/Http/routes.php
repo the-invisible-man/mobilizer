@@ -50,22 +50,20 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::get('/add-listing', ['middleware' => 'auth', 'uses' => 'HomeController@listing']);
     Route::get('/success-add-listing', 'ListingsController@testSuccess');
+
+    Route::group(['prefix' => 'bookings'], function () {
+        Route::get('/', 'BookingsController@all');
+        Route::post('/', 'BookingsController@new');
+        Route::get('{booking_id}', 'BookingsController@get');
+        Route::put('{booking_id}', 'BookingsController@edit');
+
+
+        // Booking Actions
+        Route::post("{booking_id}/accept", "BookingsController@accept");
+        Route::post("{booking_id}/reject", "BookingsController@reject");
+        Route::delete('{booking_id}', 'BookingsController@cancel');
+    });
 });
-
-
-Route::group(['prefix' => 'bookings'], function () {
-    Route::get('/', 'BookingsController@all');
-    Route::post('/', 'BookingsController@new');
-    Route::get('{booking_id}', 'BookingsController@get');
-    Route::put('{booking_id}', 'BookingsController@edit');
-
-
-    // Booking Actions
-    Route::post("{booking_id}/accept", "BookingsController@accept");
-    Route::post("{booking_id}/reject", "BookingsController@reject");
-    Route::delete('{booking_id}', 'BookingsController@cancel');
-});
-
 
 
 

@@ -33,7 +33,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-lg form-group-icon-left"><i class="fa fa-map-marker input-icon"></i>
                                                         <label>Where will you be picked up from?</label>
-                                                        <input class="typeahead form-control" placeholder="Address, City, or U.S. Zip Code" type="text" name="location" id="autocomplete" required title="Enter a pick up location"/>
+                                                        <input class="form-control" placeholder="Address, City, or U.S. Zip Code" type="text" name="location" id="autocomplete" required title="Enter a pick up location"/>
                                                         <span class="help-block" id="ride_search_error" style="color: #b90000;">
 
                                                         </span>

@@ -64,7 +64,7 @@ class Relay extends Job implements ShouldQueue
      */
     public function handle(Mailer $mailer)
     {
-        $mailer->send('emails.relay', ['content' => $this->body], function (Message $message) {
+        $mailer->send('emails.relay', ['content' => $this->body, 'from_url_encoded' => urlencode($this->from)], function (Message $message) {
             $message->to($this->to);
             $message->from($this->from, $this->name);
             $message->subject($this->subject);

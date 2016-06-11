@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Lib\Packages\Bookings\Exceptions\MismatchException;
-use App\Lib\Packages\Listings\ListingsGateway;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Lib\Packages\Listings\ListingTypes\RideListing;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
-use App\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Lib\Packages\Listings\ListingsGateway;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Log\Writer;
 use Validator;
+use App\User;
 
 /**
  * Class ListingsController

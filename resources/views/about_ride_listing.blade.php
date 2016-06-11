@@ -24,7 +24,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <p style="color:#ffffff; text-align: center; margin-top:30px; margin-bottom: 30px;">When you list your ride we match you with other berners along your route who need a ride so you can split costs and save money in this economy.</p>
+                                    <p style="color:#ffffff; text-align: center; margin-top:30px; margin-bottom: 30px;">When you list your ride we match you with other progressives going to the convention so you can split costs and save money in this economy.</p>
                                     <h2 style="color:#ffffff !important; margin-bottom: 30px; text-align: center; margin-top: 30px;">How it works</h2>
                                     <div style="color:#ffffff; font-size: 15px; text-align: center; align-content: center">
                                         <div class="row">

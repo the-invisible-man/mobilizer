@@ -42,7 +42,7 @@
         });
 
         $("#ride_search_form").submit(function () {
-            if (!$(searchField).val().length) {
+            if (!$(".autocomplete").val().length) {
                 $("#ride_search_error").html();
                 $("#ride_search_error").html('<strong>Enter an address into the search field</strong>');
                 return false;

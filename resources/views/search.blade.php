@@ -1,6 +1,6 @@
 @extends('layouts.app_with_header')
 @section('content')
-    <div id="app" about="search"></div>
+    <div id="app" about="search" data-token="{!! csrf_token() !!}"></div>
     <div class="container">
         <ul class="breadcrumb">
             <li><a href="/">Home</a>

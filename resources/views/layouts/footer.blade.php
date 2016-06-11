@@ -70,7 +70,7 @@
 
 <!-- APP Components -->
 <script src="/js/mobilizer-api.js"></script>
-<script src="/js/ride-book.js"></script>
+<script src="/js/ride-list.js"></script>
 <script src="/js/search.js"></script>
 <script src="/js/home.js"></script>
 <!-- End APP Components -->

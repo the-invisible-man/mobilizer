@@ -75,6 +75,13 @@
             return ajax_request(data, callback, resource);
         };
 
+        data_app.get_contact_email = function(listing_id, callback)
+        {
+            var resource = 'listings/contact/' + listing_id;
+
+            return ajax_request({}, callback, resource);
+        };
+
         return data_app;
     }
 

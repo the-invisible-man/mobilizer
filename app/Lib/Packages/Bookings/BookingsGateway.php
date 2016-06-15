@@ -2,7 +2,6 @@
 
 namespace App\Lib\Packages\Bookings;
 
-use App\Jobs\SendBookingNotificationEmail;
 use App\Lib\Packages\Bookings\Contracts\BaseBooking;
 use App\Lib\Packages\Bookings\Exceptions\BookingNotFoundException;
 use App\Lib\Packages\Bookings\Exceptions\InactiveBookingException;
@@ -11,6 +10,7 @@ use App\Lib\Packages\Bookings\Models\BookingMetadata;
 use App\Lib\Packages\Bookings\Models\HomeBooking;
 use App\Lib\Packages\Bookings\Models\RideBooking;
 use App\Lib\Packages\Geo\Location\LocationGateway;
+use App\Lib\Packages\Geo\TimeEstimation\TripDurationEstimator;
 use App\Lib\Packages\Listings\Contracts\BaseListing;
 use App\Lib\Packages\Listings\ListingsGateway;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
@@ -66,17 +66,33 @@ class BookingsGateway {
      * @var array
      */
     private $required = [
-        BaseBooking::FK_USER_ID    => 'required',
-        BaseBooking::FK_LISTING_ID => 'required|listingExists|listingIsActive',
-        BaseBooking::TOTAL_PEOPLE  => 'required|numeric|min:1|validateTotalPeople',
-        BaseBooking::TYPE          => 'required|bookingType',
-        'location'                 => 'required-if:type,R'
+        BaseBooking::FK_USER_ID         => 'required',
+        BaseBooking::FK_LISTING_ID      => 'required|listingExists|listingIsActive|alreadyBooked',
+        BaseBooking::TOTAL_PEOPLE       => 'required|numeric|min:1|validateTotalPeople',
+        BaseBooking::TYPE               => 'required|bookingType',
+        BaseBooking::ADDITIONAL_INFO    => 'required|min:50',
+        'location'                      => 'required-if:type,R'
     ];
 
     /**
      * @var User
      */
     private $user = null;
+
+    /**
+     * @var Log
+     */
+    private $app;
+
+    /**
+     * @var Application
+     */
+    private $log;
+
+    /**
+     * @var TripDurationEstimator
+     */
+    private $tripDurationEstimator;
 
     /**
      * BookingsGateway constructor.
@@ -86,8 +102,9 @@ class BookingsGateway {
      * @param Application $app
      * @param Log $log
      * @param ListingsGateway $listingsGateway
+     * @param TripDurationEstimator $tripDurationEstimator
      */
-    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway, ValidatorFactory $validatorFactory, Application $app, Log $log, ListingsGateway $listingsGateway)
+    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway, ValidatorFactory $validatorFactory, Application $app, Log $log, ListingsGateway $listingsGateway, TripDurationEstimator $tripDurationEstimator)
     {
         $this->db               = $databaseManager->connection();
         $this->locationGateway  = $locationGateway;
@@ -95,6 +112,8 @@ class BookingsGateway {
         $this->app              = $app;
         $this->log              = $log;
         $this->listingsGateway  = $listingsGateway;
+
+        $this->tripDurationEstimator = $tripDurationEstimator;
     }
 
     /**
@@ -102,7 +121,7 @@ class BookingsGateway {
      * @param array $rules
      * @return \Illuminate\Validation\Validator
      */
-    private function validator($data, array $rules)
+    private function validator(array $data, array $rules)
     {
         $slotsRemaining = 0;
         $db             = $this->db;
@@ -123,9 +142,15 @@ class BookingsGateway {
             return ((int)$value) <= $slotsRemaining;
         }, 'Invalid number of people. Tried to reserve ' . $data['total_people'] . ' people but there\'s only ' . $slotsRemaining);
 
-        $this->validatorFactory->extend('listingIsActive', function ($attribute, $value) use($db, $data){
+        $this->validatorFactory->extend('listingIsActive', function ($attribute, $value) use($db, $data)
+        {
             return (bool) $db->table('listings')->where(BaseListing::ID, '=', $value)->value('active');
         }, "Listing {$data['fk_listing_id']} is no longer active. Cannot book for this listing.");
+
+        $this->validatorFactory->extend('alreadyBooked', function ($attribute, $value) use($db, $data)
+        {
+            return ! $db->table('bookings')->where('fk_user_id', '=', $data['fk_user_id'])->where('fk_listing_id', '=', $value)->exists();
+        }, "A booking request has already been sent for this listing, cannot submit duplicate.");
 
         return $this->validatorFactory->make($data, $rules);
     }
@@ -158,14 +183,14 @@ class BookingsGateway {
     public function remainingSlots($id) : int
     {
         $max =  (int)$this->db->table('listings')
-                                ->where('id', '=', $id)
-                                ->value('max_occupants');
+                               ->where('id', '=', $id)
+                               ->value('max_occupants');
 
         $taken = (int)$this->db->table('bookings')
-                                ->where(BaseBooking::FK_LISTING_ID, '=', $id)
-                                ->where(BaseBooking::STATUS, '=', BaseBooking::STATUS_ACCEPTED)
-                                ->where(BaseBooking::ACTIVE, '=', 1)
-                                ->sum(BaseBooking::TOTAL_PEOPLE);
+                               ->where(BaseBooking::FK_LISTING_ID, '=', $id)
+                               ->where(BaseBooking::STATUS, '=', BaseBooking::STATUS_ACCEPTED)
+                               ->where(BaseBooking::ACTIVE, '=', 1)
+                               ->sum(BaseBooking::TOTAL_PEOPLE);
 
         return ($max - $taken);
     }
@@ -273,11 +298,9 @@ class BookingsGateway {
 
         $this->db->commit();
 
-        // Push notification email to queue
-        $this->dispatch(new SendBookingNotificationEmail($this->getCurrentUser(), $booking, $booking->getMetadata(), $booking->getMetadata()->getLocation()));
-
         return $booking;
     }
+
 
     /**
      * @param array $data
@@ -354,7 +377,11 @@ class BookingsGateway {
             'f.city as listing_location_city',
             'f.state as listing_location_state',
             'f.zip as listing_location_zip',
-            'f.country as listing_location_country'
+            'f.country as listing_location_country',
+
+            // listing owner info
+            'g.first_name as host_first_name',
+            'g.last_name as host_last_name',
         ];
     }
 
@@ -392,6 +419,7 @@ class BookingsGateway {
             ->join('listings_metadata as d', 'd.fk_listing_id', '=', 'c.id')
             ->join('locations as e', 'e.id', '=', 'b.fk_location_id', 'left')
             ->join('locations as f', 'f.id', '=', 'c.fk_location_id')
+            ->join('users as g', 'c.fk_user_id', '=', 'g.id')
             ->where('a.fk_user_id', '=', $user)
             ->where('c.active', '=', 1)
             ->get($this->getSelectColumns());
@@ -425,6 +453,8 @@ class BookingsGateway {
             'brings_dog'        => (bool)$booking[BookingMetadata::BRINGS_CAT],
             'listing'           => [
                 'id'                => $booking['listing_id'],
+                'host_first_name'   => $booking['host_first_name'],
+                'host_last_name'    => $booking['host_last_name'],
                 'party_name'        => $booking['party_name'],
                 'starting_date'     => $booking['starting_date'],
                 'ending_date'       => $booking['ending_date'],
@@ -453,6 +483,21 @@ class BookingsGateway {
                 'zip'       => $booking['booking_location_zip'],
                 'country'   => $booking['booking_location_country']
             ];
+
+            // SO FUCKING HACKY
+
+            $origin             = $booking['listing_location_city'] . ', ' . $booking['listing_location_state'];
+            $dest               = $booking['booking_location_city'] . ', ' . $booking['booking_location_state'];
+
+            // Let's add the trip estimate
+            $departureTime      = ListingMetadata::translateTimeOfDay($booking['time_of_day'], true);
+            $departureDate      = new \DateTime($booking['starting_date']);
+
+            $departureTime->setDate($departureDate->format('Y'), $departureDate->format('m'), $departureDate->format('d'));
+
+            $pickup                 = $this->tripDurationEstimator->estimateArrivalDateTime($origin, $dest, $departureTime);
+            $data['pickup_date']    = $pickup->format('M d, Y');
+            $data['pickup_time']    = $pickup->format('h:i A');
         }
 
         return $data;
@@ -597,6 +642,7 @@ class BookingsGateway {
             ->join('listings_metadata as d', 'd.fk_listing_id', '=', 'c.id')
             ->join('locations as e', 'e.id', '=', 'b.fk_location_id', 'left')
             ->join('locations as f', 'f.id', '=', 'c.fk_location_id')
+            ->join('users as g', 'g.id', '=', 'a.fk_user_id')
             ->where('a.fk_listing_id', '=', $listingId)
             ->where('a.fk_user_id', '=', $userId)
             ->where('a.active', '=', 1)

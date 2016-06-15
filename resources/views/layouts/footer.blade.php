@@ -44,33 +44,34 @@
     </div>
 </footer>
 
-<script src="js/jquery.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/slimmenu.js"></script>
-<script src="js/bootstrap-datepicker.js"></script>
-<script src="js/bootstrap-timepicker.js"></script>
-<script src="js/nicescroll.js"></script>
-<script src="js/dropit.js"></script>
-<script src="js/ionrangeslider.js"></script>
-<script src="js/icheck.js"></script>
-<script src="js/fotorama.js"></script>
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/slimmenu.js"></script>
+<script src="/js/bootstrap-datepicker.js"></script>
+<script src="/js/bootstrap-timepicker.js"></script>
+<script src="/js/nicescroll.js"></script>
+<script src="/js/dropit.js"></script>
+<script src="/js/ionrangeslider.js"></script>
+<script src="/js/icheck.js"></script>
+<script src="/js/fotorama.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
-<script src="js/typeahead.js"></script>
-<script src="js/card-payment.js"></script>
-<script src="js/magnific.js"></script>
-<script src="js/owl-carousel.js"></script>
-<script src="js/fitvids.js"></script>
-<script src="js/tweet.js"></script>
-<script src="js/countdown.js"></script>
-<script src="js/gridrotator.js"></script>
-<script src="js/custom.js"></script>
-<script src="js/pace.min.js"></script>
+<script src="/js/typeahead.js"></script>
+<script src="/js/card-payment.js"></script>
+<script src="/js/magnific.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/fitvids.js"></script>
+<script src="/js/tweet.js"></script>
+<script src="/js/countdown.js"></script>
+<script src="/js/gridrotator.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/pace.min.js"></script>
 <script src="/js/jquery-deparam.js"></script>
 <script src="/js/jsonhttprequest.js"></script>
 
 <!-- APP Components -->
 <script src="/js/mobilizer-api.js"></script>
 <script src="/js/ride-list.js"></script>
+<script src="/js/bookings.js"></script>
 <script src="/js/search.js"></script>
 <script src="/js/home.js"></script>
 <!-- End APP Components -->

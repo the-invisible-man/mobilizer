@@ -16,7 +16,8 @@
         "guzzlehttp/guzzle": "^6.2",
         "elasticsearch/elasticsearch": "^2.1",
         "lucadegasperi/oauth2-server-laravel": "^5.1",
-        "greggilbert/recaptcha": "dev-master"
+        "greggilbert/recaptcha": "dev-master",
+        "jgrossi/corcel": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

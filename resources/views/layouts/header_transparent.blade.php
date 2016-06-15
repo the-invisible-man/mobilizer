@@ -8,14 +8,14 @@
             @if (isset($auth) && $auth['status'])
                 <span class="top-user-area-avatar list nav-drop">
                     <a href="#">
-                        Hi, {{$auth['userInfo']['first_name']}} <i class="fa fa-angle-down"></i></i>
+                        Hi, {{$auth['userInfo']['first_name']}} <i class="fa fa-angle-down" style="padding-top:2px;"></i><i class="fa fa-angle-up" style="padding-top:2px;"></i></i>
                     </a>
                     <ul class="list nav-drop-menu" style="font-weight: 400; font-size:12px;">
-                        <li><a href="#">My Bookings</a>
+                        <li><a href="/bookings">My Bookings</a>
                         </li>
-                        <li><a href="#">My Listings</a>
+                        <li><a href="/listings">My Listings</a>
                         </li>
-                        <li><a href="#">Settings</a>
+                        <li><a href="/account">Account</a>
                         </li>
                         <li><a href="/logout">Sign Out</a>
                         </li>

@@ -27,14 +27,14 @@
                                     @if (isset($auth) && $auth['status'])
                                         <li class="top-user-area-avatar list nav-drop">
                                             <a href="#">
-                                                <img class="origin round" src="/img/40x40.png" alt="{{$auth['userInfo']['first_name']}}" title="{{$auth['userInfo']['first_name']}}" />Hi, {{$auth['userInfo']['first_name']}} <i class="fa fa-angle-down"></i></i>
+                                                <img class="origin round" src="/img/40x40.png" alt="{{$auth['userInfo']['first_name']}}" title="{{$auth['userInfo']['first_name']}}" />Hi, {{$auth['userInfo']['first_name']}} <i class="fa fa-angle-down" style="padding-top:2px;"></i><i class="fa fa-angle-up" style="padding-top:2px;"></i></i>
                                             </a>
                                             <ul class="list nav-drop-menu">
-                                                <li><a href="#">My Bookings</a>
+                                                <li><a href="/bookings">My Bookings</a>
                                                 </li>
-                                                <li><a href="#">My Listings</a>
+                                                <li><a href="/listings">My Listings</a>
                                                 </li>
-                                                <li><a href="#">Settings</a>
+                                                <li><a href="/account">Account</a>
                                                 </li>
                                                 <li><a href="/logout">Sign Out</a>
                                                 </li>

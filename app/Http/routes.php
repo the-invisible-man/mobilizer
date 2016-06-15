@@ -41,6 +41,9 @@ Route::group(['middleware' => 'web'], function () {
     Route::get("about_housing", "HomeController@housing");
 
     Route::group(['prefix' => 'listings'], function () {
+
+        Route::get('contact/{listing_id}', "ListingsController@contactInfo");
+
         Route::get('/', 'ListingsController@all');
         Route::post('/', ['middleware' => 'auth', 'uses' => 'ListingsController@new']);
         Route::get('{listing_id}', 'ListingsController@get');
@@ -63,8 +66,9 @@ Route::group(['middleware' => 'web'], function () {
         Route::post("{booking_id}/reject", "BookingsController@reject");
         Route::delete('{booking_id}', 'BookingsController@cancel');
     });
-});
 
+    Route::get("facebook", "Auth\\AuthController@facebook");
+});
 
 
 Route::put('accounts/{account_id}', 'AccountsController@edit');
@@ -81,8 +85,3 @@ Route::group(['prefix' => 'api'], function () {
 });
 
 Route::post('/mail/relay', 'EmailRelayController@receive');
-
-Route::get('test', function () {
-    $location = \App\Lib\Packages\Geo\Location\Location::find('c80ea16d-2093-4965-b087-63710756ef68');
-    echo $location->__toString();
-});

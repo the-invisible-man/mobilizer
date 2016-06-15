@@ -45,6 +45,53 @@
         return this.token;
     };
 
+    SearchController.Views = {
+        views: {
+            login_window: $('#login_window'),
+            booked_window: $('#booked_window'),
+            booking_form_window: $('#booking_form_window')
+        },
+        show: function (view, data, closure) {
+            for (var key in SearchController.Views.views) {
+                if (!SearchController.Views.views.hasOwnProperty(key)) continue;
+
+                SearchController.Views.views[key].addClass('hidden');
+            }
+            SearchController.Views.views[view].removeClass('hidden');
+
+            if (typeof(closure) == 'function') {
+                closure(data);
+            }
+        }
+    };
+
+    SearchController.Results.contains = function(needle) {
+        // Per spec, the way to identify NaN is that it is not equal to itself
+        var findNaN = needle !== needle;
+        var indexOf;
+
+        if(!findNaN && typeof Array.prototype.indexOf === 'function') {
+            indexOf = Array.prototype.indexOf;
+        } else {
+            indexOf = function(needle) {
+                var i = -1, index = -1;
+
+                for(i = 0; i < this.length; i++) {
+                    var item = this[i];
+
+                    if((findNaN && item !== item) || item === needle) {
+                        index = i;
+                        break;
+                    }
+                }
+
+                return index;
+            };
+        }
+
+        return indexOf.call(this, needle) > -1;
+    };
+
     SearchController.SearchComponent._register = function (config){
         var autocomplete        = new google.maps.places.Autocomplete((document.getElementById(config['autocompleteElementId'])), {type: ['geocode']});
     };
@@ -63,6 +110,21 @@
                 SearchController.Results.listingInfo(id, search.val());
             }
         });
+
+        var booking_text_field = $("#booking_additional_info");
+        var characterCountPlaceHolder = $("#additional_info_character_count");
+
+        // Character count for textbox
+        booking_text_field.keydown(function () {
+            var cs = $(this).val().length;
+            characterCountPlaceHolder.text(cs);
+        });
+
+        booking_text_field.keyup(function () {
+            var cs = $(this).val().length;
+            characterCountPlaceHolder.text(cs);
+        });
+
     };
 
     SearchController.Results.cache = {};
@@ -81,19 +143,14 @@
     };
 
     SearchController.Results.listingInfoView = function (listing_data) {
-        // handle display
-
-        var content = '';
-
         if (listing_data['type'] == 'R') {
-            content = SearchController.Results.ride(listing_data);
+            SearchController.Results.ride(listing_data);
         } else {
-            content = SearchController.Results.housing(listing_data);
+            SearchController.Results.housing(listing_data);
         }
 
         $("#party_name_placeholder").html(listing_data['party_name']);
         $("#listing_info_window_additional_info").html(listing_data['additional_info']);
-        $("#listing_content").html(content);
         $('#listing_info_window').modal('toggle');
         $("#booking_form").ready(function () {
             SearchController.Results.bindBookingFormEvents('booking_form', listing_data);
@@ -103,83 +160,37 @@
     };
 
     SearchController.Results.ride = function (data) {
-        var content = '<div class="row">';
 
-            content += '<div class="col-md-6" style="margin-bottom:10px">';
-                content += '<strong>You\'ll be riding with:</strong><br>';
-            content += '</div>';
-            content += '<div class="col-md-6" style="margin-bottom:10px">';
-                content += data['host'] + '<br>';
-            content += '</div>';
-
-            content += '<div class="col-md-6" style="margin-bottom:10px">';
-                content += '<strong>Driving From:</strong><br>';
-            content += '</div>';
-            content += '<div class="col-md-6" style="margin-bottom:10px">';
-                content += data['location']['city'] + ', ' + data['location']['state'] + '<br>';
-            content += '</div>';
-
-            content += '<div class="col-md-6" style="margin-bottom:10px">';
-                content += '<strong>Driver Leaving Home:</strong><br>';
-            content += '</div>';
-            content += '<div class="col-md-6" style="margin-bottom:10px">';
-                content += data['starting_date_raw'] + ' @ <strong>' + data['metadata']['time_of_day_string'] + ' (local time)</strong><br>';
-            content += '</div>';
-
-            content += '<div class="col-md-6" style="margin-bottom:10px">';
-                content += '<strong>Passing By Your Town:</strong><br>';
-            content += '</div>';
-            content += '<div class="col-md-6" style="margin-bottom:10px">';
-                content += data['pickup_time']['date'] + ' @ <strong>' + data['pickup_time']['time'] +  ' (approximately)</strong><br>';
-            content += '</div>';
-
-            content += '<div class="col-md-6" style="margin-bottom:10px">';
-                content += '<strong>Seats Remaining:</strong><br>';
-            content += '</div>';
-            content += '<div class="col-md-6" style="margin-bottom:10px">';
-                content += data['remaining_slots'];
-            content += '</div>';
-
-        content += '</div>';
-
-        content += '<hr>';
+        $("#host_").html(data['host']);
+        $("#location_").html(data['location']['city'] + ', ' + data['location']['state']);
+        $("#starting_date_raw_").html(data['starting_date_raw']);
+        $("#time_of_day_string_").html(data['metadata']['time_of_day_string']);
+        $("#pickup_date_").html(data['pickup_time']['date']);
+        $("#pickup_time_").html(data['pickup_time']['time']);
+        $("#data_remaining_slots_").html(data['remaining_slots']);
 
         if (!data['auth']['status']) {
-            content += '<div class="col-md-12"><a href="/login">Login to book this ride</a></div>';
+            SearchController.Views.show('login_window');
         } else {
-            content += '<form method="POST" action="/bookings" id="booking_form" name="booking_request">';
-                content += '<div class="row">' + this.bookListingBox(data) + '</div>';
-            content += '</div>';
+            if (SearchController.Results.contains.call(data['user_bookings'], data['id'])) {
+                SearchController.Views.show('booked_window');
+            } else {
+                SearchController.Views.show('booking_form_window', data, function(data) {
+                    $("#booking_form_token_").val(SearchController.getToken());
+                    $("#booking_form_fk_listing_id_").val(data['id']);
+                    $("#booking_form_type_").val(data['type']);
+                    $("#booking_pickup_location").val(SearchController.Results.getQuery());
+                    $("#booking_form_window_location").val(SearchController.Results.getQuery());
+                    $("#total_people_field").val($("#total_people").val());
+                    $("#host_inline").html(data['host']);
+                });
+            }
         }
-
-        return content;
     };
 
-    SearchController.Results.bookListingBox = function (data)
+    SearchController.Results.getQuery = function()
     {
-          var content = '<input type="hidden" name="_token" value="' + SearchController.getToken() + '">';
-            content += '<input type="hidden" name="fk_listing_id" value="' + data['id'] + '">';
-            content +=  '<div class="col-md-6">';
-                    content += '<label>Pickup location:</label><input class="form-control" id="booking_pickup_location" placeholder="Address, City, or U.S. Zip Code" value="' + $("#original_query").val() +'" name="location" disabled="disabled"/>';
-            content += '</div>';
-            content +=  '<div class="col-md-6">';
-                content += '<label>Number of Passengers:</label><input class="form-control" id="total_people_field" placeholder="How many people are coming along?" value="' + $("#total_people").val() +'" name="total_people"/><span class="help-block hidden" id="total_people_error" style="color: #b90000;"></span>';
-            content += '</div>';
-
-            content += '<div class="col-md-12" style="margin-top:15px;"><div class="alert alert-warning"><p class="text-small">(We will not show ' + data['host'] + ' your full address until the day before the trip)</p></div><span class="help-block hidden" id="booking_additional_info_error" style="color: #b90000;"></span></div>';
-
-            content +=  '<div class="col-md-12">';
-                content += '<label>Additional info:</label><textarea name="additional_info" rows="7" cols="100" placeholder="Say hi, introduce yourself." id="booking_additional_info" class="form-control" required></textarea>';
-            content += '</div>';
-
-            content += '<div class="col-md-12" style="margin-top:15px;"><div class="alert alert-warning"><p class="text-small"><strong>DISCLAIMER:</strong><br>SeeYouInPhilly.com matches drivers with people looking to carpool. We don\'t run background checks and aren\'t responsible for any actions of the drivers or carpoolers. Get to know the other party before sharing rides! Be safe and report any suspicious activity to 911. Wear a seat belt at all times and don\'t drink and drive or ride with anyone driving under the influence of any substance.<br><br>We are in no way associated with the official Bernie Sanders campaign.</p></div></div>';
-
-            content += '<div class="checkbox col-md-12" style="margin-left:17px;margin-right: 17px;text-align: center;"><label class=""><div class="i-check"><input class="i-check" type="checkbox" id="dog_friendly" name="dog_friendly" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div>I\'ve read and fully understood the disclaimer above and also agree to the <a href="/tos" target="_blank">terms of service</a></label></div>';
-        content += '<div class="col-md-12" style="margin-top:20px">';
-                content += '<span class=""><center><button class="btn btn-primary btn-lg" type="submit">Send Ride Request</button></center></span>';
-            content += '</div>';
-
-        return content;
+        return $("#original_query").val();
     };
 
     SearchController.Results.bindBookingFormEvents = function (id, listing_data) {
@@ -205,20 +216,39 @@
         }
     };
 
+    SearchController.Results.updateCharacterCount = function (selector) {
+        var cs = $(this).val().length;
+        console.dir(cs);
+        selector.text(cs);
+    };
+
     SearchController.Results.validateBooking = function (listing_data) {
         // Hide any errors from last submit
+
+
         $("#booking_additional_info_error").addClass('hidden');
         $("#total_people_error").addClass('hidden');
+        $("#disclaimer_accept_error").addClass('hidden');
+        $("#tos_accept_error").addClass('hidden');
 
         var errors = {};
+
         var total_people = $("#total_people_field").val();
 
         if ($("#booking_additional_info").val().length < 50) {
-            errors['booking_additional_info'] = 'Please enter at least 50 characters of additional information';
+            errors['booking_additional_info'] = 'Please enter at least 50 characters of information';
         }
 
         if (total_people > listing_data['remaining_slots']) {
-            errors['total_people'] = 'You can\' book ' + total_people  + ' people in this ride. There\'s only ' + listing_data['remaining_slots'] + ' seats left.';
+            errors['total_people'] = 'You can\'t book ' + total_people  + ' people in this ride. There\'s only ' + listing_data['remaining_slots'] + ' seats left.';
+        }
+
+        if (!$("#tos_accept").prop('checked')) {
+            errors['tos_accept'] = 'You must accept the terms of service to continue.';
+        }
+
+        if (!$("#disclaimer_accept").prop('checked')) {
+            errors['disclaimer_accept'] = 'You must accept the disclaimer to continue.';
         }
 
         var count = 0;

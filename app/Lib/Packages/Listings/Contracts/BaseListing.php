@@ -63,6 +63,11 @@ class BaseListing extends Model implements \JsonSerializable {
     /**
      * @var array
      */
+    protected $userBookings = null;
+
+    /**
+     * @var array
+     */
     public static $editable = [
         'party_name', 'additional_info'
     ];
@@ -91,7 +96,13 @@ class BaseListing extends Model implements \JsonSerializable {
             $metadata['time_of_day_string'] = ListingMetadata::translateTimeOfDay($metadata['time_of_day']);
         }
 
-        return array_merge($attributes, ['metadata' => $metadata, 'location' => $location, 'route' => $route]);
+        $return = array_merge($attributes, ['metadata' => $metadata, 'location' => $location, 'route' => $route]);
+
+        if (!is_null($this->userBookings)) {
+            $return = array_merge($return, ['user_bookings' => $this->userBookings]);
+        }
+
+        return $return;
     }
 
     /**
@@ -102,6 +113,24 @@ class BaseListing extends Model implements \JsonSerializable {
     public function toArray()
     {
         return $this->prepareToArray();
+    }
+
+    /**
+     * @param array $bookings
+     * @return $this
+     */
+    public function setUserBookings(array $bookings)
+    {
+        $this->userBookings = $bookings;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUserBookings()
+    {
+        return $this->userBookings;
     }
 
     /**

@@ -2,7 +2,8 @@
 
 namespace App\Lib\Packages\Listings;
 
-use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
+use App\Lib\Packages\EmailRelay\RelayGateway;
+use App\User;
 use App\Lib\Packages\Geo\Location\Location;
 use App\Lib\Packages\Geo\Location\LocationGateway;
 use App\Lib\Packages\Geo\TimeEstimation\TripDurationEstimator;
@@ -104,20 +105,53 @@ class ListingsGateway {
     protected $kernel;
 
     /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * @var RelayGateway
+     */
+    private $relayGateway;
+
+    /**
      * ListingsGateway constructor.
      * @param DatabaseManager $databaseManager
      * @param LocationGateway $locationGateway
      * @param Application $app
      * @param ValidatorFactory $validator
      * @param TripDurationEstimator $tripDurationEstimator
+     * @param RelayGateway $relayGateway
      */
-    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway, Application $app, ValidatorFactory $validator, TripDurationEstimator $tripDurationEstimator)
+    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway, Application $app, ValidatorFactory $validator, TripDurationEstimator $tripDurationEstimator, RelayGateway $relayGateway)
     {
         $this->db                       = $databaseManager->connection();
         $this->locationsGateway         = $locationGateway;
         $this->kernel                   = $app;
         $this->validator                = $validator;
         $this->tripDurationEstimator    = $tripDurationEstimator;
+        $this->relayGateway             = $relayGateway;
+    }
+
+    /**
+     * @param User $user
+     * @return $this
+     */
+    public function setCurrentUser(User $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * @return User $user
+     */
+    public function getCurrentUser()
+    {
+        if (is_null($this->user)){
+            throw new \InvalidArgumentException("Cannot provide a user object because a user object has not been set");
+        }
+        return $this->user;
     }
 
     /**
@@ -428,6 +462,34 @@ class ListingsGateway {
     }
 
     /**
+     * @param $listingId
+     * @return array
+     */
+    public function contactInfo($listingId)
+    {
+        // We only give out contact emails when the user
+        // has a booking related to the listing and that
+        // listing has been accepted.
+
+        $owner = $this->db->table('bookings as a')
+                          ->join('listings as b', 'a.fk_listing_id', '=', 'b.id')
+                          ->join('users as c', 'c.id', '=', 'b.fk_user_id')
+                          ->where('a.fk_listing_id', '=', $listingId)
+                          ->where('a.fk_user_id', '=', $this->getCurrentUser()->getId())
+                          ->where('a.status', '=', 'accepted')
+                          ->first(['b.fk_user_id', 'c.first_name']);
+
+        if (!$owner) {
+            throw new \InvalidArgumentException("No booking belonging to user {$this->getCurrentUser()->getId()} associated with this listing {$listingId}");
+        }
+
+        // Now let's get address for the owner of the listing
+        $email = $this->relayGateway->getCreateRelayAddress($owner['fk_user_id']) . '@relay.seeyouinphilly.com';
+
+        return ['email' => $email, 'first_name' => $owner['first_name']];
+    }
+
+    /**
      * @param string $listingId
      * @return BaseListing
      * @throws ListingNotFoundException
@@ -455,7 +517,20 @@ class ListingsGateway {
             $listing->setRoute($route);
         }
 
+        if ($this->userSet()) {
+            $bookings = $this->db->table('bookings')->where('fk_user_id', '=', $this->user->getId())->pluck('fk_listing_id');
+
+            if (is_array($bookings)) {
+                $listing->setUserBookings($bookings);
+            }
+        }
+
         return $listing->setMetadata($metadata)->setLocation($location);
+    }
+
+    private function userSet()
+    {
+        return $this->user instanceof User;
     }
 
     /**

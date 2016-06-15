@@ -25,12 +25,32 @@ class BookingMetadata extends Model
      */
     public $incrementing = false;
 
+    /**
+     * @var Location
+     */
+    private $location;
+
     // Columns
     const   ID              = 'id',
             FK_BOOKING_ID   = 'fk_booking_id',
             FK_LOCATION_ID  = 'fk_location_id',
             BRINGS_DOG      = 'brings_dog',
             BRINGS_CAT      = 'brings_cat';
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $attributes = $this->attributesToArray();
+
+        if ($this->location instanceof Location) {
+            $attributes = array_merge($attributes, ['location' => $this->location->toArray()]);
+        }
+
+        return $attributes;
+    }
+
     /**
      * @param string $id
      * @return $this
@@ -67,9 +87,13 @@ class BookingMetadata extends Model
         return $this->getAttribute(self::FK_BOOKING_ID);
     }
 
+    /**
+     * @param Location $location
+     * @return $this
+     */
     public function setLocation(Location $location)
     {
-        $this->setAttribute('location', $location);
+        $this->location = $location;
         return $this;
     }
 
@@ -78,7 +102,7 @@ class BookingMetadata extends Model
      */
     public function getLocation()
     {
-        return $this->getAttribute('location');
+        return $this->location;
     }
 
     /**
@@ -149,23 +173,5 @@ class BookingMetadata extends Model
     public function isBringingCat()
     {
         return $this->getBringsCat();
-    }
-
-    /**
-     * @param string $additionalInfo
-     * @return $this
-     */
-    public function setAdditionalInfo(string $additionalInfo)
-    {
-        $this->setAttribute(self::ADDITIONAL_INFO, $additionalInfo);
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAdditionalInfo()
-    {
-        return $this->getAttribute(self::ADDITIONAL_INFO);
     }
 }

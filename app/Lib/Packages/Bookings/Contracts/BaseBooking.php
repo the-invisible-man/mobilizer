@@ -54,6 +54,17 @@ class BaseBooking extends Model implements \JsonSerializable {
         self::METADATA
     ];
 
+    public function toArray()
+    {
+        $attributes = $this->attributesToArray();
+
+        if ($this->getMetadata() instanceof BookingMetadata) {
+            $attributes['metadata'] = $this->getMetadata()->toArray();
+        }
+
+        return $attributes;
+    }
+
     /**
      * @return string
      */

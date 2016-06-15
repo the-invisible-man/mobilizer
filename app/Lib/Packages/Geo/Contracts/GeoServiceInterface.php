@@ -23,7 +23,7 @@ interface GeoServiceInterface {
      * @param string $destinationZip
      * @param string $format
      * @param string $travelMode
-     * @return string
+     * @return string|int
      */
     public function estimateTripDurationByZip(string $startingZip, string $destinationZip, string $format = Directions::AS_MINUTES, string $travelMode = Directions::DRIVING);
 

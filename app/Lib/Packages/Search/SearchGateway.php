@@ -72,7 +72,6 @@ class SearchGateway {
         $ids        = $this->searchDriver->searchRide($location->getGeoLocation());
         $results    = $this->fetchListings($ids, $minRemainingSlots);
         $benchmark  = microtime() - $time;
-
         $filters    = ['total_people' => $minRemainingSlots];
         $queryInfo  = $this->formatQueryInfo($user_location, $location, $benchmark, $filters, 'R');
 

@@ -40,6 +40,10 @@ class ListingsController extends Controller {
     {
         $this->listingsGateway  = $listingsGateway;
         $this->log              = $log;
+
+        if (\Auth::check()) {
+            $this->listingsGateway->setCurrentUser(\Auth::user());
+        }
     }
 
     /**
@@ -112,7 +116,7 @@ class ListingsController extends Controller {
 
         $response['starting_date']['text']  = (new \DateTime($response['starting_date']['date']))->format("M d, Y");
         $response['ending_date']['text']    = (new \DateTime($response['ending_date']['date']))->format("M d, Y");
-        $response['user_email']             = 'granados.carlos91@gmail.com';
+        $response['user_email']             = \Auth::user()->getEmail();
         $response['leaving']                = ListingMetadata::translateTimeOfDay($response['metadata']['time_of_day']);
 
         return $response;
@@ -129,6 +133,7 @@ class ListingsController extends Controller {
     }
 
     /**
+     * hacky af
      * @param Request $request,
      * @param string $listingId
      * @return JsonResponse
@@ -202,6 +207,24 @@ class ListingsController extends Controller {
         } else {
             return view('');
         }
+    }
+
+    /**
+     * @param string $listingId
+     * @return JsonResponse
+     */
+    public function contactInfo(string $listingId)
+    {
+        $responseCode = 200;
+
+        try {
+            $response = $this->listingsGateway->contactInfo($listingId);
+        } catch (\Exception $e) {
+            $responseCode = 400;
+            $response = ['error' => $e->getMessage()];
+        }
+
+        return \Response::json($response, $responseCode);
     }
 
     /**

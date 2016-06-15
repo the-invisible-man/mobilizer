@@ -110,11 +110,26 @@ class TripDurationEstimator
     /**
      * @param string $startingZip
      * @param string $destinationZip
-     * @return string
+     * @return int
      */
-    private function grabFreshFromZip(string $startingZip, string $destinationZip) : string
+    private function grabFreshFromZip(string $startingZip, string $destinationZip)
     {
-        return $this->geoService->estimateTripDurationByZip($startingZip, $destinationZip);
+        $minutes =  $this->geoService->estimateTripDurationByZip($startingZip, $destinationZip);
+
+        // We'll want to add some padding, for instance if the trip is longer than 3 hours
+        // then we are going to wanna pad the time with 25 minutes to account for rest stops.
+        // We'll do this for every 3 hours of the trip. So if the trip lasts 9 hours we'll pad
+        // with 2 intervals of 25 minutes making the trip 9 hours and 50 minutes.
+        $hours = $minutes / 60;
+
+        // Let's figure out how many segments we'll pad with
+        $segments = (int)($hours / 3) - 1;
+
+        // Now the actual padding
+        $padding = $segments * 25;
+
+        // Final estimated arrival time
+        return $padding + $minutes;
     }
 
     /**

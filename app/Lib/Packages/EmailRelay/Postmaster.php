@@ -13,6 +13,7 @@ use Illuminate\Database\Query\Builder;
 use App\Lib\Packages\EmailRelay\Exceptions\MutedThreadException;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use App\Lib\Packages\EmailRelay\Models\EmailRelay;
+use Illuminate\Mail\Message;
 
 /**
  * Class Postmaster
@@ -42,19 +43,22 @@ class Postmaster {
      */
     private $database;
 
+    private $relayGateway;
     /**
      * RelayGateway constructor.
      * @param array $config
      * @param Mailer $mailer
      * @param DatabaseManager $databaseManager
+     * @param RelayGateway $relayGateway
      */
-    public function __construct(array $config, Mailer $mailer, DatabaseManager $databaseManager)
+    public function __construct(array $config, Mailer $mailer, DatabaseManager $databaseManager, RelayGateway $relayGateway)
     {
         $this->validateConfig($config, ['host']);
 
-        $this->config   = $config;
-        $this->mailer   = $mailer;
-        $this->database = $databaseManager->connection();
+        $this->config       = $config;
+        $this->mailer       = $mailer;
+        $this->database     = $databaseManager->connection();
+        $this->relayGateway = $relayGateway;
     }
 
     /**
@@ -71,9 +75,14 @@ class Postmaster {
         // Let's make sure that neither of the users has muted the other.
         // $this->canEmail($email->getRecipient(), $maskedEmail);
 
-        // We can now relay this message to the intended user,
-        // add to our handy-dandy queue
-        $this->dispatch(new Worker($recipient, $maskedEmail, $email->getSubject(), $email->getBody(), $getName));
+
+        // No need for a queue, this process is solely for
+        // sending emails anyway.
+        $this->mailer->send('emails.relay', ['content' => $email->getBody(), 'from_url_encoded' => urlencode($maskedEmail)], function (Message $message) use($recipient, $getName, $maskedEmail, $email) {
+            $message->to($recipient);
+            $message->from($maskedEmail, $getName);
+            $message->subject($email->getSubject());
+        });
     }
 
     /**
@@ -146,23 +155,10 @@ class Postmaster {
                 throw new InvalidEmailException("Unable to match email '{$emailToMask}' to an existing user.");
             }
 
-            $recipient = $this->createRelayAddress($userId);
+            $recipient = $this->relayGateway->createRelayAddress($userId);
         }
 
         return $recipient . '@' . $this->config['host'];
-    }
-
-    /**
-     * @param string $userId
-     * @return string
-     */
-    public function createRelayAddress(string $userId)
-    {
-        $address = new EmailRelay();
-        $address->setFkUserId($userId);
-        $address->save();
-
-        return $address->getId();
     }
 
     /**

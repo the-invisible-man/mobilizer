@@ -646,7 +646,7 @@
     </div>
 
     <div class="layout one-col fixed-width" style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
-        <div class="layout__inner" style="border-collapse: collapse;display: table;background-color: #307fb0;background-position: 0px 0px;background-image: url(http://192.168.10.10/img/email_templates/49b9a74707b049aaa40b14af36abb9cd.png);background-repeat: repeat;">
+        <div class="layout__inner" style="border-collapse: collapse;display: table;background-color: #307fb0;background-position: 0px 0px;background-image: url(https://i1.createsend1.com/ei/d/27/5F8/5CF/014440/csfinal/49b9a74707b049aaa40b14af36abb9cd.png);background-repeat: repeat;">
             <!--[if (mso)|(IE)]><table align="center" cellpadding="0" cellspacing="0"><tr class="layout-fixed-width" style="background-color: #307fb0;background-position: 0px 0px;background-image: url(https://i1.createsend1.com/ei/d/27/5F8/5CF/014440/csfinal/49b9a74707b049aaa40b14af36abb9cd.png);background-repeat: repeat;"><td style="width: 600px" class="w560"><![endif]-->
             <div class="column" style='text-align: left;color: #60666d;font-size: 14px;line-height: 21px;font-family: "Open Sans",sans-serif;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);'>
 
@@ -655,7 +655,7 @@
                 </div>
 
                 <div style="Margin-left: 20px;Margin-right: 20px;">
-                    <h1 class="size-40" style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #44a8c7;font-size: 32px;line-height: 40px;font-family: Cabin,Avenir,sans-serif;text-align: center;" lang="x-size-40"><strong><span style="color:#ffffff">#SeeYouInPhilly</span></strong></h1><p class="size-20" style="Margin-top: 20px;Margin-bottom: 20px;font-size: 17px;line-height: 26px;text-align: center;" lang="x-size-20"><span style="color:#60666d"><strong>New Booking Notification</strong></span></p>
+                    <h1 class="size-40" style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #44a8c7;font-size: 32px;line-height: 40px;font-family: Cabin,Avenir,sans-serif;text-align: center;" lang="x-size-40"><strong><span style="color:#ffffff">#SeeYouInPhilly</span></strong></h1><p class="size-20" style="Margin-top: 20px;Margin-bottom: 20px;font-size: 17px;line-height: 26px;text-align: center;" lang="x-size-20"><span style="color:#60666d"><strong>Your Booking Request</strong></span></p>
                 </div>
 
                 <div style="Margin-left: 20px;Margin-right: 20px;">
@@ -664,8 +664,8 @@
 
                 <div style="Margin-left: 20px;Margin-right: 20px;">
                     <div class="btn btn--flat btn--large" style="Margin-bottom: 20px;text-align: center;">
-                        <![if !mso]><a style='border-radius: 4px;display: inline-block;font-size: 14px;font-weight: bold;line-height: 24px;padding: 12px 24px;text-align: center;text-decoration: none !important;transition: opacity 0.1s ease-in;color: #fff;background-color: #ffffff; color: #44a8c7; font-family: &#39;Open Sans&#39;, sans-serif !important;font-family: "Open Sans",sans-serif;' href="http://test.com">Go to Booking Request</a><![endif]>
-                        <!--[if mso]><p style="line-height:0;margin:0;">&nbsp;</p><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="http://test.com" style="width:218px" arcsize="9%" fillcolor="#FFFFFF" stroke="f"><v:textbox style="mso-fit-shape-to-text:t" inset="0px,11px,0px,11px"><center style="font-size:14px;line-height:24px;color:#44A8C7;font-family:sans-serif;font-weight:bold;mso-line-height-rule:exactly;mso-text-raise:4px">Go to Booking Request</center></v:textbox></v:roundrect><![endif]--></div>
+                        <![if !mso]><a style='border-radius: 4px;display: inline-block;font-size: 14px;font-weight: bold;line-height: 24px;padding: 12px 24px;text-align: center;text-decoration: none !important;transition: opacity 0.1s ease-in;color: #fff;background-color: #ffffff; color: #44a8c7; font-family: &#39;Open Sans&#39;, sans-serif !important;font-family: "Open Sans",sans-serif;' href="http://test.com">Manage My Bookings</a><![endif]>
+                        <!--[if mso]><p style="line-height:0;margin:0;">&nbsp;</p><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="http://test.com" style="width:218px" arcsize="9%" fillcolor="#FFFFFF" stroke="f"><v:textbox style="mso-fit-shape-to-text:t" inset="0px,11px,0px,11px"><center style="font-size:14px;line-height:24px;color:#44A8C7;font-family:sans-serif;font-weight:bold;mso-line-height-rule:exactly;mso-text-raise:4px">Manage My Bookings</center></v:textbox></v:roundrect><![endif]--></div>
                 </div>
 
                 <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 24px;">
@@ -687,7 +687,7 @@
                 </div>
 
                 <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 24px;">
-                    <h2 class="size-24" style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #44a8c7;font-size: 20px;line-height: 28px;text-align: center;" lang="x-size-24"><strong>Booking request from {{$user['first_name]}}</strong></h2><p class="size-16" style="Margin-top: 16px;Margin-bottom: 0;font-size: 16px;line-height: 24px;text-align: center;" lang="x-size-16">Hey there,&nbsp;you have received a request for car pooling on your journey from {{$listing['location']['city']}}, {{$listing['location']['state']}}&nbsp;</p>
+                    <p class="size-16" style="Margin-top: 16px;Margin-bottom: 0;font-size: 16px;line-height: 24px;text-align: center;" lang="x-size-16">Hey {{$user_first_name}},&nbsp;your booking has been sent to {{$host_first_name}} for approval. Be on the lookout for any emails from the driver in case he/she has any questions.&nbsp;</p>
                 </div>
 
             </div>
@@ -702,10 +702,8 @@
 
                 <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
                     <p style="Margin-top: 0;Margin-bottom: 0;"><strong>From:</strong></p>
-                    <p style="Margin-top: 20px;Margin-bottom: 0;"><strong>Location:</strong></p>
-                    @if ($booking['metadata']['brings_dog'] || $booking['metadata']['brings_cat'])
-                    <p style="Margin-top: 20px;Margin-bottom: 0;"><strong>Pets:</strong></p>
-                    @endif
+                    <p style="Margin-top: 20px;Margin-bottom: 0;"><strong>Pickup Location:</strong></p>
+                    <p style="Margin-top: 20px;Margin-bottom: 0;"><strong>Number of Passengers:</strong></p>
                     <p style="Margin-top: 20px;Margin-bottom: 0;"><strong>Message:</strong></p>
                 </div>
 
@@ -714,12 +712,27 @@
             <div class="column" style="text-align: left;color: #60666d;font-size: 14px;line-height: 21px;font-family: &quot;Open Sans&quot;,sans-serif;Float: left;max-width: 320px;min-width: 300px; width: 320px;width: calc(13140px - 2000vw);">
 
                 <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
-                    <p style="Margin-top: 0;Margin-bottom: 0;">{{$booking['user']['first_name']}}</p>
-                    <p style="Margin-top: 20px;Margin-bottom: 0;">{{$booking['location']['city']}}, {{$booking['location']['state']}}</p>
-                    @if ($booking['metadata']['brings_dog'] || $booking['metadata']['brings_cat'])
-                    <p style="Margin-top: 20px;Margin-bottom: 0;">@if ($booking['metadata']['brings_dog']) Dog @endif @if ($booking['metadata']['brings_cat']) Cat @endif</p>
-                    @endif
-                    <p style="Margin-top: 20px;Margin-bottom: 0;">{{$booking['additional_info']}}</p>
+                    <p style="Margin-top: 0;Margin-bottom: 0;">{{$from_user_first_name}} {{$from_user_last_name}}</p>
+                    <p style="Margin-top: 20px;Margin-bottom: 0;">{{$pickup_city}}, {{$pickup_state}}</p>
+                    <p style="Margin-top: 20px;Margin-bottom: 0;">{{$total_people}}</p>
+                    <p style="Margin-top: 20px;Margin-bottom: 0;">{{$additional_info}}</p>
+                </div>
+            </div>
+            <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+        </div>
+    </div>
+
+    <div class="layout one-col fixed-width" style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+        <div class="layout__inner" style="border-collapse: collapse;display: table;background-color: #ffffff;" emb-background-style>
+            <!--[if (mso)|(IE)]><table align="center" cellpadding="0" cellspacing="0"><tr class="layout-fixed-width" emb-background-style><td style="width: 600px" class="w560"><![endif]-->
+            <div class="column" style='text-align: left;color: #60666d;font-size: 14px;line-height: 21px;font-family: "Open Sans",sans-serif;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);'>
+
+                <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;">
+                    <div style="line-height:10px;font-size:1px">&nbsp;</div>
+                </div>
+
+                <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 24px;">
+                    <p class="size-16" style="Margin-top: 16px;Margin-bottom: 0;font-size: 16px;line-height: 24px;text-align: center; font-size:11px;" lang="x-size-16">Do not reply to this email. This inbox is not monitored. If you need help contact us at <a href="mailto:support@seeyouinphilly.com">support@seeyouinphilly.com</a></p>
                 </div>
 
             </div>

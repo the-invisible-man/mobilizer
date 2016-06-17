@@ -20,7 +20,7 @@
             </div>
             <div class="col-md-4" style="text-align: center;">
                 <a class="logo" href="index.html">
-                    <img src="img/assets/coders_for_sanders_polivet_small.png" alt="Coders For Sanders" title="Built With Lots of Love By Coders For Sanders" />
+                    <img src="/img/assets/coders_for_sanders_polivet_small.png" alt="Coders For Sanders" title="Built With Lots of Love By Coders For Sanders" />
                 </a>
                 <ul class="list list-horizontal social-icons">
                     <li style="">
@@ -71,6 +71,7 @@
 <!-- APP Components -->
 <script src="/js/mobilizer-api.js"></script>
 <script src="/js/ride-list.js"></script>
+<script src="/js/requests.js"></script>
 <script src="/js/bookings.js"></script>
 <script src="/js/search.js"></script>
 <script src="/js/home.js"></script>

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Lib\Packages\Bookings\Exceptions\MismatchException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Lib\Packages\Listings\ListingTypes\RideListing;
@@ -68,9 +67,10 @@ class ListingsController extends Controller {
     /**
      * @return JsonResponse
      */
-    public function all()
+    public function all(Request $request)
     {
         $responseCode = 200;
+
         try {
             $user       = \Auth::user()->id;
             $response   = $this->listingsGateway->allForUser($user);
@@ -79,7 +79,11 @@ class ListingsController extends Controller {
             $responseCode   = 400;
         }
 
-        return \Response::json($response, $responseCode);
+        if ($request->ajax()) {
+            return \Response::json($response, $responseCode);
+        }
+
+        return view('my_listings', $response);
     }
 
     /**

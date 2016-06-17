@@ -68,7 +68,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'alerts@seeyouinphilly.com', 'name' => '#SeeYouInPhilly Alerts'],
+    'from' => ['address' => 'no-reply@seeyouinphilly.com', 'name' => '#SeeYouInPhilly Alerts'],
 
     /*
     |--------------------------------------------------------------------------

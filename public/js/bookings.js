@@ -7,7 +7,7 @@
 (function ($, undefined) {
 
     var PACKAGE_NAME = 'my-bookings';
-    var MyBookingsController = {'token':null};
+    var MyBookings = {'token':null};
 
     jQuery(function($) {
         $(document).ready(function () {
@@ -17,9 +17,17 @@
                     ContactDriver: {
                         modalId: "#contact_window",
                         trigger: ".contact_driver"
+                    },
+                    CancelBooking: {
+                        modalId: "#cancel_window",
+                        trigger: ".cancel_trip",
+                        confirm: ".confirm_cancel",
+                        host_name: "#cancel_window_host_name"
                     }
                 };
 
+                MyBookings.token    = app.attr('data-token');
+                MyBookings.api      = $.mobilizerAPI({token:MyBookings.getToken()});
                 registerEvents(packages);
             }
         });
@@ -29,30 +37,59 @@
         for (var _package in packages) {
             if (!packages.hasOwnProperty(_package)) continue;
 
-            MyBookingsController[_package]['_register'](packages[_package]);
+            MyBookings[_package]['_register'](packages[_package]);
         }
     }
 
-    MyBookingsController.ContactDriver = {};
+    MyBookings.ContactDriver    = {};
+    MyBookings.CancelBooking    = {};
+    MyBookings.CancelBooking.config = {};
+    MyBookings.getToken = function () {
+        return this.token;
+    };
 
-    MyBookingsController.ContactDriver._register = function (config)
+    MyBookings.ContactDriver._register = function (config)
     {
         $(config['trigger']).click(function () {
-            MyBookingsController.ContactDriver.handle($(this).attr('about'))
+            MyBookings.ContactDriver.handle($(this).attr('about'))
         });
     };
 
-    MyBookingsController.ContactDriver.handle = function (listing_id)
+    MyBookings.CancelBooking._register = function (config)
     {
-        $.mobilizerAPI().get_contact_email(listing_id, function (data) {
-            MyBookingsController.ContactDriver.modal(data);
+        MyBookings.CancelBooking.config = config;
+
+        $(config['trigger']).click(function () {
+            MyBookings.CancelBooking.handle($(this).attr('about'), $(this).attr('data-text'));
+        });
+
+        $(config['confirm']).click(function () {
+            $(this).html('CANCELLING...');
+            MyBookings.api.cancel_trip($(this).attr('about'), function () {
+                location.reload();
+            });
         });
     };
 
-    MyBookingsController.ContactDriver.modal = function (contactInfo)
+    MyBookings.CancelBooking.handle = function (booking_id, host_name)
+    {
+        $(MyBookings.CancelBooking.config['host_name']).html(host_name);
+        $(MyBookings.CancelBooking.config['confirm']).attr('about', booking_id);
+        $(MyBookings.CancelBooking.config['modalId']).modal('toggle');
+    };
+
+    MyBookings.ContactDriver.handle = function (listing_id)
+    {
+        MyBookings.api.get_contact_email(listing_id, function (data) {
+            MyBookings.ContactDriver.modal(data);
+        });
+    };
+
+    MyBookings.ContactDriver.modal = function (contactInfo)
     {
         $("#driver_contact_email").val(contactInfo['email']);
         $("#driver_contact_name").html(contactInfo['first_name']);
+        $("#driver_contact_email_2").html(contactInfo['email']);
         $("#contact_window").modal('toggle');
     };
 

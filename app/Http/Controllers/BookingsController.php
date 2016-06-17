@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Lib\Packages\Bookings\BookingsGateway;
 use App\Lib\Packages\Bookings\Contracts\BaseBooking;
 use App\Lib\Packages\Bookings\Exceptions\MismatchException;
+use App\Lib\Packages\Listings\Contracts\BaseListing;
 use App\Lib\Packages\Listings\ListingsGateway;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -100,26 +101,36 @@ class BookingsController extends Controller {
 
     /**
      * @param Request $request
-     * @param string $listingId
-     * @return \Illuminate\Contracts\View\Factory|JsonResponse|\Illuminate\View\View
+     * @return JsonResponse
      */
-    public function allByListing(Request $request, string $listingId)
+    public function getUserRequests(Request $request)
     {
+        $status         = $request->get('status');
+        $responseCode   = 200;
+        $userId         = \Auth::user()->getId();
+
         try {
-            $responseCode   = 200;
-            $userId         = '';
-            $response       = $this->bookingsGateway->getAllBookingsForListing($listingId, $userId);
+            if ($status === BaseBooking::STATUS_ACCEPTED) {
+                $response = $this->bookingsGateway->getAcceptedBookingRequests($userId);
+            } elseif ($status === BaseBooking::STATUS_PENDING) {
+                $response = $this->bookingsGateway->getPendingBookingRequests($userId);
+            } else {
+                $response = $this->bookingsGateway->getAllBookingRequests($userId);
+            }
         } catch (\Exception $e) {
-            $responseCode   = 400;
-            $response       = ['message' => $e->getMessage()];
+            $response = ['error' => $e->getMessage()];
+            $responseCode = 400;
         }
 
-        if ($request->ajax()) {
-            return \Response::json($response, $responseCode);
-        } else{
-            // return a view
-            return view('');
-        }
+        return \Response::json($response, $responseCode);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function myRequests()
+    {
+        return view('requests_received', $this->userInfo());
     }
 
     /**
@@ -267,15 +278,45 @@ class BookingsController extends Controller {
     public function cancel(Request $request, string $bookingId)
     {
         try {
-            $userId = \Auth::user()->getId();
-            $this->bookingsGateway->cancel($bookingId, $userId);
+            $booking = $this->bookingsGateway->cancel($bookingId);
         } catch (\Exception $e) {
             return \Response::json(['message' => 'Service not available'], 400);
+        }
+
+        if ($booking->getStatus() === BaseBooking::STATUS_ACCEPTED) {
+            $this->sendCancellationNotice($booking);
         }
 
         if ($request->ajax()) {
             return \Response::json(['status' => 'ok'], 200);
         }
+    }
+
+    /**
+     * @param BaseBooking $booking
+     */
+    private function sendCancellationNotice(BaseBooking $booking)
+    {
+        // Send Confirmation Emails
+        /**
+         * @var BaseListing $listing
+         * @var User $owner
+         */
+        $listing = BaseListing::find($booking->getFkListingId());
+        $owner   = User::find($listing->getFkUserId());
+        $data    = [
+            'type'          => $listing->getType() == 'R' ? 'ride' : 'housing',
+            'host_name'     => $owner->getFirstName(),
+            'guest_name'    => \Auth::user()->getFirstName(),
+            'freed_slots'   => $booking->getTotalPeople(),
+            'party_name'    => $listing->getPartyName()
+        ];
+
+        $this->mailer->send('emails.notifications.booking_cancellation_host', $data,
+            function (Message $email) use ($booking, $listing, $owner) {
+                $email->to($owner->getEmail());
+                $email->subject(\Auth::user()->getFirstName() . ' Has Cancelled');
+        });
     }
 
     /**

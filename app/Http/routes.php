@@ -44,27 +44,34 @@ Route::group(['middleware' => 'web'], function () {
 
         Route::get('contact/{listing_id}', "ListingsController@contactInfo");
 
-        Route::get('/', 'ListingsController@all');
+        Route::get('/', ['middleware' => 'auth', 'uses' => 'ListingsController@all']);
         Route::post('/', ['middleware' => 'auth', 'uses' => 'ListingsController@new']);
         Route::get('{listing_id}', 'ListingsController@get');
         Route::put('{listing_id}', ['middleware' => 'auth', 'uses' => 'ListingsController@edit']);
         Route::delete('{listing_id}', ['middleware' => 'auth', 'uses' => 'ListingsController@delete']);
     });
 
+    Route::group(['prefix' => 'requests'], function () {
+
+        Route::get('/', ['middleware' => 'auth', 'uses' => 'BookingsController@getUserRequests']);
+
+        // Booking Actions
+        Route::post("{booking_id}/accept", ['middleware' => 'auth', 'uses' => "BookingsController@accept"]);
+        Route::post("{booking_id}/reject", ['middleware' => 'auth', 'uses' => "BookingsController@reject"]);
+        Route::delete('{booking_id}', ['middleware' => 'auth', 'uses' => 'BookingsController@cancel']);
+
+        // Views
+        Route::get('my-requests', ['middleware' => 'auth', 'uses' => 'BookingsController@myRequests']);
+    });
+
     Route::get('/add-listing', ['middleware' => 'auth', 'uses' => 'HomeController@listing']);
     Route::get('/success-add-listing', 'ListingsController@testSuccess');
 
     Route::group(['prefix' => 'bookings'], function () {
-        Route::get('/', 'BookingsController@all');
-        Route::post('/', 'BookingsController@new');
-        Route::get('{booking_id}', 'BookingsController@get');
-        Route::put('{booking_id}', 'BookingsController@edit');
-
-
-        // Booking Actions
-        Route::post("{booking_id}/accept", "BookingsController@accept");
-        Route::post("{booking_id}/reject", "BookingsController@reject");
-        Route::delete('{booking_id}', 'BookingsController@cancel');
+        Route::get('/', ['middleware' => 'auth', 'uses' => 'BookingsController@all']);
+        Route::post('/', ['middleware' => 'auth', 'uses' => 'BookingsController@new']);
+        Route::get('{booking_id}', ['middleware' => 'auth', 'uses' => 'BookingsController@get']);
+        Route::put('{booking_id}', ['middleware' => 'auth', 'uses' => 'BookingsController@edit']);
     });
 
     Route::get("facebook", "Auth\\AuthController@facebook");

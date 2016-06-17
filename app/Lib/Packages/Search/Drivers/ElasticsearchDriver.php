@@ -46,7 +46,6 @@ class ElasticsearchDriver implements SearchDriverInterface
      */
     public function searchRide(Geopoint $pickupLocation) : array
     {
-        $out        = [];
         $aggregator = 'group_by_listings';
 
         $params     = [
@@ -84,10 +83,6 @@ class ElasticsearchDriver implements SearchDriverInterface
             throw new ElasticsearchAggregationException("Could not find aggregate index in elasticsearch results. Cannot pull buckets: " . json_encode($result));
         }
 
-        foreach ($result["aggregations"][$aggregator]["buckets"] as $bucket) {
-            $out[] = $bucket['key'];
-        }
-
-        return $out;
+        return array_column($result["aggregations"][$aggregator]["buckets"], 'key');
     }
 }

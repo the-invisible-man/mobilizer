@@ -2,7 +2,7 @@
 
 namespace App\Lib\Packages\Bookings;
 
-use App\Lib\Packages\Bookings\Contracts\BaseBooking;
+use App\Lib\Packages\Bookings\Exceptions\InvalidNumberOfPeopleException;
 use App\Lib\Packages\Bookings\Exceptions\BookingNotFoundException;
 use App\Lib\Packages\Bookings\Exceptions\InactiveBookingException;
 use App\Lib\Packages\Bookings\Exceptions\MismatchException;
@@ -14,7 +14,6 @@ use App\Lib\Packages\Geo\TimeEstimation\TripDurationEstimator;
 use App\Lib\Packages\Listings\Contracts\BaseListing;
 use App\Lib\Packages\Listings\ListingsGateway;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
-use App\User;
 use Illuminate\Contracts\Logging\Log;
 use Illuminate\Contracts\Validation\ValidationException;
 use Illuminate\Database\DatabaseManager;
@@ -22,8 +21,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\Factory as ValidatorFactory;
+use App\Lib\Packages\Bookings\Contracts\BaseBooking;
+use App\User;
 use Monolog;
-use App\Lib\Packages\Bookings\Exceptions\InvalidNumberOfPeopleException;
+
 
 /**
  * Class BookingsGateway
@@ -348,6 +349,7 @@ class BookingsGateway {
             'a.type',
             'a.additional_info',
             'a.total_people',
+            'a.created_at',
 
             // bookings_metadata
             'b.brings_dog',
@@ -386,6 +388,17 @@ class BookingsGateway {
     }
 
     /**
+     * @return array
+     */
+    private function bookingOwnerColumns()
+    {
+        return [
+            'h.first_name as guest_first_name',
+            'h.last_name as guest_last_name'
+        ];
+    }
+
+    /**
      * @param string $bookingId
      * @return array|null
      */
@@ -407,13 +420,14 @@ class BookingsGateway {
 
     /**
      * @param string $userId
+     * @param bool $activeOnly
      * @return array
      */
-    public function getUserBookings(string $userId = null)
+    public function getUserBookings(string $userId = null, $activeOnly = true)
     {
         $user = ! is_null($userId) ?: $this->getCurrentUser()->getId();
 
-        $data = (array)$this->db->table('bookings as a')
+        $data = $this->db->table('bookings as a')
             ->join('bookings_metadata as b', 'b.fk_booking_id', '=', 'a.id')
             ->join('listings as c', 'c.id', '=', 'a.fk_listing_id')
             ->join('listings_metadata as d', 'd.fk_listing_id', '=', 'c.id')
@@ -421,8 +435,13 @@ class BookingsGateway {
             ->join('locations as f', 'f.id', '=', 'c.fk_location_id')
             ->join('users as g', 'c.fk_user_id', '=', 'g.id')
             ->where('a.fk_user_id', '=', $user)
-            ->where('c.active', '=', 1)
-            ->get($this->getSelectColumns());
+            ->where('c.active', '=', 1);
+
+        if ($activeOnly) {
+            $data->where('a.active', '=', 1);
+        }
+
+        $data = (array)$data->get($this->getSelectColumns());
 
         if (!is_array($data) || ! count($data)) return [];
 
@@ -451,6 +470,7 @@ class BookingsGateway {
             'type'              => $booking[BaseBooking::TYPE],
             'brings_cat'        => (bool)$booking[BookingMetadata::BRINGS_DOG],
             'brings_dog'        => (bool)$booking[BookingMetadata::BRINGS_CAT],
+            'date_submitted'    => (new \DateTime($booking[BaseBooking::CREATED_AT]))->format('M d, Y'),
             'listing'           => [
                 'id'                => $booking['listing_id'],
                 'host_first_name'   => $booking['host_first_name'],
@@ -485,7 +505,6 @@ class BookingsGateway {
             ];
 
             // SO FUCKING HACKY
-
             $origin             = $booking['listing_location_city'] . ', ' . $booking['listing_location_state'];
             $dest               = $booking['booking_location_city'] . ', ' . $booking['booking_location_state'];
 
@@ -498,6 +517,14 @@ class BookingsGateway {
             $pickup                 = $this->tripDurationEstimator->estimateArrivalDateTime($origin, $dest, $departureTime);
             $data['pickup_date']    = $pickup->format('M d, Y');
             $data['pickup_time']    = $pickup->format('h:i A');
+        }
+
+        // Check if booking owner is set
+        if (isset($booking['guest_first_name']) and isset($booking['guest_last_name'])) {
+            $data['user'] = [
+                'first_name' => $booking['guest_first_name'],
+                'last_name' => $booking['guest_last_name']
+            ];
         }
 
         return $data;
@@ -569,8 +596,10 @@ class BookingsGateway {
         }
 
         if ($booking->getFKUserId() !== $currentUserId) {
-            throw new MismatchException("Booking to user mismatch. User {$currentUserId} does not own booking {$booking->getFkListingId()}");
+            throw new MismatchException("Booking to user mismatch. User {$currentUserId} does not own booking {$booking->getFkListingId()}, therefore you cannot do whatever the fuck sketchy shit you were trying to do.");
         }
+
+        return $booking;
     }
 
     /**
@@ -600,9 +629,8 @@ class BookingsGateway {
      */
     public function accept(string $bookingId, string $currentUserId = null)
     {
-        $currentUserId = ! is_null($currentUserId) ?: $this->getCurrentUser()->getId();
-
-        $booking = $this->listingOwnerToBookingValidation($bookingId, $currentUserId);
+        $currentUserId  = ! is_null($currentUserId) ?: $this->getCurrentUser()->getId();
+        $booking        = $this->listingOwnerToBookingValidation($bookingId, $currentUserId);
 
         if (!$booking->isActive()) {
             throw new InactiveBookingException("Cannot accept inactive booking");
@@ -615,26 +643,26 @@ class BookingsGateway {
 
     /**
      * @param string $bookingId
-     * @param string $currentUserId
      * @return BaseBooking
      * @throws BookingNotFoundException
      * @throws MismatchException
      */
-    public function cancel(string $bookingId, string $currentUserId)
+    public function cancel(string $bookingId)
     {
-        $this->bookingOwnerActionValidator($bookingId, $currentUserId);
+        $booking = $this->bookingOwnerActionValidator($bookingId, $this->getCurrentUser()->getId());
 
         $this->db->table('bookings')
             ->where(BaseBooking::ID, '=', $bookingId)
             ->update([BaseBooking::ACTIVE => 0]);
+
+        return $booking;
     }
 
     /**
-     * @param string $listingId
      * @param string $userId
      * @return array
      */
-    public function getAllBookingsForListing(string $listingId, string $userId)
+    public function getPendingBookingRequests(string $userId)
     {
         $data = (array)$this->db->table('bookings as a')
             ->join('bookings_metadata as b', 'b.fk_booking_id', '=', 'a.id')
@@ -643,10 +671,12 @@ class BookingsGateway {
             ->join('locations as e', 'e.id', '=', 'b.fk_location_id', 'left')
             ->join('locations as f', 'f.id', '=', 'c.fk_location_id')
             ->join('users as g', 'g.id', '=', 'a.fk_user_id')
-            ->where('a.fk_listing_id', '=', $listingId)
+            ->join('users as h', 'h.id', '=', 'a.fk_user_id')
             ->where('a.fk_user_id', '=', $userId)
+            ->where('a.status', '=', BaseBooking::STATUS_PENDING)
             ->where('a.active', '=', 1)
-            ->get($this->getSelectColumns());
+            ->orderBy('c.id')
+            ->get(array_merge($this->getSelectColumns(), $this->bookingOwnerColumns()));
 
         if (!is_array($data) || ! count($data)) return [];
 
@@ -655,7 +685,69 @@ class BookingsGateway {
         foreach ($data as $booking) {
             // Build booking data
             $ouput[] = $this->formatBookingResult($booking);
+        }
 
+        return $ouput;
+    }
+
+    /**
+     * @param string $userId
+     * @return array
+     */
+    public function getAcceptedBookingRequests(string $userId)
+    {
+        $data = (array)$this->db->table('bookings as a')
+            ->join('bookings_metadata as b', 'b.fk_booking_id', '=', 'a.id')
+            ->join('listings as c', 'c.id', '=', 'a.fk_listing_id')
+            ->join('listings_metadata as d', 'd.fk_listing_id', '=', 'c.id')
+            ->join('locations as e', 'e.id', '=', 'b.fk_location_id', 'left')
+            ->join('locations as f', 'f.id', '=', 'c.fk_location_id')
+            ->join('users as g', 'g.id', '=', 'a.fk_user_id')
+            ->join('users as h', 'h.id', '=', 'a.fk_user_id')
+            ->where('a.fk_user_id', '=', $userId)
+            ->where('a.status', '=', BaseBooking::STATUS_ACCEPTED)
+            ->where('a.active', '=', 1)
+            ->orderBy('c.id')
+            ->get(array_merge($this->getSelectColumns(), $this->bookingOwnerColumns()));
+
+        if (!is_array($data) || ! count($data)) return [];
+
+        $ouput = [];
+        // Format data
+        foreach ($data as $booking) {
+            // Build booking data
+            $ouput[] = $this->formatBookingResult($booking);
+        }
+
+        return $ouput;
+    }
+
+
+    /**
+     * @param string $userId
+     * @return array
+     */
+    public function getAllBookingRequests(string $userId)
+    {
+        $data = (array)$this->db->table('bookings as a')
+            ->join('bookings_metadata as b', 'b.fk_booking_id', '=', 'a.id')
+            ->join('listings as c', 'c.id', '=', 'a.fk_listing_id')
+            ->join('listings_metadata as d', 'd.fk_listing_id', '=', 'c.id')
+            ->join('locations as e', 'e.id', '=', 'b.fk_location_id', 'left')
+            ->join('locations as f', 'f.id', '=', 'c.fk_location_id')
+            ->join('users as g', 'g.id', '=', 'a.fk_user_id')
+            ->join('users as h', 'h.id', '=', 'a.fk_user_id')
+            ->where('a.fk_user_id', '=', $userId)
+            ->where('a.active', '=', 1)
+            ->get(array_merge($this->getSelectColumns(), $this->bookingOwnerColumns()));
+
+        if (!is_array($data) || ! count($data)) return [];
+
+        $ouput = [];
+        // Format data
+        foreach ($data as $booking) {
+            // Build booking data
+            $ouput[] = $this->formatBookingResult($booking);
         }
 
         return $ouput;

@@ -5,6 +5,7 @@ namespace App\Lib\Packages\Search;
 use App\Lib\Packages\Core\Validators\ValidatesConfig;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
 use App\Lib\Packages\Geo\Responses\GeocodeResponse;
+use App\Lib\Packages\Listings\ListingTypes\RideListing;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
 use App\Lib\Packages\Search\Drivers\SearchDriverInterface;
 use Illuminate\Database\DatabaseManager;
@@ -73,7 +74,7 @@ class SearchGateway {
         $results    = $this->fetchListings($ids, $minRemainingSlots);
         $benchmark  = microtime() - $time;
         $filters    = ['total_people' => $minRemainingSlots];
-        $queryInfo  = $this->formatQueryInfo($user_location, $location, $benchmark, $filters, 'R');
+        $queryInfo  = $this->formatQueryInfo($user_location, $location, $benchmark, $filters, RideListing::ListingType);
 
         return $this->formatResults($results, $queryInfo);
     }

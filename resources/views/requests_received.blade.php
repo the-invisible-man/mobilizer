@@ -1,59 +1,26 @@
 @extends('layouts.app_with_header')
 @section('content')
-    <div id="app" about="my-bookings" data-token="{!! csrf_token() !!}"></div>
+    <div id="app" about="requests-received" data-token="{!! csrf_token() !!}"></div>
     <div class="container">
         <ul class="breadcrumb">
             <li><a href="/">Home</a>
             </li>
-            <li class="active">My Bookings</li>
+            <li class="active">Requests</li>
         </ul>
-        <h3 class="booking-title">My Bookings</h3>
+        <h3 class="booking-title">Requests Received</h3>
         <div class="row">
             <div class="col-md-3 hidden-xs">
                 @include('layouts.user_side_bar')
             </div>
             <div class="col-md-9 col-xs-12">
-                <ul class="booking-list">
-                    @if (count($bookings))
-                        @foreach ($bookings as $booking)
-                            <li class="booking_result booking-item" about="{{$booking['id']}}">
-                                <div class="row">
-                                    <div class="col-md-4 col-xs-12">
-                                        <h5>{{$booking['listing']['party_name']}}</h5>
-                                        <ul class="booking-item-features booking-item-features-sign clearfix">
-                                            <li rel="tooltip" data-placement="top" title="Cancel Your Trip" about="{{$booking['id']}}" data-text="{{$booking['listing']['host_first_name']}}" class="cancel_trip"><i class="fa fa-times"></i><span class="booking-item-feature-sign">Cancel</span>
-                                            </li>
-                                            @if ($booking['status'] == 'accepted')
-                                                <li rel="tooltip" data-placement="top" title="Contact The Driver" about="{{$booking['listing']['id']}}" class="contact_driver"><i class="fa fa-envelope"></i><span class="booking-item-feature-sign">Contact</span>
-                                                </li>
-                                            @endif
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-5" style="font-size: small">
-                                        <div class="col-md-6 col-xs-6">
-                                            Driver:<br>
-                                            Pick Up Location:<br>
-                                            Passengers:<br>
-                                            Coming Back:<br>
-                                            Approx. Pickup:
-                                        </div>
-                                        <div class="col-md-6 col-xs-6" style="font-weight: bold">
-                                            {{$booking['listing']['host_first_name']}} {{$booking['listing']['host_last_name']}}<br>
-                                            {{$booking['user_location']['city']}}, {{$booking['user_location']['state']}}<br>
-                                            {{$booking['total_people']}}<br>
-                                            {{$booking['listing']['ending_date']}}<br>
-                                            {{$booking['pickup_date']}} @ {{$booking['pickup_time']}}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-xs-12" style="margin-top: 30px;">
-                                        <center><span class="btn btn-ghost">{{strtoupper($booking['status'])}}</span></center>
-                                    </div>
-                                </div>
-                            </li>
-                        @endforeach
-                    @else
-                        <p>You have no bookings right now. Go find someone to ride with!</p>
-                    @endif
+                <ul class="nav nav-tabs">
+                    <li role="presentation" class="active requests_trigger" data-status="pending"><a href="#">Pending</a></li>
+                    <li role="presentation" class="requests_trigger" data-status="accepted"><a href="#">Accepted</a></li>
+                </ul>
+            </div>
+            <div class="col-md-9 col-xs-12" style="padding-top:20px;">
+                <ul class="requests-list" id="requests-list" style="padding-left: 0;">
+                    Loading...
                 </ul>
             </div>
         </div>

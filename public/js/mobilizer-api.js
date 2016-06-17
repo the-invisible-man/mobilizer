@@ -7,33 +7,43 @@
 
     $.mobilizerAPI  = function(options)
     {
-        var data_app = {MOBILIZER_DATA_URL: 'http://192.168.10.10/'};
+        var app = {MOBILIZER_DATA_URL: 'http://192.168.10.10/'};
 
-        data_app.options = $.extend({
+        app.options = $.extend({
             'production': true,
             'base_url': 'http://192.168.10.10/',
             'apiKey': '',
             'return_resource' : false,
-            'async':true
+            'async':true,
+            'token':null
         }, options);
 
-        var base_url = data_app.options.base_url;
+        var base_url = app.options.base_url;
 
-        var ajax_request = function (request_data, callback, resource)
+        var ajax_request = function (request_data, callback, resource, method)
         {
             var temp_response, r_async;
+
+            // Figure out method
+            if (typeof method == 'undefined') {
+                // Default to get
+                method = 'GET';
+            }
 
             if (typeof async == 'boolean') {
                 r_async = async;
             } else {
-                r_async = data_app.options.async;
+                r_async = app.options.async;
             }
 
-            if (data_app.options.return_resource) {
+            request_data['_token'] = app.options.token;
+
+            if (app.options.return_resource) {
                 return $.ajax({
-                    url: data_app.MOBILIZER_DATA_URL + resource,
+                    url: app.MOBILIZER_DATA_URL + resource,
                     data: request_data,
                     async: r_async,
+                    method: method,
                     success: function (data, textStatus, jqXHR) {
                         if (typeof callback == 'function') {
                             callback(data);
@@ -43,9 +53,10 @@
                 });
             } else {
                 $.ajax({
-                    url: data_app.MOBILIZER_DATA_URL + resource,
+                    url: app.MOBILIZER_DATA_URL + resource,
                     data: request_data,
                     async: r_async,
+                    method: method,
                     success: function (data, textStatus, jqXHR) {
                         if (typeof  callback == 'function') {
                             callback(data, jqXHR);
@@ -63,7 +74,7 @@
             return temp_response;
         };
 
-        data_app.get_listing = function(listing_id, location, callback)
+        app.get_listing = function(listing_id, location, callback)
         {
             var data = {};
             if (location !== null) {
@@ -75,14 +86,34 @@
             return ajax_request(data, callback, resource);
         };
 
-        data_app.get_contact_email = function(listing_id, callback)
+        app.get_contact_email = function(listing_id, callback)
         {
             var resource = 'listings/contact/' + listing_id;
 
             return ajax_request({}, callback, resource);
         };
 
-        return data_app;
+        app.cancel_trip = function (booking_id, callback)
+        {
+            var resource = 'bookings/' + booking_id;
+
+            return ajax_request({}, callback, resource, 'DELETE');
+        };
+
+        app.get_booking_requests = function (status, callback)
+        {
+            var resource = 'requests';
+            var data = {};
+
+            // Check if any specific status
+            if (null != status) {
+                data['status'] = status;
+            }
+
+            return ajax_request(data, callback, resource);
+        };
+
+        return app;
     }
 
 }(window.jQuery));

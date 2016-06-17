@@ -198,4 +198,22 @@ class BaseBooking extends Model implements \JsonSerializable {
         $this->setAttribute(self::ADDITIONAL_INFO, $info);
         return $this;
     }
+
+    /**
+     * @param string $status
+     * @return $this
+     */
+    public function setStatus(string $status)
+    {
+        $this->setAttribute(self::STATUS, $status);
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->getAttribute(self::STATUS);
+    }
 }

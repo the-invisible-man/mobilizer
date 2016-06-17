@@ -116,6 +116,11 @@ class TripDurationEstimator
     {
         $minutes =  $this->geoService->estimateTripDurationByZip($startingZip, $destinationZip);
 
+        // If trip is less than 3 hours just return
+        if ($minutes < 180) {
+            return $minutes;
+        }
+
         // We'll want to add some padding, for instance if the trip is longer than 3 hours
         // then we are going to wanna pad the time with 25 minutes to account for rest stops.
         // We'll do this for every 3 hours of the trip. So if the trip lasts 9 hours we'll pad
@@ -142,8 +147,8 @@ class TripDurationEstimator
         // Some zip codes in the US start with 0, the smallest zip code is 00501,
         // currently  in use by the IRS. We will convert to int and multiply both
         // values, then generate a hash.
-        $startingZip        = (int)$startingZip * 0x10;
-        $destinationZip     = (int)$destinationZip * 0x10;
+        $startingZip        = (int)$startingZip * 10;
+        $destinationZip     = (int)$destinationZip * 10;
 
         // We'll enforce the smaller zip code to always come before the larger zip
         // code. This will allows us to always generate a seed that will work

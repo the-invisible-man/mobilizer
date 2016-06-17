@@ -14,19 +14,17 @@
             </div>
             <div class="col-md-9 col-xs-12">
                 <ul class="booking-list">
-                    @if (count($bookings))
-                        @foreach ($bookings as $booking)
-                            <li class="booking_result booking-item" about="{{$booking['id']}}">
+                    @if (count($listings))
+                        @foreach ($listings as $listing)
+                            <li class="booking_result booking-item" about="{{$listing['id']}}">
                                 <div class="row">
                                     <div class="col-md-4 col-xs-12">
-                                        <h5>{{$booking['listing']['party_name']}}</h5>
+                                        <h5>{{$listing['party_name']}}</h5>
                                         <ul class="booking-item-features booking-item-features-sign clearfix">
                                             <li rel="tooltip" data-placement="top" title="Cancel Your Trip" about="{{$booking['id']}}" data-text="{{$booking['listing']['host_first_name']}}" class="cancel_trip"><i class="fa fa-times"></i><span class="booking-item-feature-sign">Cancel</span>
                                             </li>
-                                            @if ($booking['status'] == 'accepted')
-                                                <li rel="tooltip" data-placement="top" title="Contact The Driver" about="{{$booking['listing']['id']}}" class="contact_driver"><i class="fa fa-envelope"></i><span class="booking-item-feature-sign">Contact</span>
-                                                </li>
-                                            @endif
+                                            <li rel="tooltip" data-placement="top" title="Contact The Driver" about="{{$booking['listing']['id']}}" class="contact_driver"><i class="fa fa-envelope"></i><span class="booking-item-feature-sign">Contact</span>
+                                            </li>
                                         </ul>
                                     </div>
                                     <div class="col-md-5" style="font-size: small">

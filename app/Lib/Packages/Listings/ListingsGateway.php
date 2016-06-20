@@ -360,7 +360,8 @@ class ListingsGateway {
             'c.country',
 
             'd.id as route_id',
-            'd.overview_path'
+            'd.overview_path',
+            'd.name as route_name'
         ];
     }
 
@@ -397,8 +398,8 @@ class ListingsGateway {
         $out = [
             'id' => $data['id'],
             'party_name' => $data['party_name'],
-            'starting_date' => $data['starting_date'],
-            'ending_date' => $data['ending_date'],
+            'starting_date' => (new \DateTime($data['starting_date']))->format('M d, Y'),
+            'ending_date' => (new \DateTime($data['ending_date']))->format('M d, Y'),
             'type' => $data['type'],
             'additional_info' => $data['additional_info'],
             'max_occupants' => $data['max_occupants'],
@@ -407,7 +408,6 @@ class ListingsGateway {
             'time_of_day' => ListingMetadata::translateTimeOfDay($data['time_of_day']),
             'location' => [
                 'id' => $data['location_id'],
-                'street' => $data['street'],
                 'city' => $data['city'],
                 'state' => $data['state'],
                 'zip' => $data['zip'],
@@ -418,6 +418,7 @@ class ListingsGateway {
         if ($data['type'] == RideListing::ListingType) {
             $out['route'] = [
                 'id' => $data['route_id'],
+                'name' => $data['route_name'],
                 'overview_path' => $data['overview_path']
             ];
         }

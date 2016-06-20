@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>#SeeYouInPhilly | The Mobilizer to the DNC</title>
+    <title>@if(isset($page_meta_title)) {{$page_meta_title}} @else #SeeYouInPhilly | The Mobilizer to the DNC @endif</title>
 
 
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">

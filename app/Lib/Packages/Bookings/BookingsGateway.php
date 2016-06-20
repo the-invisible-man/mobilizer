@@ -9,6 +9,8 @@ use App\Lib\Packages\Bookings\Exceptions\MismatchException;
 use App\Lib\Packages\Bookings\Models\BookingMetadata;
 use App\Lib\Packages\Bookings\Models\HomeBooking;
 use App\Lib\Packages\Bookings\Models\RideBooking;
+use App\Lib\Packages\EmailRelay\Models\EmailRelay;
+use App\Lib\Packages\EmailRelay\RelayGateway;
 use App\Lib\Packages\Geo\Location\LocationGateway;
 use App\Lib\Packages\Geo\TimeEstimation\TripDurationEstimator;
 use App\Lib\Packages\Listings\Contracts\BaseListing;
@@ -96,6 +98,11 @@ class BookingsGateway {
     private $tripDurationEstimator;
 
     /**
+     * @var EmailRelay
+     */
+    private $relayGateway;
+
+    /**
      * BookingsGateway constructor.
      * @param DatabaseManager $databaseManager
      * @param LocationGateway $locationGateway
@@ -104,8 +111,11 @@ class BookingsGateway {
      * @param Log $log
      * @param ListingsGateway $listingsGateway
      * @param TripDurationEstimator $tripDurationEstimator
+     * @param RelayGateway $relayGateway
      */
-    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway, ValidatorFactory $validatorFactory, Application $app, Log $log, ListingsGateway $listingsGateway, TripDurationEstimator $tripDurationEstimator)
+    public function __construct(DatabaseManager $databaseManager,
+        LocationGateway $locationGateway, ValidatorFactory $validatorFactory, Application $app, Log $log,
+        ListingsGateway $listingsGateway, TripDurationEstimator $tripDurationEstimator, RelayGateway $relayGateway)
     {
         $this->db               = $databaseManager->connection();
         $this->locationGateway  = $locationGateway;
@@ -113,8 +123,11 @@ class BookingsGateway {
         $this->app              = $app;
         $this->log              = $log;
         $this->listingsGateway  = $listingsGateway;
+        $this->relayGateway       = $relayGateway;
+
 
         $this->tripDurationEstimator = $tripDurationEstimator;
+
     }
 
     /**
@@ -361,6 +374,7 @@ class BookingsGateway {
             'c.ending_date',
             'c.party_name',
             'c.additional_info as listing_additional_info',
+            'c.max_occupants',
 
             // listing_metadata
             'd.time_of_day',
@@ -372,6 +386,8 @@ class BookingsGateway {
             'e.state as booking_location_state',
             'e.zip as booking_location_zip',
             'e.country as booking_location_country',
+            'e.lat as booking_location_lat',
+            'e.lng as booking_location_long',
 
             // listing location
             'f.id as listing_location_id',
@@ -380,6 +396,8 @@ class BookingsGateway {
             'f.state as listing_location_state',
             'f.zip as listing_location_zip',
             'f.country as listing_location_country',
+            'f.lat as listing_lat',
+            'f.lng as listing_long',
 
             // listing owner info
             'g.first_name as host_first_name',
@@ -393,8 +411,10 @@ class BookingsGateway {
     private function bookingOwnerColumns()
     {
         return [
+            'h.id as guest_id',
             'h.first_name as guest_first_name',
-            'h.last_name as guest_last_name'
+            'h.last_name as guest_last_name',
+            'i.overview_path',
         ];
     }
 
@@ -476,6 +496,7 @@ class BookingsGateway {
                 'host_first_name'   => $booking['host_first_name'],
                 'host_last_name'    => $booking['host_last_name'],
                 'party_name'        => $booking['party_name'],
+                'max_occupants'     => $booking['max_occupants'],
                 'starting_date'     => $booking['starting_date'],
                 'ending_date'       => $booking['ending_date'],
                 'additional_info'   => $booking['listing_additional_info'],
@@ -483,11 +504,12 @@ class BookingsGateway {
                 'time_of_day'       => ListingMetadata::translateTimeOfDay($booking['time_of_day']),
                 'location'          => [
                     'id'        => $booking['listing_location_id'],
-                    'street'    => $booking['listing_location_street'],
                     'city'      => $booking['listing_location_city'],
                     'state'     => $booking['listing_location_state'],
                     'zip'       => $booking['listing_location_zip'],
-                    'country'   => $booking['listing_location_country']
+                    'country'   => $booking['listing_location_country'],
+                    'lat'       => $booking['listing_lat'],
+                    'long'      => $booking['listing_long']
                 ]
             ]
         ];
@@ -497,11 +519,12 @@ class BookingsGateway {
         if ($booking[BaseBooking::TYPE] == RideBooking::ListingType) {
             $data['user_location'] = [
                 'id'        => $booking['booking_location_id'],
-                'street'    => $booking['booking_location_street'],
                 'city'      => $booking['booking_location_city'],
                 'state'     => $booking['booking_location_state'],
                 'zip'       => $booking['booking_location_zip'],
-                'country'   => $booking['booking_location_country']
+                'country'   => $booking['booking_location_country'],
+                'lat'       => $booking['booking_location_lat'],
+                'long'      => $booking['booking_location_long']
             ];
 
             // SO FUCKING HACKY
@@ -520,12 +543,19 @@ class BookingsGateway {
         }
 
         // Check if booking owner is set
-        if (isset($booking['guest_first_name']) and isset($booking['guest_last_name'])) {
+        if (isset($booking['guest_first_name']) and isset($booking['guest_last_name']) and isset($booking['guest_id'])) {
             $data['user'] = [
-                'first_name' => $booking['guest_first_name'],
-                'last_name' => $booking['guest_last_name']
+                'first_name'    => $booking['guest_first_name'],
+                'last_name'     => $booking['guest_last_name'],
+                'email'         => $this->relayGateway->getCreateRelayAddress($booking['guest_id']) . '@relay.seeyouinphilly.com'
             ];
         }
+
+        if (isset($booking['overview_path'])) {
+            $data['listing']['overview_path'] = $booking['overview_path'];
+        }
+
+
 
         return $data;
     }
@@ -564,7 +594,6 @@ class BookingsGateway {
             throw new BookingNotFoundException("Booking id: '{$bookingId}' - No such booking exists'");
         }
 
-        // User must own listing associated with booking
         $owns = $this->listingsGateway->ownsListing($booking->getFkListingId(), $currentUserId);
 
         if (!$owns) {
@@ -603,9 +632,10 @@ class BookingsGateway {
     }
 
     /**
+     * Returns the booking at the previous state
      * @param string $bookingId
      * @param string $currentUserId
-     * @return bool
+     * @return BaseBooking
      * @throws BookingNotFoundException
      * @throws MismatchException
      */
@@ -613,23 +643,27 @@ class BookingsGateway {
     {
         // This validation should probably not be in here, but as I mentioned
         // previously: #OneManDevTeam $tbs->#WeGot7DaysToWorkWith
-        $this->listingOwnerToBookingValidation($bookingId, $currentUserId);
+        $currentUserId  = ! is_null($currentUserId) ? $currentUserId: $this->getCurrentUser()->getId();
+        $booking        = $this->listingOwnerToBookingValidation($bookingId, $currentUserId);
 
         $this->db->table('bookings')
             ->where(BaseBooking::ID, '=', $bookingId)
             ->update([BaseBooking::STATUS => BaseBooking::STATUS_REJECTED]);
+
+        return $booking;
     }
 
     /**
      * @param string $bookingId
-     * @param string $currentUserId
+     * @param string|null $currentUserId
+     * @return BaseBooking
      * @throws BookingNotFoundException
-     * @throws MismatchException
      * @throws InactiveBookingException
+     * @throws MismatchException
      */
     public function accept(string $bookingId, string $currentUserId = null)
     {
-        $currentUserId  = ! is_null($currentUserId) ?: $this->getCurrentUser()->getId();
+        $currentUserId  = ! is_null($currentUserId) ? $currentUserId : $this->getCurrentUser()->getId();
         $booking        = $this->listingOwnerToBookingValidation($bookingId, $currentUserId);
 
         if (!$booking->isActive()) {
@@ -639,6 +673,8 @@ class BookingsGateway {
         $this->db->table('bookings')
             ->where(BaseBooking::ID, '=', $bookingId)
             ->update([BaseBooking::STATUS => BaseBooking::STATUS_ACCEPTED]);
+
+        return $booking;
     }
 
     /**
@@ -672,6 +708,7 @@ class BookingsGateway {
             ->join('locations as f', 'f.id', '=', 'c.fk_location_id')
             ->join('users as g', 'g.id', '=', 'a.fk_user_id')
             ->join('users as h', 'h.id', '=', 'a.fk_user_id')
+            ->join('listing_routes as i', 'i.id', '=', 'd.fk_listing_route_id')
             ->where('a.fk_user_id', '=', $userId)
             ->where('a.status', '=', BaseBooking::STATUS_PENDING)
             ->where('a.active', '=', 1)
@@ -681,7 +718,7 @@ class BookingsGateway {
         if (!is_array($data) || ! count($data)) return [];
 
         $ouput = [];
-        // Format data
+        // ` data
         foreach ($data as $booking) {
             // Build booking data
             $ouput[] = $this->formatBookingResult($booking);
@@ -704,6 +741,7 @@ class BookingsGateway {
             ->join('locations as f', 'f.id', '=', 'c.fk_location_id')
             ->join('users as g', 'g.id', '=', 'a.fk_user_id')
             ->join('users as h', 'h.id', '=', 'a.fk_user_id')
+            ->join('listing_routes as i', 'i.id', '=', 'd.fk_listing_route_id')
             ->where('a.fk_user_id', '=', $userId)
             ->where('a.status', '=', BaseBooking::STATUS_ACCEPTED)
             ->where('a.active', '=', 1)
@@ -737,6 +775,7 @@ class BookingsGateway {
             ->join('locations as f', 'f.id', '=', 'c.fk_location_id')
             ->join('users as g', 'g.id', '=', 'a.fk_user_id')
             ->join('users as h', 'h.id', '=', 'a.fk_user_id')
+            ->join('listing_routes as i', 'i.id', '=', 'd.fk_listing_route_id')
             ->where('a.fk_user_id', '=', $userId)
             ->where('a.active', '=', 1)
             ->get(array_merge($this->getSelectColumns(), $this->bookingOwnerColumns()));
@@ -751,5 +790,23 @@ class BookingsGateway {
         }
 
         return $ouput;
+    }
+
+    /**
+     * @param string $bookingId
+     * @return array
+     */
+    public function contactInfo(string $bookingId)
+    {
+        $mailboxId = $this->db->table('email_relay as a')
+            ->join('bookings as b', 'b.fk_user_id', '=', 'a.fk_user_id')
+            ->where('b.id', '=', $bookingId)
+            ->value('id');
+
+        if (!$mailboxId) {
+            return null;
+        }
+
+        return $mailboxId . '@relay.seeyouinphilly.com';
     }
 }

@@ -255,11 +255,13 @@
         var domRouteResultsHolder   = $("#route_results_holder");
         var starting                = $("#autocomplete").val();
         var selected_user_route     = $("#overview_path");
+        var route_name              = $("#name");
 
         $("#number_of_routes").html(result.routes.length);
 
         // Set first route as default selected route
         selected_user_route.val(result.routes[0]["overview_polyline"]);
+        route_name.val(result.routes[0]["summary"]);
 
         if (result.routes.length > 1) {
             $("#route_plural").html('s');
@@ -295,6 +297,7 @@
             $(".icon_selected", this).removeClass("hidden");
             displayService.setRouteIndex(parseInt($(this).attr("id")));
             selected_user_route.val(result.routes[selected_route]["overview_polyline"]);
+            route_name.val(result.routes[selected_route]["summary"]);
         });
     };
 

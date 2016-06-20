@@ -41,14 +41,14 @@ class SendBookingNotificationEmail extends Job implements ShouldQueue
     {
         $mailer->send('emails.booking_notification', $this->data, function (Message $email) {
             $email->to($this->data['to_email']);
-            $email->from('no-reply@seeyouinphilly.com', '#SeeYouInPhilly Alerts');
             $email->subject('Your Have a New Request');
         });
 
         $mailer->send('emails.booking_confirmation', $this->data, function (Message $email) {
             $email->to($this->data['confirm_to_email']);
-            $email->from('no-reply@seeyouinphilly.com', '#SeeYouInPhilly Alerts');
             $email->subject('Your Booking Request Has Been Sent');
         });
+
+        $this->delete();
     }
 }

@@ -7,16 +7,9 @@
 
     $.mobilizerAPI  = function(options)
     {
-        var app = {MOBILIZER_DATA_URL: 'http://192.168.10.10/'};
+        var app = {};
 
-        app.options = $.extend({
-            'production': true,
-            'base_url': 'http://192.168.10.10/',
-            'apiKey': '',
-            'return_resource' : false,
-            'async':true,
-            'token':null
-        }, options);
+        app.options = $.extend(config.fetch('api'), options);
 
         var base_url = app.options.base_url;
 
@@ -40,7 +33,7 @@
 
             if (app.options.return_resource) {
                 return $.ajax({
-                    url: app.MOBILIZER_DATA_URL + resource,
+                    url: base_url + resource,
                     data: request_data,
                     async: r_async,
                     method: method,
@@ -53,7 +46,7 @@
                 });
             } else {
                 $.ajax({
-                    url: app.MOBILIZER_DATA_URL + resource,
+                    url: base_url + resource,
                     data: request_data,
                     async: r_async,
                     method: method,
@@ -74,6 +67,13 @@
             return temp_response;
         };
 
+        app.get_listings = function (callback) {
+            var data = {};
+            var resource = 'listings';
+
+            return ajax_request(data, callback, resource)
+        };
+
         app.get_listing = function(listing_id, location, callback)
         {
             var data = {};
@@ -86,9 +86,16 @@
             return ajax_request(data, callback, resource);
         };
 
-        app.get_contact_email = function(listing_id, callback)
+        app.get_listing_contact_info = function(listing_id, callback)
         {
             var resource = 'listings/contact/' + listing_id;
+
+            return ajax_request({}, callback, resource);
+        };
+
+        app.get_request_contact_info = function(booking_id, callback)
+        {
+            var resource = 'bookings/contact/' + booking_id;
 
             return ajax_request({}, callback, resource);
         };
@@ -111,6 +118,27 @@
             }
 
             return ajax_request(data, callback, resource);
+        };
+
+        app.accept_request = function (booking_id, callback)
+        {
+            var resource = 'requests/' + booking_id + '/accept';
+
+            return ajax_request({}, callback, resource);
+        };
+
+        app.reject_request = function (booking_id, callback)
+        {
+            var resource = 'requests/' + booking_id + '/reject';
+
+            return ajax_request({}, callback, resource);
+        };
+
+        app.cancel_request = function (booking_id, callback)
+        {
+            var resource = 'requests/' + booking_id + '/cancel';
+
+            return ajax_request({}, callback, resource);
         };
 
         return app;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Lib\Packages\Bookings\BookingsGateway;
 use App\Lib\Packages\Bookings\Contracts\BaseBooking;
 use App\Lib\Packages\Bookings\Exceptions\MismatchException;
+use App\Lib\Packages\EmailRelay\RelayGateway;
 use App\Lib\Packages\Listings\Contracts\BaseListing;
 use App\Lib\Packages\Listings\ListingsGateway;
 use Illuminate\Database\DatabaseManager;
@@ -53,18 +54,25 @@ class BookingsController extends Controller {
     private $listingsGateway;
 
     /**
+     * @var RelayGateway
+     */
+    private $relayGateway;
+
+    /**
      * BookingsController constructor.
      * @param BookingsGateway $bookingsGateway
      * @param DatabaseManager $databaseManager
      * @param ListingsGateway $listingsGateway
      * @param Mailer $mailer
+     * @param RelayGateway $relayGateway
      */
-    public function __construct(BookingsGateway $bookingsGateway, DatabaseManager $databaseManager, ListingsGateway $listingsGateway, Mailer $mailer)
+    public function __construct(BookingsGateway $bookingsGateway, DatabaseManager $databaseManager, ListingsGateway $listingsGateway, Mailer $mailer, RelayGateway $relayGateway)
     {
         $this->bookingsGateway  = $bookingsGateway;
         $this->db               = $databaseManager->connection();
         $this->listingsGateway  = $listingsGateway;
         $this->mailer           = $mailer;
+        $this->relayGateway     = $relayGateway;
 
         if (\Auth::check()) {
             $this->bookingsGateway->setCurrentUser(\Auth::user());
@@ -151,7 +159,7 @@ class BookingsController extends Controller {
             } else {
                 $response = $this->bookingsGateway->create($data);
                 $response = $this->formatNewBooking($response);
-                $this->sendNotificationEmails($response);
+                $this->sendNewBookingNotificationEmails($response);
             }
         } catch (\Exception $e) {
             $response = ['errors' => $e->getMessage()];
@@ -194,7 +202,7 @@ class BookingsController extends Controller {
     /**
      * @param array $response
      */
-    public function sendNotificationEmails(array $response)
+    private function sendNewBookingNotificationEmails(array $response)
     {
         $data['from_user_first_name']   = \Auth::user()->getFirstName();
         $data['from_user_last_name']    = \Auth::user()->getLastName();
@@ -284,7 +292,7 @@ class BookingsController extends Controller {
         }
 
         if ($booking->getStatus() === BaseBooking::STATUS_ACCEPTED) {
-            $this->sendCancellationNotice($booking);
+            $this->sendBookingCancellationNotice($booking);
         }
 
         if ($request->ajax()) {
@@ -293,9 +301,26 @@ class BookingsController extends Controller {
     }
 
     /**
+     * @param string $bookingId
+     * @return JsonResponse
+     */
+    public function contactInfo(string $bookingId)
+    {
+        $mail = $this->bookingsGateway->contactInfo($bookingId);
+
+        if (!$mail) {
+            $response = ['message' => 'not found'];
+        } else {
+            $response = ['email' => $mail];
+        }
+
+        return \Response::json($response);
+    }
+
+    /**
      * @param BaseBooking $booking
      */
-    private function sendCancellationNotice(BaseBooking $booking)
+    private function sendBookingCancellationNotice(BaseBooking $booking)
     {
         // Send Confirmation Emails
         /**
@@ -320,40 +345,77 @@ class BookingsController extends Controller {
     }
 
     /**
-     * @param Request $request
      * @param string $bookingId
      * @return JsonResponse
      */
-    public function accept(Request $request, string $bookingId)
+    public function accept(string $bookingId)
     {
         try {
-            $userId = \Auth::user()->getId();
-            $this->bookingsGateway->accept($bookingId, $userId);
+            /**
+             * @var User $bookingOwner
+             */
+            $userId         = \Auth::user()->getId();
+            $booking        = $this->bookingsGateway->accept($bookingId, $userId);
+            $bookingOwner   = User::find($booking->getFKUserId());
         } catch (\Exception $e) {
             return \Response::json(['message' => 'Service not available'], 400);
         }
 
-        if ($request->ajax()) {
-            return \Response::json(['status' => 'ok'], 200);
-        }
+        // Notify the user that their request as been accepted
+        /**
+         * @var BaseListing $listing
+         */
+        $listing        = BaseListing::find($booking->getFkListingId());
+        $driverEmail    = $this->relayGateway->getCreateRelayAddress($listing->getFkUserId());
+        $data           = [
+            'party_name'        => $listing->getPartyName(),
+            'user_first_name'   => $bookingOwner->getFirstName(),
+            'driver_email'      => $driverEmail . '@relay.seeyouinphilly.com'
+        ];
+
+        $this->mailer->send('emails.notifications.booking_accept', $data, function (Message $message) use($bookingOwner) {
+            $message->to($bookingOwner->getEmail());
+            $message->subject("You're Going to Philly!");
+        });
+
+        return \Response::json(['status' => 'ok'], 200);
     }
 
     /**
-     * @param Request $request
+     * This is sooo inefficient, I will make this better, but rn
+     * this needs to go out.
      * @param string $bookingId
      * @return JsonResponse
      */
-    public function reject(Request $request, string $bookingId)
+    public function reject(string $bookingId)
     {
         try {
-            $userId = \Auth::user()->getId();
-            $this->bookingsGateway->reject($bookingId, $userId);
+            // Let's check this booking's current status, if it's already
+            // accepted then we need to send an email to notify the user that
+            // their request was cancelled.
+            /**
+             * @var BaseBooking $booking
+             * @var BaseListing $listing
+             * @var User $bookingOwner
+             */
+            $userId         = \Auth::user()->getId();
+            $booking        = $this->bookingsGateway->reject($bookingId, $userId);
+            $listing        = BaseListing::find($booking->getFkListingId());
+            $bookingOwner   = User::find($booking->getFKUserId());
         } catch (\Exception $e) {
             return \Response::json(['message' => 'Service not available'], 400);
         }
 
-        if ($request->ajax()) {
-            return \Response::json(['status' => 'ok'], 200);
+        $data = ['party_name' => $listing->getPartyName(), 'user_first_name' => $bookingOwner->getFirstName()];
+
+        if ($booking->getStatus() == BaseBooking::STATUS_ACCEPTED) {
+            // This was previously accepted, notify the user that their booking has been cancelled
+            $this->mailer->send('emails.notifications.booking_cancelled_by_listing_owner', $data, function (Message $message) use ($bookingOwner) {
+                $message->to($bookingOwner->getEmail());
+                $message->subject('Oh no. Your Booking Request Has Been Cancelled');
+            });
         }
+
+        return \Response::json(['status' => 'ok'], 200);
     }
 }

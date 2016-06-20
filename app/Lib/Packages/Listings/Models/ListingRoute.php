@@ -26,8 +26,27 @@ class ListingRoute extends Model {
 
     // Columns
     const   ID              = 'id',
+            NAME            = 'name',
             OVERVIEW_PATH   = 'overview_path',
             SYNCHRONIZED    = 'synchronized';
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return (string)$this->getAttribute(self::NAME);
+    }
+
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName(string $name)
+    {
+        $this->setAttribute(self::NAME, $name);
+        return $this;
+    }
 
     /**
      * @return string

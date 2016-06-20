@@ -26,7 +26,9 @@ class Location extends Model
             CITY        = 'city',
             STATE       = 'state',
             ZIP         = 'zip',
-            COUNTRY     = 'country';
+            COUNTRY     = 'country',
+            LAT         = 'lat',
+            LONG        = 'lng';
 
     protected $table = 'locations';
 
@@ -166,6 +168,44 @@ class Location extends Model
     public function getCountry()
     {
         return $this->getAttribute(self::COUNTRY);
+    }
+
+    /**
+     * Maintain as string to avoid precision errors!
+     * @return string
+     */
+    public function getLat()
+    {
+        return $this->getAttribute(self::LAT);
+    }
+
+    /**
+     * Maintain as string to avoid precision errors!
+     * @return string
+     */
+    public function getLong()
+    {
+        return $this->getAttribute(self::LONG);
+    }
+
+    /**
+     * @param string $lat
+     * @return $this
+     */
+    public function setLat(string $lat)
+    {
+        $this->setAttribute(self::LAT, $lat);
+        return $this;
+    }
+
+    /**
+     * @param string $lng
+     * @return $this
+     */
+    public function setLong(string $lng)
+    {
+        $this->setAttribute(self::LONG, $lng);
+        return $this;
     }
 
     /**

@@ -65,25 +65,31 @@ class ListingsController extends Controller {
     }
 
     /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function myListings()
+    {
+        $userinfo = $this->userInfo();
+        return view('my_listings', $userinfo);
+    }
+
+    /**
      * @return JsonResponse
      */
-    public function all(Request $request)
+    public function all()
     {
         $responseCode = 200;
 
         try {
-            $user       = \Auth::user()->id;
+            $user       = \Auth::user()->getId();
             $response   = $this->listingsGateway->allForUser($user);
         } catch (\Exception $e) {
             $response       = ['message' => $e->getMessage()];
             $responseCode   = 400;
         }
 
-        if ($request->ajax()) {
-            return \Response::json($response, $responseCode);
-        }
 
-        return view('my_listings', $response);
+        return \Response::json($response, $responseCode);
     }
 
     /**
@@ -176,12 +182,6 @@ class ListingsController extends Controller {
         }
 
         return \Response::json($response, $responseCode);
-
-        if ($request->ajax()) {
-            return \Response::json($response, $responseCode);
-        } else {
-
-        }
     }
 
     /**
@@ -205,12 +205,6 @@ class ListingsController extends Controller {
         }
 
         return \Response::json($response, $responseCode);
-
-        if ($request->ajax()) {
-            return \Response::json($response, $responseCode);
-        } else {
-            return view('');
-        }
     }
 
     /**

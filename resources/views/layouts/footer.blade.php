@@ -14,9 +14,8 @@
                     </li>
                     <li><a href="/about_housing">List Your Home</a>
                     </li>
-                    <li><a href="#">Blog</a>
-                    </li>
                 </ul>
+                <br>
             </div>
             <div class="col-md-4" style="text-align: center;">
                 <a class="logo" href="index.html">
@@ -24,21 +23,15 @@
                 </a>
                 <ul class="list list-horizontal social-icons">
                     <li style="">
-                        <a class="fa fa-facebook box-icon-normal round animate-icon-bottom-to-top" href="#"></a>
+                        <a class="fa fa-facebook box-icon-normal round animate-icon-bottom-to-top" target="_blank" href="https://www.facebook.com/seeyouinphilly"></a>
                     </li>
                     <li>
-                        <a class="fa fa-twitter box-icon-normal round animate-icon-bottom-to-top" href="#"></a>
-                    </li>
-                    <li>
-                        <a class="fa fa-google-plus box-icon-normal round animate-icon-bottom-to-top" href="#"></a>
-                    </li>
-                    <li>
-                        <a class="fa fa-linkedin box-icon-normal round animate-icon-bottom-to-top" href="#"></a>
-                    </li>
-                    <li>
-                        <a class="fa fa-pinterest box-icon-normal round animate-icon-bottom-to-top" href="#"></a>
+                        <a class="fa fa-twitter box-icon-normal round animate-icon-bottom-to-top" target="_blank" href="https://twitter.com/seeyouinp"></a>
                     </li>
                 </ul>
+            </div>
+            <div class="col-md-12">
+                <center>Your usage of this site is in accordance with our <a href="/tos" style="color:#0066b8 !important">terms of service</a> and our <a href="/privacy" style="color:#0066b8 !important">privacy policy</a>.</center>
             </div>
         </div>
     </div>
@@ -54,7 +47,7 @@
 <script src="/js/ionrangeslider.js"></script>
 <script src="/js/icheck.js"></script>
 <script src="/js/fotorama.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7-veSR-bmwjhQNXSPPIKAJRTRG5CzZZ8&v=3.exp&sensor=false&libraries=places,geometry"></script>
 <script src="/js/typeahead.js"></script>
 <script src="/js/card-payment.js"></script>
 <script src="/js/magnific.js"></script>
@@ -69,12 +62,14 @@
 <script src="/js/jsonhttprequest.js"></script>
 
 <!-- APP Components -->
-<script src="/js/mobilizer-api.js"></script>
-<script src="/js/ride-list.js"></script>
-<script src="/js/requests.js"></script>
-<script src="/js/bookings.js"></script>
-<script src="/js/search.js"></script>
-<script src="/js/home.js"></script>
+<script src="/js/mobilizer/config.js"></script>
+<script src="/js/mobilizer/mobilizer-api.js"></script>
+<script src="/js/mobilizer/ride-list.js"></script>
+<script src="/js/mobilizer/listings.js"></script>
+<script src="/js/mobilizer/requests.js"></script>
+<script src="/js/mobilizer/bookings.js"></script>
+<script src="/js/mobilizer/search.js"></script>
+<script src="/js/mobilizer/home.js"></script>
 <!-- End APP Components -->
 
 </div>

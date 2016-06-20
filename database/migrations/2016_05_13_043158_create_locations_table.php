@@ -19,6 +19,8 @@ class CreateLocationsTable extends Migration
             $table->string('state');
             $table->string('zip');
             $table->string('country');
+            $table->decimal('lat', 10, 8);
+            $table->decimal('lng', 11, 8);
             $table->timestamps();
         });
     }

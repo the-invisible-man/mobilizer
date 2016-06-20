@@ -655,7 +655,7 @@
                 </div>
 
                 <div style="Margin-left: 20px;Margin-right: 20px;">
-                    <h1 class="size-40" style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #44a8c7;font-size: 32px;line-height: 40px;font-family: Cabin,Avenir,sans-serif;text-align: center;" lang="x-size-40"><strong><span style="color:#ffffff">#SeeYouInPhilly</span></strong></h1><p class="size-20" style="Margin-top: 20px;Margin-bottom: 20px;font-size: 17px;line-height: 26px;text-align: center;" lang="x-size-20"><span style="color:#60666d"><strong>Your Booking Request</strong></span></p>
+                    <h1 class="size-40" style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #44a8c7;font-size: 32px;line-height: 40px;font-family: Cabin,Avenir,sans-serif;text-align: center;" lang="x-size-40"><strong><span style="color:#ffffff">#SeeYouInPhilly</span></strong></h1><p class="size-20" style="Margin-top: 20px;Margin-bottom: 20px;font-size: 17px;line-height: 26px;text-align: center;" lang="x-size-20"><span style="color:#60666d"><strong>Your Booking Has Been Cancelled</strong></span></p>
                 </div>
 
                 <div style="Margin-left: 20px;Margin-right: 20px;">
@@ -664,8 +664,8 @@
 
                 <div style="Margin-left: 20px;Margin-right: 20px;">
                     <div class="btn btn--flat btn--large" style="Margin-bottom: 20px;text-align: center;">
-                        <![if !mso]><a style='border-radius: 4px;display: inline-block;font-size: 14px;font-weight: bold;line-height: 24px;padding: 12px 24px;text-align: center;text-decoration: none !important;transition: opacity 0.1s ease-in;color: #fff;background-color: #ffffff; color: #44a8c7; font-family: &#39;Open Sans&#39;, sans-serif !important;font-family: "Open Sans",sans-serif;' href="http://test.com">Manage My Bookings</a><![endif]>
-                        <!--[if mso]><p style="line-height:0;margin:0;">&nbsp;</p><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="http://test.com" style="width:218px" arcsize="9%" fillcolor="#FFFFFF" stroke="f"><v:textbox style="mso-fit-shape-to-text:t" inset="0px,11px,0px,11px"><center style="font-size:14px;line-height:24px;color:#44A8C7;font-family:sans-serif;font-weight:bold;mso-line-height-rule:exactly;mso-text-raise:4px">Manage My Bookings</center></v:textbox></v:roundrect><![endif]--></div>
+                        <![if !mso]><a style='border-radius: 4px;display: inline-block;font-size: 14px;font-weight: bold;line-height: 24px;padding: 12px 24px;text-align: center;text-decoration: none !important;transition: opacity 0.1s ease-in;color: #fff;background-color: #ffffff; color: #44a8c7; font-family: &#39;Open Sans&#39;, sans-serif !important;font-family: "Open Sans",sans-serif;' href="{{url('/')}}/bookings">Manage My Bookings</a><![endif]>
+                        <!--[if mso]><p style="line-height:0;margin:0;">&nbsp;</p><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="{{url('/')}}/bookings" style="width:218px" arcsize="9%" fillcolor="#FFFFFF" stroke="f"><v:textbox style="mso-fit-shape-to-text:t" inset="0px,11px,0px,11px"><center style="font-size:14px;line-height:24px;color:#44A8C7;font-family:sans-serif;font-weight:bold;mso-line-height-rule:exactly;mso-text-raise:4px">Manage My Bookings</center></v:textbox></v:roundrect><![endif]--></div>
                 </div>
 
                 <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 24px;">
@@ -687,36 +687,9 @@
                 </div>
 
                 <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 24px;">
-                    <p class="size-16" style="Margin-top: 16px;Margin-bottom: 0;font-size: 16px;line-height: 24px;text-align: center;" lang="x-size-16">Hey {{$user_first_name}},&nbsp;your booking has been sent to {{$host_first_name}} for approval. Be on the lookout for any emails from the driver in case he/she has any questions.&nbsp;</p>
+                    <p class="size-16" style="Margin-top: 16px;Margin-bottom: 0;font-size: 16px;line-height: 24px;text-align: center;" lang="x-size-16">Hey {{$user_first_name}},&nbsp;we're sorry to inform you that your booking for "{{$party_name}}" has been cancelled. If you still need a ride you can head to our site and book another.&nbsp;</p>
                 </div>
 
-            </div>
-            <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
-        </div>
-    </div>
-
-    <div class="layout two-col fixed-width" style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
-        <div class="layout__inner" style="border-collapse: collapse;display: table;background-color: #ffffff;" emb-background-style="">
-            <!--[if (mso)|(IE)]><table align="center" cellpadding="0" cellspacing="0"><tr class="layout-fixed-width" emb-background-style><td style="width: 300px" valign="top" class="w260"><![endif]-->
-            <div class="column" style="text-align: left;color: #60666d;font-size: 14px;line-height: 21px;font-family: &quot;Open Sans&quot;,sans-serif;Float: left;max-width: 320px;min-width: 300px; width: 320px;width: calc(13140px - 2000vw);">
-
-                <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
-                    <p style="Margin-top: 0;Margin-bottom: 0;"><strong>From:</strong></p>
-                    <p style="Margin-top: 20px;Margin-bottom: 0;"><strong>Pickup Location:</strong></p>
-                    <p style="Margin-top: 20px;Margin-bottom: 0;"><strong>Number of Passengers:</strong></p>
-                    <p style="Margin-top: 20px;Margin-bottom: 0;"><strong>Message:</strong></p>
-                </div>
-
-            </div>
-            <!--[if (mso)|(IE)]></td><td style="width: 300px" valign="top" class="w260"><![endif]-->
-            <div class="column" style="text-align: left;color: #60666d;font-size: 14px;line-height: 21px;font-family: &quot;Open Sans&quot;,sans-serif;Float: left;max-width: 320px;min-width: 300px; width: 320px;width: calc(13140px - 2000vw);">
-
-                <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
-                    <p style="Margin-top: 0;Margin-bottom: 0;">{{$from_user_first_name}} {{$from_user_last_name}}</p>
-                    <p style="Margin-top: 20px;Margin-bottom: 0;">{{$pickup_city}}, {{$pickup_state}}</p>
-                    <p style="Margin-top: 20px;Margin-bottom: 0;">{{$total_people}}</p>
-                    <p style="Margin-top: 20px;Margin-bottom: 0;">{{$additional_info}}</p>
-                </div>
             </div>
             <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
         </div>
@@ -741,6 +714,7 @@
     </div>
 
     @include('emails.footer')
+
     <div style="line-height:40px;font-size:40px;">&nbsp;</div>
 
 </div>

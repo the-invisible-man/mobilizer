@@ -55,7 +55,7 @@ class RideMetadataDriver extends AbstractMetadataDriver
     {
         $this->validate($listing, $data);
 
-        $route = $this->createRoute($data[ListingRoute::OVERVIEW_PATH]);
+        $route = $this->createRoute($data[ListingRoute::NAME], $data[ListingRoute::OVERVIEW_PATH]);
 
         $listing->setListingRoute($route);
         $listing->setMetadata($this->createMetadata($listing, $route, $data));
@@ -86,14 +86,17 @@ class RideMetadataDriver extends AbstractMetadataDriver
     }
 
     /**
+     * @param string $name
      * @param $path
      * @return ListingRoute
      */
-    private function createRoute($path)
+    private function createRoute(string $name, $path)
     {
         // Save encoded lat/long path in database for further
         // processing at a later time.
         $route      = new ListingRoute();
+
+        $route->setName($name);
         $route->setOverviewPath($path)->save();
 
         return $route;

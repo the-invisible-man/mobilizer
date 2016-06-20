@@ -55,6 +55,10 @@ class LocationGateway
 
         $location->setCountry($response->getCountry());
 
+        // Set geospatial data
+        $location->setLat($response->getGeoLocation()->getLat());
+        $location->setLong($response->getGeoLocation()->getLong());
+
         $location->save();
 
         return $location;

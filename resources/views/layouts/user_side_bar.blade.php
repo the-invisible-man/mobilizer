@@ -6,9 +6,9 @@
     <ul class="list user-profile-nav">
         <li><a href="/account"><i class="fa fa-user"></i>Account</a>
         </li>
-        <li><a href="/listings"><i class="fa fa-camera"></i>My Listings</a>
+        <li><a href="/my-listings"><i class="fa fa-camera"></i>My Listings</a>
         </li>
-        <li><a href="/requests/my-requests"><i class="fa fa-camera"></i>Requests</a>
+        <li><a href="/my-requests"><i class="fa fa-camera"></i>Requests</a>
         </li>
         <li><a href="/bookings"><i class="fa fa-clock-o"></i>My Bookings</a>
         </li>

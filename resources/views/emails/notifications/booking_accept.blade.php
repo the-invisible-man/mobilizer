@@ -646,7 +646,7 @@
     </div>
 
     <div class="layout one-col fixed-width" style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
-        <div class="layout__inner" style="border-collapse: collapse;display: table;background-color: #307fb0;background-position: 0px 0px;background-image: url(http://192.168.10.10/img/email_templates/49b9a74707b049aaa40b14af36abb9cd.png);background-repeat: repeat;">
+        <div class="layout__inner" style="border-collapse: collapse;display: table;background-color: #307fb0;background-position: 0px 0px;background-image: url(https://i1.createsend1.com/ei/d/27/5F8/5CF/014440/csfinal/49b9a74707b049aaa40b14af36abb9cd.png);background-repeat: repeat;">
             <!--[if (mso)|(IE)]><table align="center" cellpadding="0" cellspacing="0"><tr class="layout-fixed-width" style="background-color: #307fb0;background-position: 0px 0px;background-image: url(https://i1.createsend1.com/ei/d/27/5F8/5CF/014440/csfinal/49b9a74707b049aaa40b14af36abb9cd.png);background-repeat: repeat;"><td style="width: 600px" class="w560"><![endif]-->
             <div class="column" style='text-align: left;color: #60666d;font-size: 14px;line-height: 21px;font-family: "Open Sans",sans-serif;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);'>
 
@@ -664,8 +664,8 @@
 
                 <div style="Margin-left: 20px;Margin-right: 20px;">
                     <div class="btn btn--flat btn--large" style="Margin-bottom: 20px;text-align: center;">
-                        <![if !mso]><a style='border-radius: 4px;display: inline-block;font-size: 14px;font-weight: bold;line-height: 24px;padding: 12px 24px;text-align: center;text-decoration: none !important;transition: opacity 0.1s ease-in;color: #fff;background-color: #ffffff; color: #44a8c7; font-family: &#39;Open Sans&#39;, sans-serif !important;font-family: "Open Sans",sans-serif;' href="http://test.com">Manage My Bookings</a><![endif]>
-                        <!--[if mso]><p style="line-height:0;margin:0;">&nbsp;</p><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="http://test.com" style="width:218px" arcsize="9%" fillcolor="#FFFFFF" stroke="f"><v:textbox style="mso-fit-shape-to-text:t" inset="0px,11px,0px,11px"><center style="font-size:14px;line-height:24px;color:#44A8C7;font-family:sans-serif;font-weight:bold;mso-line-height-rule:exactly;mso-text-raise:4px">Manage My Bookings</center></v:textbox></v:roundrect><![endif]--></div>
+                        <![if !mso]><a style='border-radius: 4px;display: inline-block;font-size: 14px;font-weight: bold;line-height: 24px;padding: 12px 24px;text-align: center;text-decoration: none !important;transition: opacity 0.1s ease-in;color: #fff;background-color: #ffffff; color: #44a8c7; font-family: &#39;Open Sans&#39;, sans-serif !important;font-family: "Open Sans",sans-serif;' href="{{url('/')}}/bookings">Manage My Bookings</a><![endif]>
+                        <!--[if mso]><p style="line-height:0;margin:0;">&nbsp;</p><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="{{url('/')}}/bookings" style="width:218px" arcsize="9%" fillcolor="#FFFFFF" stroke="f"><v:textbox style="mso-fit-shape-to-text:t" inset="0px,11px,0px,11px"><center style="font-size:14px;line-height:24px;color:#44A8C7;font-family:sans-serif;font-weight:bold;mso-line-height-rule:exactly;mso-text-raise:4px">Manage My Bookings</center></v:textbox></v:roundrect><![endif]--></div>
                 </div>
 
                 <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 24px;">
@@ -687,7 +687,7 @@
                 </div>
 
                 <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 24px;">
-                    <h2 class="size-24" style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #44a8c7;font-size: 20px;line-height: 28px;text-align: center;" lang="x-size-24"><strong>Your ride request has been accepted</strong></h2><p class="size-16" style="Margin-top: 16px;Margin-bottom: 0;font-size: 16px;line-height: 24px;text-align: center;" lang="x-size-16">Hey there,&nbsp;you have received a request for car pooling on your journey from {{$listing['location']['city']}}, {{$listing['location']['state']}}&nbsp;</p>
+                    <h2 class="size-24" style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #44a8c7;font-size: 20px;line-height: 28px;text-align: center;" lang="x-size-24"><strong>Your ride request has been accepted</strong></h2><p class="size-16" style="Margin-top: 16px;Margin-bottom: 0;font-size: 16px;line-height: 24px;text-align: center;" lang="x-size-16">Hey there,&nbsp;your ride request for "{{$party_name}}" has been accepted!&nbsp;</p>
                 </div>
 
             </div>
@@ -695,35 +695,44 @@
         </div>
     </div>
 
-    <div class="layout email-footer" style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
-        <div class="layout__inner" style="border-collapse: collapse;display: table;">
-            <!--[if (mso)|(IE)]><table align="center" cellpadding="0" cellspacing="0"><tr class="layout-email-footer"><td style="width: 400px;" valign="top" class="w360"><![endif]-->
-            <div class="column wide" style='text-align: left;font-size: 12px;line-height: 19px;color: #b9b9b9;font-family: "Open Sans",sans-serif;Float: left;max-width: 400px;min-width: 320px; width: 320px;width: calc(8000vw - 50960px);'>
-                <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 10px;Margin-bottom: 10px;">
+    <div class="layout one-col fixed-width" style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+        <div class="layout__inner" style="border-collapse: collapse;display: table;background-color: #ffffff;" emb-background-style>
+            <!--[if (mso)|(IE)]><table align="center" cellpadding="0" cellspacing="0"><tr class="layout-fixed-width" emb-background-style><td style="width: 600px" class="w560"><![endif]-->
+            <div class="column" style='text-align: left;color: #60666d;font-size: 14px;line-height: 21px;font-family: "Open Sans",sans-serif;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);'>
 
-                    <div>
-
-                    </div>
-                    <div style="Margin-top: 18px;">
-
-                    </div>
+                <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;">
+                    <div style="line-height:10px;font-size:1px">&nbsp;</div>
                 </div>
-            </div>
-            <!--[if (mso)|(IE)]></td><td style="width: 200px;" valign="top" class="w160"><![endif]-->
-            <div class="column narrow" style='text-align: left;font-size: 12px;line-height: 19px;color: #b9b9b9;font-family: "Open Sans",sans-serif;Float: left;max-width: 320px;min-width: 200px; width: 320px;width: calc(77240px - 12000vw);'>
-                <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 10px;Margin-bottom: 10px;">
-                    <div class="footer__share-button">
-                        <!--[if mso]><p style="line-height:0;">&nbsp;</p><![endif]-->
-                        <p style="Margin-top: 0;Margin-bottom: 5px;line-height: 26px;mso-line-height-rule: exactly;"><fblike class="fblike" style="background-image: url(https://i5.createsend1.com/static/eb/beta/13-the-blueprint-3/images/fblike.png);background-repeat: no-repeat;background-size: 200px 56px;border-radius: 2px;color: #ffffff;display: inline-block;font-size: 11px;font-weight: bold;line-height: 11px;padding: 8px 11px 7px 28px;text-align: left;text-decoration: none;background-color: #7b7c7d;" cs-button data-vml-width="62" left-align-text="true">Like</fblike></p>
-                        <p style="Margin-top: 0;Margin-bottom: 5px;line-height: 26px;mso-line-height-rule: exactly;"><tweet class="tweet" style="background-image: url(https://i9.createsend1.com/static/eb/beta/13-the-blueprint-3/images/tweet.png);background-repeat: no-repeat;background-size: 200px 56px;border-radius: 2px;color: #ffffff;display: inline-block;font-size: 11px;font-weight: bold;line-height: 11px;padding: 8px 11px 7px 28px;text-align: left;text-decoration: none;background-color: #7b7c7d;" cs-button data-vml-width="73" left-align-text="true">Tweet</tweet></p>
-                        <p style="Margin-top: 0;Margin-bottom: 5px;line-height: 26px;mso-line-height-rule: exactly;"><linkedinshare class="linkedinshare" style="background-image: url(https://i8.createsend1.com/static/eb/beta/13-the-blueprint-3/images/lishare.png);background-repeat: no-repeat;background-size: 200px 56px;border-radius: 2px;color: #ffffff;display: inline-block;font-size: 11px;font-weight: bold;line-height: 11px;padding: 8px 11px 7px 28px;text-align: left;text-decoration: none;background-color: #7b7c7d;" cs-button data-vml-width="70" left-align-text="true">Share</linkedinshare></p>
-                        <p style="Margin-top: 0;Margin-bottom: 5px;line-height: 26px;mso-line-height-rule: exactly;"><forwardtoafriend class="forwardtoafriend" style="background-image: url(https://i10.createsend1.com/static/eb/beta/13-the-blueprint-3/images/forward.png);background-repeat: no-repeat;background-size: 200px 56px;border-radius: 2px;color: #ffffff;display: inline-block;font-size: 11px;font-weight: bold;line-height: 11px;padding: 8px 11px 7px 28px;text-align: left;text-decoration: none;background-color: #7b7c7d;" cs-button data-vml-width="85" left-align-text="true">Forward</forwardtoafriend></p>
-                    </div>
+
+                <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 24px;">
+                    <h2 class="size-24" style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #44a8c7;font-size: 20px;line-height: 28px;text-align: center;" lang="x-size-24"><strong>What now from here?</strong></h2><p class="size-16" style="Margin-top: 16px;Margin-bottom: 0;font-size: 16px;line-height: 24px;text-align: center;" lang="x-size-16">Stay alert to your email for any notifications about changes to your booking, or any mail from the driver.&nbsp;</p>
                 </div>
+
             </div>
             <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
         </div>
     </div>
+
+    <div class="layout one-col fixed-width" style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+        <div class="layout__inner" style="border-collapse: collapse;display: table;background-color: #ffffff;" emb-background-style>
+            <!--[if (mso)|(IE)]><table align="center" cellpadding="0" cellspacing="0"><tr class="layout-fixed-width" emb-background-style><td style="width: 600px" class="w560"><![endif]-->
+            <div class="column" style='text-align: left;color: #60666d;font-size: 14px;line-height: 21px;font-family: "Open Sans",sans-serif;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);'>
+
+                <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;">
+                    <div style="line-height:10px;font-size:1px">&nbsp;</div>
+                </div>
+
+                <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 24px;">
+                    <h2 class="size-24" style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #44a8c7;font-size: 20px;line-height: 28px;text-align: center;" lang="x-size-24"><strong>How can I contact the driver?</strong></h2><p class="size-16" style="Margin-top: 16px;Margin-bottom: 0;font-size: 16px;line-height: 24px;text-align: center;" lang="x-size-16">You may contact the driver at this email: <a href="mailto:{{$driver_email}}">{{$driver_email}}</a>&nbsp;</p>
+                </div>
+
+            </div>
+            <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+        </div>
+    </div>
+
+    @include('emails.footer')
+
     <div style="line-height:40px;font-size:40px;">&nbsp;</div>
 
 </div>

@@ -133,7 +133,7 @@
                                     </div>
                                     <div class="col-md-12" style="margin-top:15px;">
                                         <div class="alert alert-warning">
-                                            <p class="text-small" style="text-align: justify;">We will not show <span id="host_inline"></span> your address at any time. We do not save your street address, we simply use this information to acquire your geo-location. To learn more about what information we keep please refer to our <a href="/tos#privacy" target="_blank">privacy policy</a>.</p>
+                                            <p class="text-small" style="text-align: justify;">We will not show <span id="host_inline"></span> your address at any time. We do not save your street address, we simply use this information to acquire your geo-location. To learn more about what information we keep please refer to our <a href="/privacy" target="_blank">privacy policy</a>.</p>
                                         </div>
                                         <span class="help-block hidden" id="booking_additional_info_error" style="color: #b90000;"></span>
                                     </div>
@@ -172,11 +172,12 @@
                                             <div>
                                                 <input type="checkbox" id="tos_accept"/><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>
                                             </div>
-                                            I've read and agree to the <a href="/tos" target="_blank">terms of service</a> (But no seriously, read that stuff)
                                         </label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        I've read and agree to the <a href="/tos" target="_blank">terms of service</a> (But no seriously, read that stuff)
                                         <br><span class="help-block hidden" id="tos_accept_error" style="color: #b90000;"></span>
                                     </div>
-
                                     <div class="col-md-12" style="margin-top:20px">
                                         <span class=""><center><button class="btn btn-primary btn-lg" type="submit">Send Ride Request</button></center></span>
                                     </div>

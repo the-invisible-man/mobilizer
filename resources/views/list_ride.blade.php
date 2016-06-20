@@ -15,6 +15,7 @@
             <form role="form" name="list_user_ride" method="post" action="/listings" id="list_user_ride_form">
                 {!! csrf_field() !!}
                 <input type="hidden" value="0" id="overview_path" name="overview_path"/>
+                <input type="hidden" value="0" id="name" name="name"/>
                 <input type="hidden" value="R" id="type" name="type"/>
                 <div class="col-md-8 col-md-offset-2">
                     <div class="row">
@@ -88,18 +89,6 @@
                         </div>
                         <div class="gap"></div>
                         <div class="col-md-12">
-                            <div class="form-group">
-                                Check if you'd be open to allowing passengers to bring their pet along. Be sure that pets are safe AT ALL times. I mean, make sure you're ALL safe... but the pets more.
-                                <br><br>
-                                <div class="row" style="padding-left:20px;">
-                                    <div class="checkbox col-md-8 col-md-offset-4">
-                                        <label><input class="i-check" type="checkbox" id="dog_friendly" name="dog_friendly"/>Passengers can bring a dog!</label>
-                                    </div>
-                                    <div class="checkbox col-md-8 col-md-offset-4">
-                                        <label><input class="i-check" type="checkbox" id="cat_friendly" name="cat_friendly"/>Passengers can bring a cat!</label>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="form-group">
                                 <label for="InputMessage">Additional Info</label>
                                 <div class="input-group">

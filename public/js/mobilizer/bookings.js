@@ -80,7 +80,7 @@
 
     MyBookings.ContactDriver.handle = function (listing_id)
     {
-        MyBookings.api.get_contact_email(listing_id, function (data) {
+        MyBookings.api.get_listing_contact_info(listing_id, function (data) {
             MyBookings.ContactDriver.modal(data);
         });
     };

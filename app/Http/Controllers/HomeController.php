@@ -33,6 +33,16 @@ class HomeController extends Controller
         return $type['type'] == 'r' ? view('list_ride', $this->userInfo()) : view('list_home', $this->userInfo());
     }
 
+    public function privacy()
+    {
+        return view('privacy_policy', array_merge($this->userInfo(), ['page_title_meta' => 'Privacy Policy']));
+    }
+
+    public function tos()
+    {
+        return view('tos', array_merge($this->userInfo(), ['page_title_meta' => 'Terms of Service']));
+    }
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

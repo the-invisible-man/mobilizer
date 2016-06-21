@@ -86,7 +86,7 @@
         // Get ready, shit's about to get ugly(er)...
         var content = "<h5><strong>Check that everything looks good and submit when you're ready.</strong></h5>";
 
-        for (key in data) {
+        for (var key in data) {
             if (data.hasOwnProperty(key)) continue;
             content = content + '<div class="row"> <div class="col-md-4"> <strong>' + key + '</strong> </div> <div class="col-md-8" style="text-align:left;">' + data[data] + '</div></div><hr>';
         }
@@ -141,6 +141,16 @@
                     throw "maximum number of passengers is supposed to be a number, you entered \"" + value + "\"";
                 } else if(value == 0) {
                     throw "maximum number of passengers must be greater than zero.";
+                }
+            },
+            'additional_info': function(value) {
+                if (value.length < 50){
+                    throw "Enter at least 50 characters of additional information";
+                }
+            },
+            'party_name': function(value) {
+                if (value.length < 8) {
+                    throw "Your party name should be at least 8 characters"
                 }
             }
         };

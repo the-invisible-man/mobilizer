@@ -8,7 +8,7 @@
     </style>
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12" style="text-align: justify;"">
                 <h1>Terms of Service ("Terms")</h1>
                 <p>Last updated: June 19, 2016</p>
                 <p>Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the https://www.seeyouinphilly.com/ website (the "Service") operated by SeeYouInPhilly.com ("us", "we", or "our").</p>

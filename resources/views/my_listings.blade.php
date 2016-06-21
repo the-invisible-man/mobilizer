@@ -35,36 +35,56 @@
                     <div class="row">
                         <!-- END CONTACT SECTION -->
                         <form id="edit_listing_form">
+
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="InputName">Party Name <span class="sub_text">(A fun little name to give your journey to the DNC)</span></label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" name="party_name" id="listing_party_name" pattern=".{5,}" required title="Make your party name at least 5 characters." placeholder="Bernin' The Road">
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
-                                    </div>
+                                    <input type="text" class="form-control" name="party_name" id="listing_party_name" placeholder="Bernin' The Road">
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <span class="help-block hidden" id="party_name_error" style="color: #b90000;"></span>
+                            </div>
+
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="InputEmail">Max Passengers</label>
-                                    <div class="input-group">
-                                        <input type="numeric" class="form-control bfh-number" name="max_occupants" id="listing_max_occupants" placeholder="How many passengers can you fit?" required>
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
-                                    </div>
+                                    <input type="numeric" class="form-control bfh-number" name="max_occupants" id="listing_max_occupants" placeholder="How many passengers can you fit?" required>
                                 </div>
                             </div>
                             <div class="col-md-12">
+                                <span class="help-block hidden" id="max_occupants_error" style="color: #b90000;"></span>
+                            </div>
+
+                            <div class="col-xs-4">
+                                <label>Additional info:</label>
+                            </div>
+                            <div class="col-xs-8" style="text-align: right">
+                                <strong>50 Character Minimum: <span id="additional_info_character_count">0</span>/500</strong>
+                            </div>
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="InputMessage">Additional Info</label>
                                     <div class="input-group">
                                         <textarea name="additional_info" rows="7" cols="100" placeholder="A short intro" id="listing_additional_info" class="form-control" required></textarea>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <span class="help-block hidden" id="additional_info_error" style="color: #b90000;"></span>
+                            </div>
                         </form>
                         <div class="col-md-12">
-                            <center><a class="btn btn-primary font_depth" id="contact_user">SAVE</a></center><br>
-                            <center><a class="btn btn-danger font_depth" id="contact_user">DEACTIVATE LISTING</a></center>
+                            <center><a class="btn btn-primary font_depth" id="save_edits">SAVE</a></center><br>
+                            <center><a class="btn btn-danger font_depth" id="deactivate_listing">DEACTIVATE LISTING</a></center>
+                        </div>
+                        <div class="col-md-12" id="deactivate_confirm">
+                            <div class="alert alert-danger">
+                                <p class="text-small" style="text-align: justify;">
+                                    <center><strong>WARNING</strong></center>
+                                    You are about to take down the listing "<strong><span id="deactivate_party_name"></span></strong>". This action cannot be undone. If you have accepted any requests for this listing, we will notify the users.
+                                </p>
+                                <br><center><a class="btn btn-danger font_depth" id="deactivate_confirm_button">I UNDERSTAND</a>&nbsp;<a class="btn btn-primary font_depth" id="deactivate_cancel">CANCEL</a></center>
+                            </div>
                         </div>
                         <div class="gap"></div>
                         <hr>

@@ -82,7 +82,7 @@ class ListingsController extends Controller {
 
         try {
             $user       = \Auth::user()->getId();
-            $response   = $this->listingsGateway->allForUser($user);
+            $response   = $this->listingsGateway->all($user);
         } catch (\Exception $e) {
             $response       = ['message' => $e->getMessage()];
             $responseCode   = 400;

@@ -40,6 +40,7 @@ class ElasticsearchDriver implements SearchDriverInterface
     }
 
     /**
+     * Todo: revisit top_hits aggregator to return geo spatial match
      * @param Geopoint $pickupLocation
      * @return array
      * @throws ElasticsearchAggregationException
@@ -65,12 +66,24 @@ class ElasticsearchDriver implements SearchDriverInterface
                         ]
                     ]
                 ],
-                'size'  => 0,
                 'aggs' => [
                     $aggregator => [
                         'terms' => [
                             'field' => 'listing_id.raw',
                             'size'  => 0
+                        ],
+                        'aggs' => [
+                            'geo_location_hits' => [
+                                'top_hits' => [
+                                    '_source' => [
+                                        'include' => [
+                                            'location',
+                                            'key'
+                                        ]
+                                    ],
+                                    'size' => 1
+                                ]
+                            ]
                         ]
                     ]
                 ]

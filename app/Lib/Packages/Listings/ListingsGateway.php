@@ -96,7 +96,9 @@ class ListingsGateway {
      */
     private $editsRule = [
         'party_name'        => 'min:5',
-        'additional_info'   => 'min:10'
+        'additional_info'   => 'min:10',
+        'max_occupants'     => 'numeric|newOccupantsAmount|min:1',
+        'active'            => 'numeric'
     ];
 
     /**
@@ -123,7 +125,9 @@ class ListingsGateway {
      * @param TripDurationEstimator $tripDurationEstimator
      * @param RelayGateway $relayGateway
      */
-    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway, Application $app, ValidatorFactory $validator, TripDurationEstimator $tripDurationEstimator, RelayGateway $relayGateway)
+    public function __construct(DatabaseManager $databaseManager, LocationGateway $locationGateway,
+        Application $app, ValidatorFactory $validator, TripDurationEstimator $tripDurationEstimator,
+        RelayGateway $relayGateway)
     {
         $this->db                       = $databaseManager->connection();
         $this->locationsGateway         = $locationGateway;
@@ -300,8 +304,9 @@ class ListingsGateway {
     {
         $this->db->beginTransaction();
 
-        $edits      = array_intersect_key($data, array_flip(BaseListing::$editable));
-        $validator  = $this->validator->make($data, $this->editsRule);
+        $edits              = array_intersect_key($data, array_flip(BaseListing::$editable));
+        $data['listing_id'] = $listingId;
+        $validator          = $this->makeEditValidator($data, $this->editsRule);
 
         if ($validator->fails()) {
             $bag = new MessageBag($validator->failed());
@@ -321,23 +326,30 @@ class ListingsGateway {
 
         $listing->save();
 
-        $metadata = ListingMetadata::where(ListingMetadata::FK_LISTING_ID, $listing->getId())->first();
-
-        $listing->setMetadata($metadata);
-        $location = Location::find($listing->getFkLocationId());
-        $listing->setLocation($location);
-
-        if ($listing->getType() == RideListing::ListingType) {
-            $route = ListingRoute::find($metadata->getFkListingRouteId());
-            $listing->setRoute($route);
-        }
-
         $this->db->commit();
 
         return $listing;
     }
 
-    public function getSelectColumns()
+    /**
+     * @param array $data
+     * @param array $rules
+     * @return \Illuminate\Validation\Validator
+     */
+    private function makeEditValidator(array $data, array $rules)
+    {
+        $this->validator->extend('newOccupantsAmount', function ($attribute, $value) use($data) {
+            $remainingSlots = $this->remainingSlots($data['listing_id']);
+            return (int)$value >= $remainingSlots;
+        }, 'Cannot reduce number of occupants, the number if passengers booked on this ride exceeds the new amount');
+
+        return $this->validator->make($data, $rules);
+    }
+
+    /**
+     * @return array
+     */
+    private function getSelectColumns()
     {
         return [
             'a.id',
@@ -361,7 +373,7 @@ class ListingsGateway {
 
             'd.id as route_id',
             'd.overview_path',
-            'd.name as route_name'
+            'd.name as route_name',
         ];
     }
 
@@ -369,15 +381,19 @@ class ListingsGateway {
      * @param string $userId
      * @return array
      */
-    public function allForUser(string $userId)
+    public function all(string $userId)
     {
         $data = $this->db->table('listings as a')
             ->join('listings_metadata as b', 'a.id', '=', 'b.fk_listing_id')
             ->join('locations as c', 'c.id', '=', 'a.fk_location_id')
             ->join('listing_routes as d', 'd.id', '=', 'b.fk_listing_route_id', 'left')
+            ->join('bookings as e', 'e.fk_listing_id', '=', 'a.id', 'left')
             ->where('a.fk_user_id', '=', $userId)
             ->where('a.active', '=', 1)
-            ->select($this->getSelectColumns())->get();
+            ->select($this->getSelectColumns())
+            ->addSelect($this->db->raw('SUM(e.total_people) as slots_booked'))
+            ->groupBy('a.id')
+            ->get();
 
         if (!is_array($data) || !count($data)) return [];
 
@@ -396,29 +412,30 @@ class ListingsGateway {
     private function formatOne(array $data)
     {
         $out = [
-            'id' => $data['id'],
-            'party_name' => $data['party_name'],
-            'starting_date' => (new \DateTime($data['starting_date']))->format('M d, Y'),
-            'ending_date' => (new \DateTime($data['ending_date']))->format('M d, Y'),
-            'type' => $data['type'],
-            'additional_info' => $data['additional_info'],
-            'max_occupants' => $data['max_occupants'],
-            'dog_friendly' => (bool)$data['dog_friendly'],
-            'cat_friendly' => (bool)$data['cat_friendly'],
-            'time_of_day' => ListingMetadata::translateTimeOfDay($data['time_of_day']),
+            'id'                => $data['id'],
+            'party_name'        => $data['party_name'],
+            'starting_date'     => (new \DateTime($data['starting_date']))->format('M d, Y'),
+            'ending_date'       => (new \DateTime($data['ending_date']))->format('M d, Y'),
+            'type'              => $data['type'],
+            'additional_info'   => $data['additional_info'],
+            'max_occupants'     => $data['max_occupants'],
+            'dog_friendly'      => (bool)$data['dog_friendly'],
+            'cat_friendly'      => (bool)$data['cat_friendly'],
+            'time_of_day'       => ListingMetadata::translateTimeOfDay($data['time_of_day']),
+            'slots_booked'      => (int)$data['slots_booked'],
             'location' => [
-                'id' => $data['location_id'],
-                'city' => $data['city'],
-                'state' => $data['state'],
-                'zip' => $data['zip'],
-                'country' => $data['country']
+                'id'        => $data['location_id'],
+                'city'      => $data['city'],
+                'state'     => $data['state'],
+                'zip'       => $data['zip'],
+                'country'   => $data['country']
             ]
         ];
 
         if ($data['type'] == RideListing::ListingType) {
             $out['route'] = [
-                'id' => $data['route_id'],
-                'name' => $data['route_name'],
+                'id'            => $data['route_id'],
+                'name'          => $data['route_name'],
                 'overview_path' => $data['overview_path']
             ];
         }

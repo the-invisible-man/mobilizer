@@ -24,7 +24,7 @@
                             <div class="form-group">
                                 <label for="InputName">Party Name <span class="sub_text">(A fun little name to give your journey to the DNC)</span></label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="party_name" id="party_name" pattern=".{5,}" required title="Make your party name at least 5 characters." placeholder="Bernin' The Road">
+                                    <input type="text" class="form-control" name="party_name" id="party_name" placeholder="Bernin' The Road">
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                                 </div>
                             </div>

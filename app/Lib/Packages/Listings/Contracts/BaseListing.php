@@ -69,7 +69,7 @@ class BaseListing extends Model implements \JsonSerializable {
      * @var array
      */
     public static $editable = [
-        'party_name', 'additional_info'
+        'party_name', 'additional_info', 'max_occupants', 'active'
     ];
 
     /**

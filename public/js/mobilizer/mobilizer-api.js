@@ -141,6 +141,13 @@
             return ajax_request({}, callback, resource);
         };
 
+        app.edit_listing = function (listing_id, data, callback)
+        {
+            var resource = 'listings/' + listing_id;
+
+            return ajax_request(data, callback, resource, 'PUT');
+        };
+
         return app;
     }
 

@@ -14,8 +14,14 @@
                 <p>Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the https://www.seeyouinphilly.com/ website (the "Service") operated by SeeYouInPhilly.com ("us", "we", or "our").</p>
                 <p>Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service.</p>
                 <p>By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service.</p>
+                <br><p><strong>Disclaimer</strong></p>
+                <p>
+                    <br>SeeYouInPhilly.com matches drivers with people looking to carpool. We don't run background checks and aren't responsible for any actions of the drivers or carpoolers. Get to know the other party before sharing rides! Be safe and report any suspicious activity to 911. Wear a seat belt at all times and don't drink and drive or ride with anyone driving under the influence of any substance.
+                    <br><br>We are in no way associated with the official Bernie Sanders campaign.
+                    <br><br><strong>You must be at least 18 years of age or older to use this service.</strong>
+                </p>
                 <p><strong>Accounts</strong></p>
-                <p>When you create an account with us, you must provide us information that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account on our Service.</p>
+                <p>When you create an account with us, you certify that you are at least 18 years of age or older, and that you provided us information that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account on our Service.</p>
                 <p>You are responsible for safeguarding the password that you use to access the Service and for any activities or actions under your password, whether your password is with our Service or a third-party service.</p>
                 <p>You agree not to disclose your password to any third party. You must notify us immediately upon becoming aware of any breach of security or unauthorized use of your account.</p>
                 <p><strong>Links To Other Web Sites</strong></p>

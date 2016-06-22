@@ -81,4 +81,22 @@ class User extends Authenticatable
     {
         return $this->getAttribute('phone');
     }
+
+    /**
+     * @param bool $confirmed
+     * @return $this
+     */
+    public function setConfirmed(bool $confirmed)
+    {
+        $this->setAttribute('confirmed', $confirmed);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getConfirmed()
+    {
+        return (bool)$this->getAttribute('confirmed');
+    }
 }

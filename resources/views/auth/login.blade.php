@@ -5,7 +5,7 @@
         <div id="app" about="home"></div>
         <div class="bg-holder">
             <!-- TOP AREA -->
-            <div class="top-area show-onload">
+            <div class="top-area show-onload" style="height: 1050px !important;">
                 <div class="bg-holder full">
                     <div class="bg-mask"></div>
                     <div class="bg-parallax" style="background-image:url(/img/photography/1-sctffvDbRnImiQhvNppFYA.jpeg);"></div>
@@ -17,14 +17,11 @@
                             <h1 class="page-title" style="color:#ffffff !important;">Login/Register</h1>
                         </div>
 
-                        <div class="gap"></div>
-
-
                         <div class="container" style="color:#ffffff !important;">
                             <div class="row" data-gutter="60">
                                 <div class="col-md-4" style="text-align: justify">
                                     <h3 style="color:#ffffff !important;">Get Mobilized</h3>
-                                    <p>Welcome to the mobilizer platform by Polivet. We are a political grassroots software powerhouse that delivers solutions for the benefit of the 99%.</p>
+                                    <p>Welcome to the <strong>Mobilizer</strong> platform by <strong>Polivet</strong>. We are a political grassroots software powerhouse that delivers solutions for the benefit of the 99%.</p>
                                     <p>Sign up to use our powerful tools for planning, booking, or listing your journey to the Democratic National Convention. #FeelTheBern #SeeYouInPhilly</p>
                                 </div>
                                 <div class="col-md-4" style="margin-bottom: 30px">
@@ -57,7 +54,7 @@
                                 </div>
                                 <div class="col-md-4" style="margin-bottom: 30px">
                                     <h3 style="color:#ffffff !important;">New to #SeeYouInPhilly?</h3>
-                                    <form role="form" method="POST" action="{{ url('/register') }}">
+                                    <form role="form" method="POST" id="sign_up_form" action="{{ url('/register') }}">
                                         {!! csrf_field() !!}
                                         <div class="form-group form-group-icon-left{{ $errors->has('first_name') ? ' has-error' : '' }}"><i class="fa fa-user input-icon input-icon-show"></i>
                                             <label>First Name</label>
@@ -79,7 +76,7 @@
                                         </div>
                                         <div class="form-group form-group-icon-left{{ $errors->has('email') && Session::get('last_auth_attempt') == 'register' ? ' has-error' : '' }}"><i class="fa fa-envelope input-icon input-icon-show"></i>
                                             <label>Emai</label>
-                                            <input class="form-control" placeholder="e.g. johndoe@gmail.com" type="text" name="email" value="{{ old('email') }}"/>
+                                            <input class="form-control" placeholder="e.g. janedoe@gmail.com" type="text" name="email" value="{{ old('email') }}"/>
                                             @if ($errors->has('email') && Session::get('last_auth_attempt') == 'register' )
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('email') }}</strong>
@@ -103,6 +100,13 @@
                                                     <strong>{{ $errors->first('password_confirmation') }}</strong>
                                                 </span>
                                             @endif
+                                        </div>
+                                        <div class="alert alert-warning">
+                                            <p class="text-small" style="text-align: justify;">
+                                                <input type="checkbox" id="disclaimer_accept"/>
+                                                I am <strong>18 years of age or older</strong> and I agree with the <a href="{{url('/')}}/tos" target="_blank">terms of service</a> and the <a href="{{url('/')}}/privacy" target="_blank">privacy policy</a> of SeeYouInPhilly.com
+                                            </p>
+                                            <span style="color:#B90000" id="accept_tos"></span>
                                         </div>
                                         <button type="submit" class="btn btn-primary">
                                             <i class="fa fa-btn fa-user"></i>Register

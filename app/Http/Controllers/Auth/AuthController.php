@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Mail\Mailer;
+use Illuminate\Mail\Message;
 use Illuminate\Validation\Factory;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Validation\Validator;
@@ -38,14 +41,22 @@ class AuthController extends Controller
     protected $validator;
 
     /**
+     * @var Mailer
+     */
+    private $mailer;
+
+    /**
      * Create a new authentication controller instance.
      *
      * @param Factory $validator
+     * @param Mailer $mailer
      */
-    public function __construct(Factory $validator)
+    public function __construct(Factory $validator, Mailer $mailer)
     {
         $this->middleware('guest', ['except' => 'logout']);
-        $this->validator = $validator;
+
+        $this->validator    = $validator;
+        $this->mailer       = $mailer;
     }
 
     /**
@@ -68,16 +79,72 @@ class AuthController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return User
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     protected function create(array $data)
     {
-        return User::create([
-            'first_name'    => $data['first_name'],
-            'last_name'     => $data['last_name'],
-            'email'         => $data['email'],
-            'password'      => bcrypt($data['password'])
+        $user = User::create([
+            'first_name'            => $data['first_name'],
+            'last_name'             => $data['last_name'],
+            'email'                 => $data['email'],
+            'password'              => bcrypt($data['password']),
+            'confirmation_code'     => str_random()
         ]);
+
+        return $this->sendEmailConfirmation($user);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function resendEmailConfirm(Request $request)
+    {
+        $user = User::where('email', '=', $request->get('email'))->first();
+
+        if (!$user) {
+            return view('home');
+        }
+
+        return $this->sendEmailConfirmation($user);
+    }
+
+    /**
+     * @param User $user
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    private function sendEmailConfirmation(User $user)
+    {
+        $this->mailer->send('emails.confirm_email', $user->toArray(), function (Message $message) use($user) {
+            $message->to($user->getEmail());
+            $message->subject('Confirm Your SeeYouInPhilly.com Account');
+        });
+
+        return view('auth.signup_confirm', $user->toArray());
+    }
+
+    /**
+     * @param string $confirmation_code
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    protected function confirmEmail(string $confirmation_code)
+    {
+        /**
+         * @var User $user
+         */
+        // Activate account linked to confirmation code
+        $user = User::find($confirmation_code);
+
+        // If no use is found response with error
+        if (!$user) {
+            return view('auth.bad_email_confirm_code.blade.php');
+        }
+
+        $user->setConfirmed(true);
+        $user->save();
+
+        return view('auth.email_confirm_success', $user->toArray());
+
     }
 
     protected function facebook()

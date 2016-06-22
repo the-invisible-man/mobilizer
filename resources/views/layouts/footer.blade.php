@@ -8,11 +8,9 @@
             </div>
             <div class="col-md-3 col-md-offset-1" id="footer_links">
                 <ul class="list list-footer">
-                    <li><a href="#">About</a>
+                    <li><a href="/about">About</a>
                     </li>
                     <li><a href="/about_rides">List Your Ride</a>
-                    </li>
-                    <li><a href="/about_housing">List Your Home</a>
                     </li>
                 </ul>
                 <br>
@@ -62,6 +60,7 @@
 <script src="/js/jsonhttprequest.js"></script>
 
 <!-- APP Components -->
+<script src="/js/mobilizer/login.js"></script>
 <script src="/js/mobilizer/config.js"></script>
 <script src="/js/mobilizer/mobilizer-api.js"></script>
 <script src="/js/mobilizer/ride-list.js"></script>

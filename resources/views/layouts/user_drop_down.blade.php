@@ -5,8 +5,6 @@
     </li>
     <li><a href="/my-requests">Requests</a>
     </li>
-    <li><a href="/account">Account</a>
-    </li>
     <li><a href="/logout">Sign Out</a>
     </li>
 </ul>

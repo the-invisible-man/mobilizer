@@ -26,7 +26,7 @@
                                 <ul class="top-user-area-list list list-horizontal list-border social-icons">
                                     @if (isset($auth) && $auth['status'])
                                         <li class="top-user-area-avatar list nav-drop">
-                                            <a href="/account">
+                                            <a href="#">
                                                 <img class="origin round" src="/img/40x40.png" alt="{{$auth['userInfo']['first_name']}}" title="{{$auth['userInfo']['first_name']}}" />Hi, {{$auth['userInfo']['first_name']}} <i class="fa fa-angle-down" style="padding-top:2px;"></i><i class="fa fa-angle-up" style="padding-top:2px;"></i></i>
                                             </a>
                                             @include('layouts.user_drop_down')
@@ -35,7 +35,6 @@
                                         <li><a href="/login" ><span class="btn btn-primary">Login</span></a></li>
                                     @endif
                                     <li><a href="/about_rides"><span class="btn btn-primary">List Ride</span></a></li>
-                                    <li><a href="/about_housing"><span class="btn btn-primary">List Home</span></a></li>
                                 </ul>
                             </div>
                         </div>

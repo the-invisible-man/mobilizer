@@ -18,10 +18,6 @@
                                 <ul class="nav nav-tabs" id="myTab">
                                     <li class="active"><a href="#tab-1" data-toggle="tab"><i class="fa fa-car"></i> <span >Rides</span></a>
                                     </li>
-                                    <li><a href="#tab-3" data-toggle="tab"><i class="fa fa-home"></i> <span >Housing</span></a>
-                                    </li>
-                                    <li><a href="#tab-5" data-toggle="tab"><i class="fa fa-bolt"></i> <span >Activities</span></a>
-                                    </li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane fade in active" id="tab-1">
@@ -33,7 +29,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-lg form-group-icon-left"><i class="fa fa-map-marker input-icon"></i>
                                                         <label>Where will you be picked up from?</label>
-                                                        <input class="form-control" placeholder="Address, City, or U.S. Zip Code" type="text" name="location" id="autocomplete" required title="Enter a pick up location"/>
+                                                        <input class="form-control" placeholder="Pickup Address" type="text" name="location" id="autocomplete" required title="Enter a pick up location"/>
                                                         <span class="help-block" id="ride_search_error" style="color: #b90000;">
 
                                                         </span>

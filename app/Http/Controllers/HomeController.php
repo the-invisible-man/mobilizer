@@ -48,11 +48,16 @@ class HomeController extends Controller
      */
     public function ride()
     {
-        return view('about_ride_listing', $this->userInfo());
+        return view('about_ride_listing', array_merge($this->userInfo(), ['page_meta_title' => 'List Your Ride']));
     }
 
     public function housing()
     {
         return view('about_home_listing', $this->userInfo());
+    }
+
+    public function about()
+    {
+        return view('about', array_merge($this->userInfo(), ['page_meta_title' => 'About']));
     }
 }

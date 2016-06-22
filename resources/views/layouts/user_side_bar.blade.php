@@ -4,8 +4,6 @@
         <h5>{{$auth['userInfo']['first_name']}} {{$auth['userInfo']['last_name']}}</h5>
     </div>
     <ul class="list user-profile-nav">
-        <li><a href="/account"><i class="fa fa-user"></i>Account</a>
-        </li>
         <li><a href="/my-listings"><i class="fa fa-camera"></i>My Listings</a>
         </li>
         <li><a href="/my-requests"><i class="fa fa-camera"></i>Requests</a>

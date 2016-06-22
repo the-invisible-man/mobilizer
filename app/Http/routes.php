@@ -30,11 +30,11 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('my-requests', ['middleware' => 'auth', 'uses' => 'BookingsController@myRequests']);
     Route::get('my-listings', ['middleware' => 'auth', 'uses' => 'ListingsController@myListings']);
     Route::get("facebook", "Auth\\AuthController@facebook");
-    Route::get('/add-listing', ['middleware' => 'auth', 'uses' => 'HomeController@listing']);
-    Route::get('/success-add-listing', 'ListingsController@testSuccess');
-
+    Route::get('add-listing', ['middleware' => 'auth', 'uses' => 'HomeController@listing']);
+    Route::get('success-add-listing', 'ListingsController@testSuccess');
     Route::get('tos', 'HomeController@tos');
     Route::get('privacy', 'HomeController@privacy');
+    Route::get('about', "HomeController@about");
 
     /*
     |--------------------------------------------------------------------------
@@ -76,7 +76,6 @@ Route::group(['middleware' => 'web'], function () {
         Route::get("{booking_id}/reject", ['middleware' => 'auth', 'uses' => "BookingsController@reject"]);
         Route::get("{booking_id}/cancel", ['middleware' => 'auth', 'uses' => "BookingsController@reject"]);
 
-
         Route::delete('{booking_id}', ['middleware' => 'auth', 'uses' => 'BookingsController@cancel']);
     });
 
@@ -99,8 +98,6 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('{booking_id}', ['middleware' => 'auth', 'uses' => 'BookingsController@get']);
         Route::put('{booking_id}', ['middleware' => 'auth', 'uses' => 'BookingsController@edit']);
     });
-
-
 });
 
 Route::post('/mail/relay', 'EmailRelayController@receive');

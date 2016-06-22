@@ -1,6 +1,6 @@
 <aside class="user-profile-sidebar">
     <div class="user-profile-avatar text-center">
-        <img src="/img/300x300.png" alt="Image Alternative text" title="AMaze" />
+        <img src="/img/assets/contributors/8ea87a52ec2fb2dbf390628af9ad56ad.jpg" alt="Image Alternative text" title="AMaze" />
         <h5>{{$auth['userInfo']['first_name']}} {{$auth['userInfo']['last_name']}}</h5>
     </div>
     <ul class="list user-profile-nav">

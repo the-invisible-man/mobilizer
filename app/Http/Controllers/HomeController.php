@@ -35,12 +35,12 @@ class HomeController extends Controller
 
     public function privacy()
     {
-        return view('privacy_policy', array_merge($this->userInfo(), ['page_title_meta' => 'Privacy Policy']));
+        return view('privacy_policy', array_merge($this->userInfo(), ['page_meta_title' => 'Privacy Policy']));
     }
 
     public function tos()
     {
-        return view('tos', array_merge($this->userInfo(), ['page_title_meta' => 'Terms of Service']));
+        return view('tos', array_merge($this->userInfo(), ['page_meta_title' => 'Terms of Service']));
     }
 
     /**

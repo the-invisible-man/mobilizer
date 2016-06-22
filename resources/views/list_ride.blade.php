@@ -95,19 +95,30 @@
                                     <textarea name="additional_info" rows="7" cols="100" placeholder="A short intro" id="InputMessage" class="form-control" required></textarea>
                                 </div>
                             </div>
-                            <dix class="well well-sm col-md-12 text-center">
-                                <row>
-                                    <div class="col-md-11 col-md-offset-1">
-                                        <label><input class="i-check" type="checkbox" />I've read the disclaimer/terms of service of ride sharing</label>
+                            <div class="col-md-12" style="margin-top:15px;">
+                                <div class="alert alert-warning">
+                                    <p class="text-small" style="text-align: justify;"><strong>DISCLAIMER:</strong>
+                                        <br>By using this service you agree to the <a href="/tos" target="_blank">terms of service</a> and our <a href="/privacy" target="_blank">privacy policy</a>. You also certify that you, or the person who is driving, will <strong>have a valid driver's license</strong> by the day of the trip.<br>
+                                        <br>SeeYouInPhilly.com matches drivers with people looking to carpool. We don't run background checks and aren't responsible for any actions of the drivers or carpoolers. Get to know the other party before sharing rides! Be safe and report any suspicious activity to 911. Wear a seat belt at all times and don't drink and drive or ride with anyone driving under the influence of any substance.
+                                        <br><br>We are in no way associated with the official Bernie Sanders campaign.
+                                        <br><br><strong>You must be at least 18 years of age or older to use this service.</strong>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" style="padding-left:17px;padding-right:17px;text-align: center;">
+                                <label class="">
+                                    <div>
+                                        <input type="checkbox" id="disclaimer_accept"/><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>
                                     </div>
-                                </row>
-                            </dix>
+                                    I am 18 years of age or older and I've read and fully understood the disclaimer above.
+                                </label>
+                                <br>
+                                <center><span class="help-block hidden" id="disclaimer_accept_error" style="color: #b90000;">You must agree to the terms above to continue</span></center>
+                            </div>
                             <br><br>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6 col-md-offset-4">
-                    <div class="g-recaptcha" data-sitekey="6LemViETAAAAAOGjQXwCEuy4BiaRcVxiS8iskcVT"></div>
                 </div>
             </form>
         </div>

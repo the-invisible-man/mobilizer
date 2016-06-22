@@ -48,6 +48,11 @@
 
         $("#submit_listing").click(function ()
         {
+            if (!$("#disclaimer_accept").prop('checked')) {
+                $("#disclaimer_accept_error").removeClass('hidden');
+                return false;
+            }
+
             var data = $.deparam($(form).serialize());
 
             try {

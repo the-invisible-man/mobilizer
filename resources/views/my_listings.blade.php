@@ -13,7 +13,7 @@
                 @include('layouts.user_side_bar')
             </div>
             <div class="col-md-9 col-xs-12">
-                <ul id="listings-list">
+                <ul id="listings-list" style="padding-left: 0;">
                     Loading...
                 </ul>
             </div>

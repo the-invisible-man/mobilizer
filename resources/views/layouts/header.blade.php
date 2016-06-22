@@ -24,17 +24,17 @@
                         <div class="col-md-4 col-md-offset-4">
                             <div class="top-user-area clearfix">
                                 <ul class="top-user-area-list list list-horizontal list-border social-icons">
-                                    @if (isset($auth) && $auth['status'])
+                                    <li><a href="/about_rides"><span class="btn btn-primary">List Ride</span></a></li>
+                                @if (isset($auth) && $auth['status'])
                                         <li class="top-user-area-avatar list nav-drop">
                                             <a href="#">
-                                                <img class="origin round" src="/img/40x40.png" alt="{{$auth['userInfo']['first_name']}}" title="{{$auth['userInfo']['first_name']}}" />Hi, {{$auth['userInfo']['first_name']}} <i class="fa fa-angle-down" style="padding-top:2px;"></i><i class="fa fa-angle-up" style="padding-top:2px;"></i></i>
+                                                <img class="origin round" src="/img/assets/contributors/oe2Yr7ur.jpg" alt="{{$auth['userInfo']['first_name']}}" title="{{$auth['userInfo']['first_name']}}" />Hi, {{$auth['userInfo']['first_name']}} <i class="fa fa-angle-down" style="padding-top:2px;"></i><i class="fa fa-angle-up" style="padding-top:2px;"></i></i>
                                             </a>
                                             @include('layouts.user_drop_down')
                                         </li>
                                     @else
                                         <li><a href="/login" ><span class="btn btn-primary">Login</span></a></li>
                                     @endif
-                                    <li><a href="/about_rides"><span class="btn btn-primary">List Ride</span></a></li>
                                 </ul>
                             </div>
                         </div>

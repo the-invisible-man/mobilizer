@@ -35,12 +35,12 @@ class ElasticsearchCreateListingsIndex extends Migration
                                         "index" => "not_analyzed"
                                     ]
                                 ]
+                            ],
+                            "location"      => ["type" => "geo_point"],
+                            "created_on"    => [
+                                "type"          => "date",
+                                "format"        => "date_time"
                             ]
-                        ],
-                        "location"      => ["type" => "geo_point"],
-                        "created_on"    => [
-                            "type"          => "date",
-                            "format"        => "date_time"
                         ]
                     ]
                 ]

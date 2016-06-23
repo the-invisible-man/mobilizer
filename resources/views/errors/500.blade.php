@@ -48,6 +48,7 @@
         }
 
         .link a {
+            color: #B0BEC5;
             text-decoration: none;
         }
     </style>

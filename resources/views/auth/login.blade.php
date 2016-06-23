@@ -5,7 +5,7 @@
         <div id="app" about="home"></div>
         <div class="bg-holder">
             <!-- TOP AREA -->
-            <div class="top-area show-onload" style="height: 1050px !important;">
+            <div class="top-area show-onload login_wrap">
                 <div class="bg-holder full">
                     <div class="bg-mask"></div>
                     <div class="bg-parallax" style="background-image:url(/img/photography/1-sctffvDbRnImiQhvNppFYA.jpeg);"></div>
@@ -107,6 +107,16 @@
                                                 I am <strong>18 years of age or older</strong> and I agree with the <a href="{{url('/')}}/tos" target="_blank">terms of service</a> and the <a href="{{url('/')}}/privacy" target="_blank">privacy policy</a> of SeeYouInPhilly.com
                                             </p>
                                             <span style="color:#B90000" id="accept_tos"></span>
+                                        </div>
+                                        <div class="form-group form-group-icon-left"><i class="fa fa-lock input-icon input-icon-show"></i>
+                                            <div style="margin: 0 auto;">
+                                            {!! Recaptcha::render() !!}
+                                            </div>
+                                            @if ($errors->has('g-recaptcha-response') && Session::get('last_auth_attempt') == 'register')
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                                </span>
+                                            @endif
                                         </div>
                                         <button type="submit" class="btn btn-primary">
                                             <i class="fa fa-btn fa-user"></i>Register

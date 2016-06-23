@@ -216,6 +216,7 @@ class BookingsController extends Controller {
         $data['total_people']           = $response['total_people'];
         $data['confirm_to_email']       = \Auth::user()->getEmail();
         $data['user_first_name']        = \Auth::user()->getFirstName();
+        $data['guest_email']            = $this->relayGateway->getCreateRelayAddress(\Auth::user()->getId());
 
 
         // Push notification email to queue

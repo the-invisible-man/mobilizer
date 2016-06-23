@@ -664,8 +664,8 @@
 
                 <div style="Margin-left: 20px;Margin-right: 20px;">
                     <div class="btn btn--flat btn--large" style="Margin-bottom: 20px;text-align: center;">
-                        <![if !mso]><a style='border-radius: 4px;display: inline-block;font-size: 14px;font-weight: bold;line-height: 24px;padding: 12px 24px;text-align: center;text-decoration: none !important;transition: opacity 0.1s ease-in;color: #fff;background-color: #ffffff; color: #44a8c7; font-family: &#39;Open Sans&#39;, sans-serif !important;font-family: "Open Sans",sans-serif;' href="http://test.com">Go to Booking Request</a><![endif]>
-                        <!--[if mso]><p style="line-height:0;margin:0;">&nbsp;</p><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="http://test.com" style="width:218px" arcsize="9%" fillcolor="#FFFFFF" stroke="f"><v:textbox style="mso-fit-shape-to-text:t" inset="0px,11px,0px,11px"><center style="font-size:14px;line-height:24px;color:#44A8C7;font-family:sans-serif;font-weight:bold;mso-line-height-rule:exactly;mso-text-raise:4px">Go to Booking Request</center></v:textbox></v:roundrect><![endif]--></div>
+                        <![if !mso]><a style='border-radius: 4px;display: inline-block;font-size: 14px;font-weight: bold;line-height: 24px;padding: 12px 24px;text-align: center;text-decoration: none !important;transition: opacity 0.1s ease-in;color: #fff;background-color: #ffffff; color: #44a8c7; font-family: &#39;Open Sans&#39;, sans-serif !important;font-family: "Open Sans",sans-serif;' href="{{url('/')}}/my-requests">Manage Requests</a><![endif]>
+                        <!--[if mso]><p style="line-height:0;margin:0;">&nbsp;</p><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="{{url('/')}}/my-requests" style="width:218px" arcsize="9%" fillcolor="#FFFFFF" stroke="f"><v:textbox style="mso-fit-shape-to-text:t" inset="0px,11px,0px,11px"><center style="font-size:14px;line-height:24px;color:#44A8C7;font-family:sans-serif;font-weight:bold;mso-line-height-rule:exactly;mso-text-raise:4px">Manage Requests</center></v:textbox></v:roundrect><![endif]--></div>
                 </div>
 
                 <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 24px;">
@@ -776,6 +776,43 @@
                 <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
                     <p style="Margin-top: 20px;Margin-bottom: 0;">{{$additional_info}}</p>
                 </div>
+            </div>
+            <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+        </div>
+    </div>
+
+    <div class="layout one-col fixed-width" style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+        <div class="layout__inner" style="border-collapse: collapse;display: table;background-color: #ffffff;" emb-background-style>
+            <!--[if (mso)|(IE)]><table align="center" cellpadding="0" cellspacing="0"><tr class="layout-fixed-width" emb-background-style><td style="width: 600px" class="w560"><![endif]-->
+            <div class="column" style='text-align: left;color: #60666d;font-size: 14px;line-height: 21px;font-family: "Open Sans",sans-serif;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);'>
+
+                <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;">
+                    <div style="line-height:10px;font-size:1px">&nbsp;</div>
+                </div>
+
+                <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 24px;">
+                    <h2 class="size-24" style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #44a8c7;font-size: 20px;line-height: 28px;text-align: center;" lang="x-size-24"><strong>How Can I Contact {{$from_user_first_name}}?</strong></h2>
+                </div>
+
+            </div>
+            <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+        </div>
+    </div>
+
+    <div class="layout one-col fixed-width" style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+        <div class="layout__inner" style="border-collapse: collapse;display: table;background-color: #ffffff;" emb-background-style>
+            <!--[if (mso)|(IE)]><table align="center" cellpadding="0" cellspacing="0"><tr class="layout-fixed-width" emb-background-style><td style="width: 600px" class="w560"><![endif]-->
+            <div class="column" style='text-align: left;color: #60666d;font-size: 14px;line-height: 21px;font-family: "Open Sans",sans-serif;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);'>
+
+                <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;">
+                    <div style="line-height:10px;font-size:1px">&nbsp;</div>
+                </div>
+
+                <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 24px;">
+                    <p class="size-16" style="Margin-top: 16px;Margin-bottom: 0;font-size: 16px;line-height: 24px;text-align: center;" lang="x-size-16">You can get in touch with {{$from_user_first_name}} at the following email:&nbsp;</p>
+                    <p class="size-16" style="Margin-top: 16px;Margin-bottom: 0;font-size: 16px;line-height: 24px;text-align: center;" lang="x-size-16">{{$guest_email}}:&nbsp;</p>
+                </div>
+
             </div>
             <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
         </div>

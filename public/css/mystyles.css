@@ -101,6 +101,9 @@
 #mobile_padding {
     padding-bottom:10px;
 }
+.login_wrap {
+    height: 1500px !important;
+}
 @media screen and (min-width: 48em) {
     #footer_links {
         text-align: left;
@@ -114,6 +117,9 @@
     }
     #mobile_padding {
         padding-bottom:0;
+    }
+    .login_wrap {
+        height: 1050px !important;
     }
 }
 .social-icons {

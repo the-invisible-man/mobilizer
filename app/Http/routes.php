@@ -100,6 +100,7 @@ Route::group(['middleware' => 'web'], function () {
         Route::post('/', ['middleware' => 'auth', 'uses' => 'BookingsController@new']);
         Route::get('{booking_id}', ['middleware' => 'auth', 'uses' => 'BookingsController@get']);
         Route::put('{booking_id}', ['middleware' => 'auth', 'uses' => 'BookingsController@edit']);
+        Route::delete('{booking_id}', ['middleware' => 'auth', 'uses' => 'BookingsController@cancel']);
     });
 });
 

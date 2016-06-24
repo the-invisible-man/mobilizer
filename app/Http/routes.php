@@ -36,6 +36,9 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('privacy', 'HomeController@privacy');
     Route::get('about', "HomeController@about");
 
+    $this->get('account/confirm/{confirmation_code}', 'Auth\AuthController@confirmEmail');
+    $this->get('resendConfEmail', 'Auth\AuthController@resendEmailConfirm');
+
     /*
     |--------------------------------------------------------------------------
     | Listings

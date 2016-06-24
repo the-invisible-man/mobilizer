@@ -110,6 +110,8 @@ return [
 
     'log' => env('APP_LOG', 'single'),
 
+    'log_max_files' => 30,
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

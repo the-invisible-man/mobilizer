@@ -19,7 +19,7 @@ return [
     ],
 
     'elasticsearch'     => [
-        'hosts'     => ['192.168.10.10:9200'],
+        'hosts'     => [env('ELASTICSEARCH_HOST', '192.168.10.10') . ':' . env('ELASTICSEARCH_PORT', '9200')],
         'radius'    => '32.1869km'
     ]
 ];

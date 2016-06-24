@@ -201,6 +201,9 @@ class SearchGateway {
                 'zip'       => $data['zip'],
                 'country'   => $data['country']
             ],
+            'booking'   => [
+                'status'    => $data['status']
+            ]
         ];
 
         return $out;
@@ -231,7 +234,9 @@ class SearchGateway {
             'c.zip',
             'c.country',
 
-            'd.first_name as host'
+            'd.first_name as host',
+
+            'e.status'
         ];
     }
 }

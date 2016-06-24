@@ -689,7 +689,7 @@ class BookingsGateway {
 
         $this->db->table('bookings')
             ->where(BaseBooking::ID, '=', $bookingId)
-            ->update([BaseBooking::ACTIVE => 0]);
+            ->update([BaseBooking::ACTIVE => 0, BaseBooking::STATUS => BaseBooking::STATUS_CANCELLED]);
 
         return $booking;
     }

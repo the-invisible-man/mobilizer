@@ -37,9 +37,10 @@ class BaseBooking extends Model implements \JsonSerializable {
             METADATA        = 'metadata',
 
             // Booking request statuses
-            STATUS_ACCEPTED = 'accepted',
-            STATUS_REJECTED = 'rejected',
-            STATUS_PENDING  = 'pending';
+            STATUS_ACCEPTED     = 'accepted',
+            STATUS_REJECTED     = 'rejected',
+            STATUS_CANCELLED    = 'cancelled',
+            STATUS_PENDING      = 'pending';
 
 
     /**

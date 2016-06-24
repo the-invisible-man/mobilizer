@@ -30,6 +30,7 @@
                 <ul class="booking-list">
                     @if (count($results))
                     @foreach ($results as $result)
+                        @if($result['booking']['status'] == \App\Lib\Packages\Bookings\Contracts\BaseBooking::STATUS_REJECTED) @continue @endif
                         <li class="listing_result" about="{{$result['id']}}">
                             <a class="booking-item" href="#">
                                 <div class="row">

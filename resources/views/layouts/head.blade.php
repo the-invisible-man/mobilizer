@@ -36,7 +36,7 @@
     <meta property="og:description" content="SeeYouInPhilly.com is a carpool/housing site that facilitates the mobilization to the Democratic National convention is support of Senator Bernie Sanders.">
     <meta property="fb:app_id" content="">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="//www.seeyouinphilly.com/img/logo.jpg"/>
+    <meta property="og:image" content="//www.seeyouinphilly.com/img/assets/fb_img.jpg"/>
     <!-- /OPEN GRAPH -->
 
     <!-- GOOGLE FONTS -->

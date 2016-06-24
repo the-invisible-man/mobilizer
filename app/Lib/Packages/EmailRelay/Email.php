@@ -28,6 +28,15 @@ class Email {
      */
     private $sender;
 
+    public function toArray() {
+        return [
+            'body'      => $this->body,
+            'recipient' => $this->recipient,
+            'subject'   => $this->subject,
+            'sender'    => $this->sender
+        ];
+    }
+
     /**
      * @param string $body
      * @return $this

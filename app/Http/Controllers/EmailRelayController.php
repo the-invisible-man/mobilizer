@@ -42,6 +42,7 @@ class EmailRelayController extends Controller
             $message = $this->extract($request->all());
             $this->relayGateway->handle($message);
         } catch (\Exception $e) {
+            \Log::info("[EmailRelayController] {$e->getMessage()}");
             $responseCode = 500;
         }
 

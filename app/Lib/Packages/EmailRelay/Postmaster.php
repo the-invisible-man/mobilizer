@@ -43,7 +43,16 @@ class Postmaster {
      */
     private $database;
 
+    /**
+     * @var RelayGateway
+     */
     private $relayGateway;
+
+    /**
+     * @var string
+     */
+    private $logNamespace;
+
     /**
      * RelayGateway constructor.
      * @param array $config
@@ -59,6 +68,7 @@ class Postmaster {
         $this->mailer       = $mailer;
         $this->database     = $databaseManager->connection();
         $this->relayGateway = $relayGateway;
+        $this->logNamespace = '[Postmaster]';
     }
 
     /**
@@ -68,13 +78,21 @@ class Postmaster {
      */
     public function handle(Email $email)
     {
+        \Log::info("{$this->logNamespace} Received request to email user", $email->toArray());
+
         $recipient      = $this->unmask($email->getRecipient());
+        \Log::info("{$this->logNamespace} Unmasked recipient email: {$recipient}");
+
         $maskedEmail    = $this->mask($email->getSender());
+        \Log::info("{$this->logNamespace} Masked sender email: {$maskedEmail}");
+
         $getName        = $this->fromName($email->getSender());
+        \Log::info("{$this->logNamespace} From name: {$getName}");
 
         // Let's make sure that neither of the users has muted the other.
         // $this->canEmail($email->getRecipient(), $maskedEmail);
 
+        \Log::info("{$this->logNamespace} All necessary data is complete, sending email...");
 
         // No need for a queue, this process is solely for
         // sending emails anyway.

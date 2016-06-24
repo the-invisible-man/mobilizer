@@ -57,9 +57,9 @@
                 </div><hr>
                 <h4 class="text-center">You might also need in Philly</h4>
                 <ul class="list list-inline list-center">
-                    <li><a class="btn btn-primary" href="#"><i class="fa fa-building-o"></i> Housing</a>
+                    <li><a class="btn btn-primary" href="http://www.berniebnb.com/" target="_blank"><i class="fa fa-building-o"></i> Housing</a>
                     </li>
-                    <li><a class="btn btn-primary" href="#"><i class="fa fa-bolt"></i> Activities</a>
+                    <li><a class="btn btn-primary" href="https://occupydncconvention.com/" target="_blank"><i class="fa fa-bolt"></i> Activities</a>
                     </li>
                 </ul>
             </div>

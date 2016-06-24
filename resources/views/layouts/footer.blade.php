@@ -16,7 +16,7 @@
                 <br>
             </div>
             <div class="col-md-4" style="text-align: center;">
-                <a class="logo" href="index.html">
+                <a class="logo" href="https://coders.forsanders.com/">
                     <img src="/img/assets/coders_for_sanders_polivet_small.png" alt="Coders For Sanders" title="Built With Lots of Love By Coders For Sanders" />
                 </a>
                 <ul class="list list-horizontal social-icons">

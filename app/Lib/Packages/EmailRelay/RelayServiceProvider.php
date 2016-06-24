@@ -17,7 +17,8 @@ class RelayServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(RelayGateway::class, function (Application $app) {
-            return new RelayGateway($app->make('db'));
+            $config = \Config::get('mail.relay');
+            return new RelayGateway($config, $app->make('db'));
         });
     }
 }

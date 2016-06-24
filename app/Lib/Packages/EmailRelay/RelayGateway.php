@@ -2,11 +2,14 @@
 
 namespace App\Lib\Packages\EmailRelay;
 
+use App\Lib\Packages\Core\Validators\ValidatesConfig;
 use App\Lib\Packages\EmailRelay\Models\EmailRelay;
 
 use Illuminate\Database\DatabaseManager;
 
 class RelayGateway {
+
+    use ValidatesConfig;
 
     /**
      * @var \Illuminate\Database\Connection
@@ -14,12 +17,19 @@ class RelayGateway {
     private $db;
 
     /**
+     * @var array
+     */
+    private $config;
+
+    /**
      * RelayGateway constructor.
+     * @param array $config
      * @param DatabaseManager $databaseManager
      */
-    public function __construct(DatabaseManager $databaseManager)
+    public function __construct(array $config, DatabaseManager $databaseManager)
     {
-        $this->db = $databaseManager->connection();
+        $this->db       = $databaseManager->connection();
+        $this->config   = $this->validateConfig($config, ['host']);
     }
 
     /**
@@ -31,10 +41,10 @@ class RelayGateway {
         $address = $this->db->table('email_relay')->where('fk_user_id', '=', $userId)->value('id');
 
         if (!$address) {
-            return $this->createRelayAddress($userId);
+            $address = $this->createRelayAddress($userId);
         }
 
-        return $address . '@seeyouinphilly.com';
+        return $address . '@' . $this->config['host'];
     }
 
     /**

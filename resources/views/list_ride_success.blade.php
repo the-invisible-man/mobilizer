@@ -18,7 +18,7 @@
             <div class="col-md-8 col-md-offset-2">
                 <i class="fa fa-check round box-icon-large box-icon-center box-icon-success mb30"></i>
                 <h2 class="text-center">Your listing was successful!</h2>
-                <h5 class="text-center mb30">Listing details have been sent to <strong>{{$user_email}}</strong></h5>
+                <h5 class="text-center mb30">You will receive all ride requests to this email: <strong>{{$user_email}}</strong></h5>
                 <div class="row">
                     <div class="col-md-6">
                         <h5 class="text-center mb30">Let the world know you're going:</h5>
@@ -84,9 +84,9 @@
                 @endif
                 <h4 class="text-center">You might also need in Philly</h4>
                 <ul class="list list-inline list-center">
-                    <li><a class="btn btn-primary" href="#"><i class="fa fa-building-o"></i> Housing</a>
+                    <li><a class="btn btn-primary" href="http://www.berniebnb.com/" target="_blank"><i class="fa fa-building-o"></i> Housing</a>
                     </li>
-                    <li><a class="btn btn-primary" href="#"><i class="fa fa-bolt"></i> Activities</a>
+                    <li><a class="btn btn-primary" href="https://occupydncconvention.com/" target="_blank"><i class="fa fa-bolt"></i> Activities</a>
                     </li>
                 </ul>
             </div>

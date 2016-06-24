@@ -810,7 +810,7 @@
 
                 <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 24px;">
                     <p class="size-16" style="Margin-top: 16px;Margin-bottom: 0;font-size: 16px;line-height: 24px;text-align: center;" lang="x-size-16">You can get in touch with {{$from_user_first_name}} at the following email:&nbsp;</p>
-                    <p class="size-16" style="Margin-top: 16px;Margin-bottom: 0;font-size: 16px;line-height: 24px;text-align: center;" lang="x-size-16">{{$guest_email}}:&nbsp;</p>
+                    <p class="size-16" style="Margin-top: 16px;Margin-bottom: 0;font-size: 16px;line-height: 24px;text-align: center;" lang="x-size-16"><a href="mailto:{{$guest_email}}">{{$guest_email}}</a>&nbsp;</p>
                 </div>
 
             </div>

@@ -132,6 +132,6 @@ return [
     |
     */
     'relay' => [
-        'host' => 'relay.seeyouinphilly.com'
+        'host' => 'seeyouinphilly.com'
     ]
 ];

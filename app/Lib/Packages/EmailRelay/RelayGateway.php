@@ -34,7 +34,7 @@ class RelayGateway {
             return $this->createRelayAddress($userId);
         }
 
-        return $address;
+        return $address . '@seeyouinphilly.com';
     }
 
     /**

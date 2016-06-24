@@ -547,7 +547,7 @@ class BookingsGateway {
             $data['user'] = [
                 'first_name'    => $booking['guest_first_name'],
                 'last_name'     => $booking['guest_last_name'],
-                'email'         => $this->relayGateway->getCreateRelayAddress($booking['guest_id']) . '@relay.seeyouinphilly.com'
+                'email'         => $this->relayGateway->getCreateRelayAddress($booking['guest_id'])
             ];
         }
 
@@ -798,15 +798,14 @@ class BookingsGateway {
      */
     public function contactInfo(string $bookingId)
     {
-        $mailboxId = $this->db->table('email_relay as a')
-            ->join('bookings as b', 'b.fk_user_id', '=', 'a.fk_user_id')
-            ->where('b.id', '=', $bookingId)
-            ->value('id');
+        $user = $this->db->table('bookings')
+        ->where('id', '=', $bookingId)
+        ->value('fk_user_id');
 
-        if (!$mailboxId) {
+        if (!$user) {
             return null;
         }
 
-        return $mailboxId . '@relay.seeyouinphilly.com';
+        return $this->relayGateway->getCreateRelayAddress($user);
     }
 }

@@ -502,7 +502,7 @@ class ListingsGateway {
         }
 
         // Now let's get address for the owner of the listing
-        $email = $this->relayGateway->getCreateRelayAddress($owner['fk_user_id']) . '@relay.seeyouinphilly.com';
+        $email = $this->relayGateway->getCreateRelayAddress($owner['fk_user_id']);
 
         return ['email' => $email, 'first_name' => $owner['first_name']];
     }

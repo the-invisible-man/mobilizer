@@ -96,7 +96,7 @@ class Postmaster {
 
         // No need for a queue, this process is solely for
         // sending emails anyway.
-        $this->mailer->send('emails.relay', ['content' => $email->getBody(), 'from_url_encoded' => urlencode($maskedEmail)], function (Message $message) use($recipient, $getName, $maskedEmail, $email) {
+        $this->mailer->send('emails.relay', ['content' => $email->getBody()], function (Message $message) use($recipient, $getName, $maskedEmail, $email) {
             $message->to($recipient);
             $message->from($maskedEmail, $getName);
             $message->subject($email->getSubject());

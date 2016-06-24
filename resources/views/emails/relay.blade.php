@@ -1,2 +1,3 @@
-Is this spam? You can <a href="https://www.seeyouinphilly.com/mute/{{$from_url_encoded}}">mute this conversation</a>.<br>
 {{$content}}
+<br><br>
+This message was delivered by the #SeeYouInPhilly email relay service. Please report any abuse to <a href="mailto:support@seeyouinphilly.com">support@seeyouinphilly.com</a>

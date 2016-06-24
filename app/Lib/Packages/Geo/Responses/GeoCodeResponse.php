@@ -6,7 +6,7 @@ use App\Lib\Packages\Geo\Location\Geopoint;
 
 /**
  * Class GeoCodeResponse
- * @package App\Lib\Packages\Geo\Contracts
+ * @package App\Lib\Packages\Geo\Contracts 
  * @author Carlos Granados <granados.carlos91@gmail.com>
  */
 class GeocodeResponse {

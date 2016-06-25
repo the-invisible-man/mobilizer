@@ -17,7 +17,8 @@
         "elasticsearch/elasticsearch": "^2.1",
         "lucadegasperi/oauth2-server-laravel": "^5.1",
         "greggilbert/recaptcha": "dev-master",
-        "jgrossi/corcel": "^1.1"
+        "jgrossi/corcel": "^1.1",
+        "errorstream/errorstream-laravel": "1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

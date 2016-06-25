@@ -33,6 +33,9 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
+        if ($this->shouldReport($e)) {
+            app('errorstream')->reportException($e);
+        }
         parent::report($e);
     }
 

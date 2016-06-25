@@ -157,6 +157,7 @@ return [
         App\Lib\Packages\Search\SearchServiceProvider::class,
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
         App\Lib\Packages\EmailRelay\RelayServiceProvider::class,
+        ErrorStream\ErrorStream\ErrorStreamServiceProvider::class,
 
         /*
          * Application Service Providers...

@@ -64,8 +64,8 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <div class="input-group">
-                                        <textarea name="additional_info" rows="7" cols="100" placeholder="A short intro" id="listing_additional_info" class="form-control" required></textarea>
+                                    <div class="input-group" style="width: 100%;">
+                                        <textarea name="additional_info" rows="7" style="width:100%;" placeholder="A short intro" id="listing_additional_info" class="form-control" required></textarea>
                                     </div>
                                 </div>
                             </div>

@@ -288,7 +288,7 @@
         for (var i = 0; i < result.routes.length; i++) {
             var class_ = i == 0 ? "user_route_item_active" : '';
             var icon_class = i == 0 ? "" : 'hidden';
-            list_r = list_r + '<li style="padding-bottom:3px;" class="booking-item user_route_item ' + class_ + '" id="' + i + '"><i class="fa fa-car"></i><span class="booking-item-feature-title"><span class="via">via</span> ' + result.routes[i].summary + '<br><span style="color:green">' + result.routes[i].legs[0].distance.text + ' | ' + result.routes[i].legs[0].duration.text + '</span></span> <i class="' + icon_class + ' fa-check-circle-o fa-check-icon_selected_active-o icon_selected_active fa icon_selected"></i></li>';
+            list_r = list_r + '<li style="padding-bottom:3px;" class="booking-item user_route_item ' + class_ + '" id="' + i + '"><i class="fa fa-car"></i><span class="booking-item-feature-title"><span class="via">via</span> ' + result.routes[i].summary + '<br><span style="color:darkgreen">' + result.routes[i].legs[0].distance.text + ' | ' + result.routes[i].legs[0].duration.text + '</span></span> <i class="' + icon_class + ' fa-check-circle-o fa-check-icon_selected_active-o icon_selected_active fa icon_selected"></i></li>';
         }
 
         starting = starting.split(',');

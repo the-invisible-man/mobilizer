@@ -111,7 +111,7 @@
                             <span id="listing_date_leaving"></span><br>
                             <span id="listing_time_of_day"></span><br>
                             <span id="listing_date_returning"></span><br>
-                            <span id="listing_route_name"></span><br>
+                            <span id="listing_route_name" style="color:darkgreen"></span><br>
                         </div>
                         <div class="col-md-12">
                             <div id="map-canvas" style="width:100%; height:400px;"></div>

@@ -53,4 +53,9 @@ class SearchController extends Controller {
 
         return view('search', $response);
     }
+
+    public function logRideSearch($query)
+    {
+
+    }
 }

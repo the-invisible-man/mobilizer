@@ -6,6 +6,9 @@ body {
   font-weight: 400;
   height: 100%;
 }
+body.modal-open {
+  overflow: hidden;
+}
 a {
   color: #0066b8;
   text-decoration: none;

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Not Found</title>
+    <title>500 Is a Type of Error</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1 minimum-scale=1, maximum-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
@@ -56,7 +56,7 @@
 <body>
 <div class="container">
     <div class="content">
-        <div class="title">Be right back.</div>
+        <div class="title">Whoops Something Went  Wrong.</div>
     </div>
     <div>
         <div class="link"><a href="{{url('/')}}">#SeeYouInPhillly</a></div>

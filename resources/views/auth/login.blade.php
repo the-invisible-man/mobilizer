@@ -75,7 +75,7 @@
                                             @endif
                                         </div>
                                         <div class="form-group form-group-icon-left{{ $errors->has('email') && Session::get('last_auth_attempt') == 'register' ? ' has-error' : '' }}"><i class="fa fa-envelope input-icon input-icon-show"></i>
-                                            <label>Emai</label>
+                                            <label>Email</label>
                                             <input class="form-control" placeholder="e.g. janedoe@gmail.com" type="text" name="email" value="{{ old('email') }}"/>
                                             @if ($errors->has('email') && Session::get('last_auth_attempt') == 'register' )
                                                 <span class="help-block">

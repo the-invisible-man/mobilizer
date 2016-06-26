@@ -86,6 +86,9 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        //Set session as 'login'
+        Session::put('last_auth_attempt', 'login');
+        
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle

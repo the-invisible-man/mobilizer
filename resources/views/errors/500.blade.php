@@ -61,6 +61,9 @@
     <div>
         <div class="link"><a href="{{url('/')}}">#SeeYouInPhillly</a></div>
     </div>
+    <div>
+        <div class="link"><strong>If your problem persists please shoot us an email at support@seeyouinphilly.com</strong></div>
+    </div>
 </div>
 </body>
 </html>

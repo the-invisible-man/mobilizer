@@ -35,6 +35,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('tos', 'HomeController@tos');
     Route::get('privacy', 'HomeController@privacy');
     Route::get('about', "HomeController@about");
+    Route::post('notifications', 'HomeController@signUpNotifications');
 
     $this->get('account/confirm/{confirmation_code}', 'Auth\AuthController@confirmEmail');
     $this->get('account/send_confirm', 'Auth\AuthController@resendEmailConfirm');

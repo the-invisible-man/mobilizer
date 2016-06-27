@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use App\Lib\Packages\Core\EmailListForNotifications;
 
 class HomeController extends Controller
 {
@@ -14,6 +15,19 @@ class HomeController extends Controller
     public function __construct()
     {
         //$this->middleware('auth');
+    }
+
+    public function signUpNotifications(Request $request)
+    {
+        $email = $request->get('email');
+        $query = $request->get('query');
+
+        $data  = EmailListForNotifications::create([
+            'email' => $email,
+            'query' => $query
+        ]);
+
+        return view('confirm_notify', $data->toArray());
     }
 
     /**

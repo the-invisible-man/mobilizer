@@ -12,6 +12,7 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\MySqlConnection;
 use App\Lib\Packages\Bookings\Contracts\BaseBooking;
 use Illuminate\Database\Query\JoinClause;
+use App\Lib\Packages\Search\Exceptions\IncompleteQueryException;
 
 /**
  * Class Search
@@ -65,11 +66,19 @@ class SearchGateway {
      * @param string $user_location
      * @param int $minRemainingSlots
      * @return array
+     * @throws IncompleteQueryException
      */
     public function searchRide(string $user_location, int $minRemainingSlots = 1)
     {
         $time       = microtime();
         $location   = $this->geoService->geocode($user_location);
+
+        // We need at least a zip code, we don't allow
+        // just using the state or country
+        if (! strlen($location->getZip()) && ! strlen($location->getCity())) {
+            throw new IncompleteQueryException("You need to search using at least a zip or U.S. city");
+        }
+
         $ids        = $this->searchDriver->searchRide($location->getGeoLocation());
         $results    = $this->fetchListings($ids, $minRemainingSlots);
         $benchmark  = microtime() - $time;

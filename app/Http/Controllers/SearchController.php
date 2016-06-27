@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Lib\Packages\Listings\ListingTypes\RideListing;
 use App\Lib\Packages\Search\SearchGateway;
 use Illuminate\Http\Request;
+use App\Lib\Packages\Search\Exceptions\IncompleteQueryException;
 
 /**
  * Class SearchController
@@ -34,24 +35,31 @@ class SearchController extends Controller {
     public function search(Request $request)
     {
         $resultCode = 200;
+        $view = 'search';
 
         try {
             if ($request->get('type', RideListing::ListingType) == RideListing::ListingType) {
-                $response = $this->searchGateway->searchRide($request->get('location'), $request->get('total_people', 1));
+                $response = $this->searchGateway->searchRide($request->get('location'),
+                    $request->get('total_people', 1));
                 $response = array_merge($response, $this->userInfo());
             } else {
-                $response = $this->searchGateway->searchHousing($request->get('starting_date'), $request->get('ending_date'));
+                $response = $this->searchGateway->searchHousing($request->get('starting_date'),
+                    $request->get('ending_date'));
             }
+        } catch (IncompleteQueryException $e) {
+            $response   = ['status' => 'error', 'message' => $e->getMessage()];
+            $resultCode = 400;
+            $view       = 'search_error';
         } catch (\Exception $e) {
             $response = ['message' => 'Service not available'];
             $resultCode = 400;
         }
 
-        if ($request->ajax() || $resultCode != 200) {
+        if ($request->ajax()) {
             return \Response::json($response, $resultCode);
         }
 
-        return view('search', $response);
+        return view($view, $response);
     }
 
     public function logRideSearch($query)

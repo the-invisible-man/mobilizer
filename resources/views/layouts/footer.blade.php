@@ -60,15 +60,15 @@
 <script src="/js/jsonhttprequest.js"></script>
 
 <!-- APP Components -->
-<script src="/js/mobilizer/login.js"></script>
-<script src="/js/mobilizer/config.js"></script>
-<script src="/js/mobilizer/mobilizer-api.js"></script>
-<script src="/js/mobilizer/ride-list.js"></script>
-<script src="/js/mobilizer/listings.js"></script>
-<script src="/js/mobilizer/requests.js"></script>
-<script src="/js/mobilizer/bookings.js"></script>
-<script src="/js/mobilizer/search.js"></script>
-<script src="/js/mobilizer/home.js"></script>
+<script src="/js/mobilizer/login.js?v=1"></script>
+<script src="/js/mobilizer/config.js?v=1"></script>
+<script src="/js/mobilizer/mobilizer-api.js?v=1"></script>
+<script src="/js/mobilizer/ride-list.js?v=1"></script>
+<script src="/js/mobilizer/listings.js?v=1"></script>
+<script src="/js/mobilizer/requests.js?v=1"></script>
+<script src="/js/mobilizer/bookings.js?v=1"></script>
+<script src="/js/mobilizer/search.js?v=1"></script>
+<script src="/js/mobilizer/home.js?v=1"></script>
 <!-- End APP Components -->
 
 </div>

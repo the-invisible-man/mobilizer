@@ -3,6 +3,8 @@
 namespace App\Lib\Packages\Geo\Services\Google;
 
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
+use App\Lib\Packages\Geo\Exceptions\GeocodeException;
+use App\Lib\Packages\Geo\Exceptions\ZeroResultsException;
 use App\Lib\Packages\Geo\Location\Geopoint;
 use App\Lib\Packages\Geo\Responses\TimeZoneResponse;
 use App\Lib\Packages\Geo\Services\Google\API\Geocode;
@@ -25,6 +27,8 @@ class GoogleMaps implements GeoServiceInterface {
      * @var GoogleMapsAPI[]|Directions[]|Geocode[]|Timezone[]
      */
     private $services;
+
+    const NO_RESULTS = 'ZERO_RESULTS';
 
     /**
      * GoogleMaps constructor.
@@ -87,10 +91,17 @@ class GoogleMaps implements GeoServiceInterface {
     /**
      * @param string $address
      * @return GeocodeResponse
+     * @throws GeocodeException
      */
     public function geocode(string $address) : GeocodeResponse
     {
-        return $this->formatGeocodeResponse($this->services[Geocode::class]->geocode($address));
+        $response = $this->services[Geocode::class]->geocode($address);
+
+        if ($response['status'] != 'OK') {
+            throw new GeocodeException($response['status']);
+        }
+
+        return $this->formatGeocodeResponse($response);
     }
 
     /**

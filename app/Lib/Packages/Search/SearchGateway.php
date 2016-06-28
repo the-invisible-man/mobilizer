@@ -4,6 +4,7 @@ namespace App\Lib\Packages\Search;
 
 use App\Lib\Packages\Core\Validators\ValidatesConfig;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
+use App\Lib\Packages\Geo\Exceptions\ZeroResultsException;
 use App\Lib\Packages\Geo\Location\Location;
 use App\Lib\Packages\Geo\Responses\GeocodeResponse;
 use App\Lib\Packages\Listings\ListingTypes\RideListing;
@@ -74,8 +75,6 @@ class SearchGateway {
         $time       = microtime();
         $location   = $this->geoService->geocode($user_location);
 
-        // We need at least a zip code, we don't allow
-        // just using the state or country
         if (! strlen($location->getZip()) && ! strlen($location->getCity())) {
             throw new IncompleteQueryException("You need to search using at least a zip or U.S. city");
         }

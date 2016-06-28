@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Lib\Packages\Geo\Exceptions\GeocodeException;
 use App\Lib\Packages\Listings\ListingTypes\RideListing;
 use App\Lib\Packages\Search\SearchGateway;
 use Illuminate\Contracts\Logging\Log;
@@ -58,6 +59,9 @@ class SearchController extends Controller {
             $response   = ['status' => 'error', 'message' => 'There was an error'];
             $resultCode = 400;
             $view       = 'search_error';
+            $this->log->error($e->getMessage());
+        } catch (GeocodeException $e) {
+            $response = ['status' => 'error', 'message' => 'We weren\'t able to understand that address.'];
             $this->log->error($e->getMessage());
         } catch (\Exception $e) {
             $response = ['status' => 'error', 'message' => 'There was an error'];

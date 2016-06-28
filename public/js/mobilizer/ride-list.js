@@ -137,13 +137,13 @@
     };
 
     RideListing.FormComponent.validateForm = function (data) {
-        var requiredFields = {'party_name':"a party name", 'start':"a starting location", 'time_of_day':"the time approximation of when you're planning to leave", 'end':"the date you're coming back", 'max_occupants':"the maximum number of people you can bring, 1 at minimum.", 'location':"a starting location", 'additional_info':"additional information in the text box."};
+        var requiredFields = {'party_name':"a party name", 'start':"a starting location", 'time_of_day':"the time approximation of when you're planning to leave", 'end':"the date you're coming back", 'max_occupants':"the maximum number of people you can bring, 1 at minimum.", 'location':"a starting location", 'additional_info':"additional information in the text box.", 'overview_path':" the route that you will be driving on. Or select and deselect?"};
         var messages = [];
         var validators = {
             'max_occupants': function (value) {
                 value = $.trim(value);
                 if (isNaN(value)) {
-                    throw "maximum number of passengers is supposed to be a number, you entered \"" + value + "\"";
+                    throw "– Maximum number of passengers is supposed to be a number, you entered \"" + value + "\"";
                 } else if(value == 0) {
                     throw "maximum number of passengers must be greater than zero.";
                 }

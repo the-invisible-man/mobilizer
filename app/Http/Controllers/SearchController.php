@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Lib\Packages\Listings\ListingTypes\RideListing;
 use App\Lib\Packages\Search\SearchGateway;
+use Illuminate\Contracts\Logging\Log;
 use Illuminate\Http\Request;
 use App\Lib\Packages\Search\Exceptions\IncompleteQueryException;
 
@@ -20,12 +21,19 @@ class SearchController extends Controller {
     private $searchGateway;
 
     /**
+     * @var Log
+     */
+    private $log;
+
+    /**
      * SearchController constructor.
      * @param SearchGateway $searchGateway
+     * @param Log $log
      */
-    public function __construct(SearchGateway $searchGateway)
+    public function __construct(SearchGateway $searchGateway, Log $log)
     {
-        $this->searchGateway = $searchGateway;
+        $this->searchGateway    = $searchGateway;
+        $this->log              = $log;
     }
 
     /**
@@ -47,12 +55,14 @@ class SearchController extends Controller {
                     $request->get('ending_date'));
             }
         } catch (IncompleteQueryException $e) {
-            $response   = ['status' => 'error', 'message' => $e->getMessage()];
+            $response   = ['status' => 'error', 'message' => 'There was an error'];
             $resultCode = 400;
             $view       = 'search_error';
+            $this->log->error($e->getMessage());
         } catch (\Exception $e) {
-            $response = ['message' => 'Service not available'];
+            $response = ['status' => 'error', 'message' => 'There was an error'];
             $resultCode = 400;
+            $this->log->error($e->getMessage());
         }
 
         if ($request->ajax()) {

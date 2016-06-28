@@ -16,7 +16,7 @@
                         <input type="hidden" name="type" value="{{$query_info['type']}}" />
                         <div class="form-group form-group-icon-left"><i class="fa fa-map-marker input-icon input-icon-hightlight"></i>
                             <label>Picked up from</label>
-                            <input class="form-control" id="autocomplete" name="location" value="@if(strlen($query_info['search_term']['geocoded']['city'])) {{$query_info['search_term']['geocoded']['city']}}, @endif{{$query_info['search_term']['geocoded']['state']}}" placeholder="Address, City, or U.S. Zip Code" type="text" />
+                            <input class="form-control" id="autocomplete" name="location" value="{{$query_info['search_term']['composed']}}" placeholder="Address, City, or U.S. Zip Code" type="text" />
                         </div>
                         <div class="form-group form-group-icon-left"><i class="fa fa-users input-icon input-icon-hightlight"></i>
                             <label>Passengers</label>

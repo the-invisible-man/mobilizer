@@ -2,6 +2,7 @@
 
 namespace App\Lib\Packages\Geo\Location;
 
+use App\Lib\Packages\Geo\Responses\GeocodeResponse;
 use Illuminate\Database\Eloquent\Model;
 use App\Lib\Packages\Tools\Traits\UuidModel;
 
@@ -37,6 +38,13 @@ class Location extends Model
      */
     protected $standardComponents = [
         self::STREET, self::CITY, self::STATE, self::ZIP, self::COUNTRY
+    ];
+
+    /**
+     * @var array
+     */
+    protected $fillable = [
+        self::STREET, self::CITY, self::STATE, self::ZIP, self::COUNTRY, self::LAT, self::LONG
     ];
 
     /**
@@ -216,5 +224,22 @@ class Location extends Model
     {
         $this->geopoint = $geopoint;
         return $this;
+    }
+
+    /**
+     * @param GeocodeResponse $response
+     * @return static
+     */
+    public static function build(GeocodeResponse $response)
+    {
+        return new static([
+            self::STREET    => $response->getStreetNumber() . ' ' . $response->getStreetName(),
+            self::CITY      => $response->getCity(),
+            self::STATE     => $response->getState(),
+            self::ZIP       => $response->getZip(),
+            self::COUNTRY   => $response->getCountry(),
+            self::LAT       => $response->getGeoLocation()->getLat(),
+            self::LONG      => $response->getGeoLocation()->getLong()
+        ]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Lib\Packages\Search;
 
 use App\Lib\Packages\Core\Validators\ValidatesConfig;
 use App\Lib\Packages\Geo\Contracts\GeoServiceInterface;
+use App\Lib\Packages\Geo\Location\Location;
 use App\Lib\Packages\Geo\Responses\GeocodeResponse;
 use App\Lib\Packages\Listings\ListingTypes\RideListing;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
@@ -104,6 +105,7 @@ class SearchGateway {
                 'search_term'   => [
                     'raw'           => $raw,
                     'geocoded'      => $location->toArray(),
+                    'composed'      => (string)Location::build($location),
                     'filters'       => $filters
                 ]
         ];

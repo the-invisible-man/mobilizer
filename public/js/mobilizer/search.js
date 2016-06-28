@@ -99,6 +99,14 @@
 
     SearchController.SearchComponent._register = function (config){
         var autocomplete        = new google.maps.places.Autocomplete((document.getElementById(config['autocompleteElementId'])), {type: ['geocode']});
+
+        $("#ride_search_form").submit(function () {
+            if (!$("#autocomplete").val().length) {
+                $("#ride_search_error").html();
+                $("#ride_search_error").html('<strong>Enter an address into the search field</strong>');
+                return false;
+            }
+        });
     };
 
     SearchController.Results._register = function (config) {

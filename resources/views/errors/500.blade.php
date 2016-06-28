@@ -56,7 +56,7 @@
 <body>
 <div class="container">
     <div class="content">
-        <div class="title">Whoops Something Went Wrong.</div>
+        <div class="title">Whoops, Something Went Wrong.</div>
     </div>
     <div>
         <div class="link" style="color:#8c8c8c;"><strong>If your problem persists please shoot us an email at support@seeyouinphilly.com</strong></div>

@@ -11,12 +11,13 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="booking-item-dates-change mb30">
-                    <form method="get" action="/search">
+                    <form method="get" action="/search" id="ride_search_form">
                         <input type="hidden" name="original_query" value="{{$query_info['search_term']['raw']}}" id="original_query"/>
                         <input type="hidden" name="type" value="{{$query_info['type']}}" />
                         <div class="form-group form-group-icon-left"><i class="fa fa-map-marker input-icon input-icon-hightlight"></i>
                             <label>Picked up from</label>
                             <input class="form-control" id="autocomplete" name="location" value="{{$query_info['search_term']['composed']}}" placeholder="Address, City, or U.S. Zip Code" type="text" />
+                            <span class="help-block" id="ride_search_error"></span>
                         </div>
                         <div class="form-group form-group-icon-left"><i class="fa fa-users input-icon input-icon-hightlight"></i>
                             <label>Passengers</label>

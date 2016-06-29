@@ -63,4 +63,33 @@ class EmailListForNotifications extends Model
         $this->setAttribute('query', $query);
         return $this;
     }
+
+    /**
+     *
+     * @return bool
+     */
+    public function wasNotified()
+    {
+        return (bool)$this->getAttribute('notified');
+    }
+
+    /**
+     * Gets actual value, casted into int
+     * @return bool
+     */
+    public function getNotified()
+    {
+        return (int)$this->getAttribute('notified');
+    }
+
+    /**
+     * @param int $notified
+     * @return $this
+     */
+    public function setNotified(int $notified)
+    {
+        // We only want to save 1 or 0
+        $this->setAttribute('notified', (int)(bool)$notified);
+        return $this;
+    }
 }

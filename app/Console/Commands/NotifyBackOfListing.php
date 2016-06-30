@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Lib\Packages\Core\EmailListForNotifications;
 use App\Lib\Packages\Search\SearchGateway;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Logging\Log;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Mail\Message;
 
@@ -36,17 +37,24 @@ class NotifyBackOfListing extends Command
     private $mailer;
 
     /**
+     * @var Log
+     */
+    private $log;
+
+    /**
      * NotifyBackOfListing constructor.
      * Create a new command instance.
      * @param SearchGateway $searchGateway
      * @param Mailer $mailer
+     * @param Log $log
      */
-    public function __construct(SearchGateway $searchGateway, Mailer $mailer)
+    public function __construct(SearchGateway $searchGateway, Mailer $mailer, Log $log)
     {
         parent::__construct();
 
         $this->searchGateway    = $searchGateway;
         $this->mailer           = $mailer;
+        $this->log              = $log;
     }
 
 
@@ -56,7 +64,12 @@ class NotifyBackOfListing extends Command
         $subscribers    = EmailListForNotifications::query()->where('notified', '=', 0)->get();
 
         foreach ($subscribers as $subscriber) {
-            $results = $this->searchGateway->searchRide($subscriber->getQuery(), 1);
+            try {
+                $results = $this->searchGateway->searchRide($subscriber->getQuery(), 1);
+            } catch (\Exception $e) {
+                $this->log->error('[NotifyBackOfListing] ' . $e->getMessage());
+                continue;
+            }
 
             if (!count($results['results'])) continue;
 

@@ -122,7 +122,7 @@
                     <hr>
 
                     <!-- Dynamic Views-->
-                    <div class="col-md-12 hidden" id="login_window"><a href="/login">Login to book this ride</a></div>
+                    <div class="col-md-12 hidden" id="login_window"><a href="/login">Login or signup to book this ride</a></div>
 
                     <div class="col-md-12 hidden" id="booked_window">You already requested this ride</div>
 

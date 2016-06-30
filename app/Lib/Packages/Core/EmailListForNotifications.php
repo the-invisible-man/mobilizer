@@ -65,6 +65,24 @@ class EmailListForNotifications extends Model
     }
 
     /**
+     * @return int
+     */
+    public function getTotalPeople() : int
+    {
+        return (int)$this->getAttribute('total_people');
+    }
+
+    /**
+     * @param int $totalPeople
+     * @return $this
+     */
+    public function setTotalPeople(int $totalPeople)
+    {
+        $this->setAttribute('total_people', $totalPeople);
+        return $this;
+    }
+
+    /**
      *
      * @return bool
      */

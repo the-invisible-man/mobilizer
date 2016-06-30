@@ -47,19 +47,18 @@ class SearchController extends Controller {
         $view = 'search';
 
         try {
-            if ($request->get('type', RideListing::ListingType) == RideListing::ListingType) {
-                $response = $this->searchGateway->searchRide($request->get('location'),
-                    $request->get('total_people', 1));
+            if ($request->get('type', RideListing::ListingType) == RideListing::ListingType)
+            {
+                $response = $this->searchGateway->searchRide($request->get('location'), $request->get('total_people', 1));
                 $response = array_merge($response, $this->userInfo());
-            } else {
-                $response = $this->searchGateway->searchHousing($request->get('starting_date'),
-                    $request->get('ending_date'));
+            }
+            else
+            {
+                $response = $this->searchGateway->searchHousing($request->get('starting_date'), $request->get('ending_date'));
             }
         } catch (IncompleteQueryException $e) {
-            $response   = ['status' => 'error', 'message' => 'There was an error'];
-            $resultCode = 400;
-            $view       = 'search_error';
-            $this->log->error($e->getMessage());
+            $response   = ['status' => 'error', 'location' => $e->getMessage()];
+            return back()->with('error', $e->getMessage());
         } catch (GeocodeException $e) {
             $response = ['status' => 'error', 'message' => 'We weren\'t able to understand that address.'];
             $this->log->error($e->getMessage());

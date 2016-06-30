@@ -31,6 +31,9 @@ class Location extends Model
             LAT         = 'lat',
             LONG        = 'lng';
 
+    /**
+     * @var string
+     */
     protected $table = 'locations';
 
     /**
@@ -64,7 +67,7 @@ class Location extends Model
         foreach ($this->standardComponents as $component) {
             $str = $this->getAttribute($component);
 
-            if (strlen($str)) $components[] = $str;
+            if (strlen(trim($str))) $components[] = $str;
         }
 
         return implode(', ', $components);

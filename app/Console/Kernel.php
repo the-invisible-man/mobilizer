@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        // Commands\Inspire::class,
+        Commands\NotifyBackOfListing::class
     ];
 
     /**
@@ -24,7 +24,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->exec('/usr/bin/python /home/forge/polivet-data/Geospatial/RoutesGenerator.py')->everyFiveMinutes();
+
+        $schedule->command('command:NotifyBackOfListing')
+                 ->everyThirtyMinutes()
+                 ->sendOutputTo(storage_path() . '/NotifyBackOfListing.txt')
+                 ->emailOutputTo('carlos@polivet.org');
     }
 }

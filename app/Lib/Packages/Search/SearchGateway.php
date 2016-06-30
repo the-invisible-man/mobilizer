@@ -75,8 +75,8 @@ class SearchGateway {
         $time       = microtime();
         $location   = $this->geoService->geocode($user_location);
 
-        if (! strlen($location->getZip()) && ! strlen($location->getCity())) {
-            throw new IncompleteQueryException("You need to search using at least a zip or U.S. city");
+        if (!strlen($location->getZip()) && ! strlen($location->getCity())) {
+            throw new IncompleteQueryException("You need to search using at least a ZIP Code or U.S./Canada city");
         }
 
         $ids        = $this->searchDriver->searchRide($location->getGeoLocation());
@@ -103,6 +103,7 @@ class SearchGateway {
                 'type'          => $type,
                 'search_term'   => [
                     'raw'           => $raw,
+                    'url_encoded'   => urlencode($raw),
                     'geocoded'      => $location->toArray(),
                     'composed'      => (string)Location::build($location),
                     'filters'       => $filters

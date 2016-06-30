@@ -57,7 +57,6 @@ class SearchController extends Controller {
                 $response = $this->searchGateway->searchHousing($request->get('starting_date'), $request->get('ending_date'));
             }
         } catch (IncompleteQueryException $e) {
-            $response   = ['status' => 'error', 'location' => $e->getMessage()];
             return back()->with('error', $e->getMessage());
         } catch (GeocodeException $e) {
             $response = ['status' => 'error', 'message' => 'We weren\'t able to understand that address.'];

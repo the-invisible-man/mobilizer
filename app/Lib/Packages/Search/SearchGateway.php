@@ -193,13 +193,14 @@ class SearchGateway {
     private function formatOne(array $data)
     {
         $out = [
-            'id'                => $data['id'],
-            'party_name'        => $data['party_name'],
-            'starting_date'     => (new \DateTime($data['starting_date']))->format('M d, Y'),
-            'ending_date'       => (new \DateTime($data['ending_date']))->format('M d, Y'),
-            'host'              => $data['host'],
-            'type'              => $data['type'],
-            'additional_info'   => $data['additional_info'],
+            'id'                    => $data['id'],
+            'party_name'            => $data['party_name'],
+            'starting_date'         => (new \DateTime($data['starting_date']))->format('M d, Y'),
+            'ending_date'           => (new \DateTime($data['ending_date']))->format('M d, Y'),
+            'host'                  => $data['host'],
+            'type'                  => $data['type'],
+            'additional_info'       => $data['additional_info'],
+            'additional_info_trim'  => strlen($data['additional_info']) > 200 ? substr($data['additional_info'], 0, 200) . '...' : $data['additional_info'],
             'max_occupants'     => $data['max_occupants'],
             'remaining_slots'   => (int)$data['remaining_slots'],
             'dog_friendly'      => (bool)$data['dog_friendly'],

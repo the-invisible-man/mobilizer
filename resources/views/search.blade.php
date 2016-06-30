@@ -37,7 +37,7 @@
                                     <div class="row">
                                         <div class="col-md-4 col-xs-12">
                                             <h5>{{$result['party_name']}}</h5>
-                                            <p>{{$result['additional_info']}}</p>
+                                            <p style="text-align: justify;">{{($result['additional_info_trim'])}}</p>
                                         </div>
                                         <div class="col-md-5" style="font-size: small">
                                             <div class="col-md-6 col-xs-6">
@@ -84,7 +84,7 @@
                     <h4 class="modal-title" id="party_name_placeholder"></h4>
                     <div class="additional_info_placeholder">
                         <strong>About this ride:</strong><br>
-                        <span id="listing_info_window_additional_info"></span>
+                        <textarea id="listing_info_window_additional_info" style="width:100%; height:120px; background:#48484C;" readonly="readonly"></textarea>
                     </div>
                 </div>
 

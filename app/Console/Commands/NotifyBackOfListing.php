@@ -65,13 +65,20 @@ class NotifyBackOfListing extends Command
 
         foreach ($subscribers as $subscriber) {
             try {
+                $this->info('Searching for subscriber ' . $subscriber->getEmail());
                 $results = $this->searchGateway->searchRide($subscriber->getQuery(), 1);
             } catch (\Exception $e) {
+                $this->info('There was an error searching for user: ' . $e->getMessage());
                 $this->log->error('[NotifyBackOfListing] ' . $e->getMessage());
                 continue;
             }
 
-            if (!count($results['results'])) continue;
+            if (!count($results['results'])) {
+                $this->info('No matching listing found');
+                continue;
+            }
+
+            $this->info('Found ' . $results['number_of_hits'] . ' results for this user, will email.');
 
             // Notify this subscriber that we have something available for them
             $this->mailer->send('emails.notifications.matching_listing_available', $results, function (Message $email) use($subscriber) {

@@ -773,6 +773,26 @@
                 <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
             </div>
         </div>
+        <div class="layout two-col fixed-width" style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+            <div class="layout__inner" style="border-collapse: collapse;display: table;background-color: #ffffff;" emb-background-style="">
+                <!--[if (mso)|(IE)]><table align="center" cellpadding="0" cellspacing="0"><tr class="layout-fixed-width" emb-background-style><td style="width: 300px" valign="top" class="w260"><![endif]-->
+                <div class="column" style="text-align: left;color: #60666d;font-size: 14px;line-height: 21px;font-family: &quot;Open Sans&quot;,sans-serif;Float: left;max-width: 320px;min-width: 300px; width: 320px;width: calc(13140px - 2000vw);">
+
+                    <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
+                        <p style="Margin-top: 0;Margin-bottom: 0;"><strong>Seats Remaining:</strong></p>
+                    </div>
+
+                </div>
+                <!--[if (mso)|(IE)]></td><td style="width: 300px" valign="top" class="w260"><![endif]-->
+                <div class="column" style="text-align: left;color: #60666d;font-size: 14px;line-height: 21px;font-family: &quot;Open Sans&quot;,sans-serif;Float: left;max-width: 320px;min-width: 300px; width: 320px;width: calc(13140px - 2000vw);">
+
+                    <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
+                        <p style="Margin-top: 0;Margin-bottom: 0;">{{$result['remaining_slots']}}</p>
+                    </div>
+                </div>
+                <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+            </div>
+        </div>
     @endforeach
 
     <div class="layout one-col fixed-width" style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000vw - 179160px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">

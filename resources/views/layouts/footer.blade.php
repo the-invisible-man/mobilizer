@@ -67,7 +67,7 @@
 <script src="/js/mobilizer/listings.js?v=1"></script>
 <script src="/js/mobilizer/requests.js?v=1"></script>
 <script src="/js/mobilizer/bookings.js?v=1"></script>
-<script src="/js/mobilizer/search.js?v=1"></script>
+<script src="/js/mobilizer/search.js?v=2"></script>
 <script src="/js/mobilizer/home.js?v=1"></script>
 <!-- End APP Components -->
 

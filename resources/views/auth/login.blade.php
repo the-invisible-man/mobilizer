@@ -106,7 +106,7 @@
                                                 <input type="checkbox" id="disclaimer_accept"/>
                                                 I am <strong>18 years of age or older</strong> and I agree with the <a href="{{url('/')}}/tos" target="_blank">terms of service</a> and the <a href="{{url('/')}}/privacy" target="_blank">privacy policy</a> of SeeYouInPhilly.com
                                                 <br><br>
-                                                <strong>**NOTICE**</strong> Keep your password safe at all times. We will <strong>NEVER</strong> under any circumstance ask you for your password, neither by email or some other page. Do not enter your password on any other page other than this page. Always check that your address bar says https://www.seeyouinphilly.com/
+                                                <strong>**NOTICE**</strong> Keep your password safe at all times. We will <strong>NEVER</strong> under any circumstance ask you for your password, neither by email or by private message on social media. Do not enter your password on any other site other than this site. Always check that your address bar says https://www.seeyouinphilly.com/
                                             </p>
                                             <span style="color:#B90000" id="accept_tos"></span>
                                         </div>

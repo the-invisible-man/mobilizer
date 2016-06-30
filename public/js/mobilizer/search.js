@@ -172,7 +172,7 @@
         }
 
         $("#party_name_placeholder").html(listing_data['party_name']);
-        $("#listing_info_window_additional_info").append(listing_data['additional_info']);
+        $("#listing_info_window_additional_info").val(listing_data['additional_info']);
         $('#listing_info_window').modal('toggle');
         $("#booking_form").ready(function () {
             SearchController.Results.bindBookingFormEvents('booking_form', listing_data);

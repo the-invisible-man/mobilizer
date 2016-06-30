@@ -26,9 +26,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->exec('/usr/bin/python /home/forge/polivet-data/Geospatial/RoutesGenerator.py')->everyFiveMinutes();
 
-        $schedule->command('command:NotifyBackOfListing')
-                 ->hourly()
-                 ->sendOutputTo(storage_path() . '/NotifyBackOfListing.txt')
-                 ->emailOutputTo('carlos@polivet.org');
+        $schedule->command('command:NotifyBackOfListing')->hourly();
     }
 }

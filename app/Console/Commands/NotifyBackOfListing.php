@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Lib\Packages\Core\EmailListForNotifications;
 use App\Lib\Packages\Search\SearchGateway;
+use ErrorStream\ErrorStreamClient\ErrorStreamClient;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Logging\Log;
 use Illuminate\Contracts\Mail\Mailer;
@@ -42,19 +43,25 @@ class NotifyBackOfListing extends Command
     private $log;
 
     /**
+     * @var ErrorStreamClient
+     */
+    private $errorStreamClient;
+
+    /**
      * NotifyBackOfListing constructor.
      * Create a new command instance.
      * @param SearchGateway $searchGateway
      * @param Mailer $mailer
      * @param Log $log
      */
-    public function __construct(SearchGateway $searchGateway, Mailer $mailer, Log $log)
+    public function __construct(SearchGateway $searchGateway, Mailer $mailer, Log $log, ErrorStreamClient $errorStreamClient)
     {
         parent::__construct();
 
-        $this->searchGateway    = $searchGateway;
-        $this->mailer           = $mailer;
-        $this->log              = $log;
+        $this->searchGateway        = $searchGateway;
+        $this->mailer               = $mailer;
+        $this->log                  = $log;
+        $this->errorStreamClient    = $errorStreamClient;
     }
 
 
@@ -68,8 +75,8 @@ class NotifyBackOfListing extends Command
                 $this->info('Searching for subscriber ' . $subscriber->getEmail());
                 $results = $this->searchGateway->searchRide($subscriber->getQuery(), 1);
             } catch (\Exception $e) {
+                $this->errorStreamClient->reportException($e);
                 $this->info('There was an error searching for user: ' . $e->getMessage());
-                $this->log->error('[NotifyBackOfListing] ' . $e->getMessage());
                 continue;
             }
 

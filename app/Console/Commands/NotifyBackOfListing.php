@@ -53,6 +53,7 @@ class NotifyBackOfListing extends Command
      * @param SearchGateway $searchGateway
      * @param Mailer $mailer
      * @param Log $log
+     * @param ErrorStreamClient $errorStreamClient
      */
     public function __construct(SearchGateway $searchGateway, Mailer $mailer, Log $log, ErrorStreamClient $errorStreamClient)
     {
@@ -64,7 +65,6 @@ class NotifyBackOfListing extends Command
         $this->errorStreamClient    = $errorStreamClient;
     }
 
-
     public function handle()
     {
         // We'll fetch the data of those subscribers who have yet to be notified
@@ -75,7 +75,7 @@ class NotifyBackOfListing extends Command
                 $this->info('Searching for subscriber ' . $subscriber->getEmail());
                 $results = $this->searchGateway->searchRide($subscriber->getQuery(), 1);
             } catch (\Exception $e) {
-                $this->errorStreamClient->reportException($e);
+                $this->errorStreamClient->reportException(new $e('[NotifyBackOfListing]' . $e->getMessage()));
                 $this->info('There was an error searching for user: ' . $e->getMessage());
                 continue;
             }
@@ -94,8 +94,7 @@ class NotifyBackOfListing extends Command
             });
 
             // Mark this guy as 'done'
-            $subscriber->setNotified(1)
-                ->save();
+            $subscriber->setNotified(1)->save();
         }
     }
 }

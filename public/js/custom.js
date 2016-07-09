@@ -361,7 +361,7 @@ $(document).ready(function() {
 
 $(function($) {
     $("#twitter").tweet({
-        username: "remtsoy", //!paste here your twitter username!
+        username: "seeyouinp", //!paste here your twitter username!
         count: 3
     });
 });

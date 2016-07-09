@@ -225,7 +225,7 @@ class BookingsController extends Controller {
         $this->mailer->send('emails.booking_notification', $data, function (Message $email) use($data) {
             $email->to($data['to_email']);
             $email->from('no-reply@seeyouinphilly.com', '#SeeYouInPhilly Alerts');
-            $email->subject('Your Have a New Request');
+            $email->subject('You Have a New Request');
         });
 
         $this->mailer->send('emails.booking_confirmation', $data, function (Message $email) use($data) {

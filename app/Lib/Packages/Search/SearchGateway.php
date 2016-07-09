@@ -75,7 +75,7 @@ class SearchGateway {
         $time       = microtime();
         $location   = $this->geoService->geocode($user_location);
 
-        if (!strlen($location->getZip()) && ! strlen($location->getCity())) {
+        if ( ! strlen($location->getZip()) && ! strlen($location->getCity())) {
             throw new IncompleteQueryException("You need to search using at least a ZIP Code or U.S./Canada city");
         }
 
@@ -90,13 +90,13 @@ class SearchGateway {
 
     /**
      * @param $raw
-     * @param GeocodeResponse $location
+     * @param GeocodeResponse $geocoded
      * @param string $benchmark
      * @param array $filters
      * @param string $type
      * @return array
      */
-    public function formatQueryInfo($raw, GeocodeResponse $location, string $benchmark, array $filters, string $type)
+    public function formatQueryInfo($raw, GeocodeResponse $geocoded, string $benchmark, array $filters, string $type)
     {
         return [
                 'process_time'  => $benchmark,
@@ -104,8 +104,8 @@ class SearchGateway {
                 'search_term'   => [
                     'raw'           => $raw,
                     'url_encoded'   => urlencode($raw),
-                    'geocoded'      => $location->toArray(),
-                    'composed'      => (string)Location::build($location),
+                    'geocoded'      => $geocoded->toArray(),
+                    'composed'      => (string)Location::build($geocoded),
                     'filters'       => $filters
                 ]
         ];

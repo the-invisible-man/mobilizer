@@ -44,7 +44,7 @@ class SearchController extends Controller {
     public function search(Request $request)
     {
         $resultCode = 200;
-        $view = 'search';
+        $view       = 'search';
 
         try {
             if ($request->get('type', RideListing::ListingType) == RideListing::ListingType)

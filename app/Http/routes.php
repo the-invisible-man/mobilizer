@@ -40,6 +40,10 @@ Route::group(['middleware' => 'web'], function () {
     $this->get('account/confirm/{confirmation_code}', 'Auth\AuthController@confirmEmail');
     $this->get('account/send_confirm', 'Auth\AuthController@resendEmailConfirm');
 
+    Route::group(['prefix' => 'blog'], function () {
+        Route::get('events', "BlogController@events");
+    });
+
     /*
     |--------------------------------------------------------------------------
     | Listings

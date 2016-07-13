@@ -6,7 +6,7 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3 hidden-xs hidden-sm">
                 <aside class="sidebar-left">
                     <div class="sidebar-widget">
                         <h4>Facebook</h4>

@@ -190,7 +190,7 @@
                         </div>
                     </div>
                     <div class="container" style="margin-top:120px; margin-bottom: 80px;">
-                        <p style="text-align:center; line-height: 1.3;"><span style=" color: white; font-weight: 700; font-size:40px;"><span style="font-style: italic; ">Those who love peace must learn to organize as effectively as those who love war"</span><br> - MLK Jr.</span></p>
+                        <p style="text-align:center; line-height: 1.3;"><span style=" color: white; font-weight: 700; font-size:40px;"><span style="font-style: italic;">"Those who love peace must learn to organize as effectively as those who love war"</span><br> - MLK Jr.</span></p>
                     </div>
                     <footer id="main-footer" style="background: none; border-top:none;">
                         <div class="container">

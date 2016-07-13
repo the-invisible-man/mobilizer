@@ -14,7 +14,7 @@
                         @include('layouts.header_transparent')
                         <div class="col-md-12" style="height:300px;padding-top:100px;">
                             <h1 style="font-size: 40px; font-weight: 700; color:white; text-align: center">RIDES COMING OUT OF 20 US CITIES</h1>
-                            <h1 style="font-size: 40px; font-weight: 700; color:white; text-align: center; margin-top:130px;">OVER 50 EVENTS HAPPENING IN PHILLY</h1>
+                            <h1 style="font-size: 40px; font-weight: 700; color:white; text-align: center; margin-top:130px;">OVER 25 EVENTS HAPPENING IN PHILLY</h1>
                             <p style="text-align: center; font-size:20px;"><a href="/blog/events/" style="color:lightblue;">View Events in Phily</a></p>
                         </div>
                     </div>

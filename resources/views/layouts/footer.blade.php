@@ -7,7 +7,7 @@
                 <p>#SeeYouInPhilly | &copy;<?=date('Y');?> SeeYouInPhilly.com</p>
             </div>
             <div class="col-md-3 col-md-offset-1" id="footer_links">
-                <span style="color:lightgrey; font-size: 13px; margin-bottom: 10px;"><strong>- Links</strong></span>
+                <span style="color:lightgrey; font-size: 13px; margin-bottom: 10px;"><strong>Links</strong></span>
                 <ul class="list list-footer">
                     <li><a href="/about">About</a>
                     </li>

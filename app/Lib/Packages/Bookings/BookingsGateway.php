@@ -30,8 +30,12 @@ use Monolog;
 
 /**
  * Class BookingsGateway
- * @package App\Lib\Packages\Bookings
- * @author Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * @copyright   Copyright (c) Polivet.org
+ * @package     App\Lib\Packages\Bookings
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
  */
 class BookingsGateway {
 

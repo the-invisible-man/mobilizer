@@ -4,6 +4,7 @@
             <a href="/"><img src="/img/assets/logo.png" id="logo_home"></a>
         </div>
         <div class="col-md-6" id="home_top_links">
+            <a href="/blog/events">Events</a> |
             <a href="/about_rides">List My Ride</a> |
             @if (isset($auth) && $auth['status'])
                 <span class="top-user-area-avatar list nav-drop">

@@ -53,6 +53,7 @@ class ezTweet {
 	/**************************************************************************************/
 
 	public function __construct() {
+		$this->lib = app_path("../public/includes/twitter/lib/");
 		// Initialize paths and etc.
 		$this->pathify($this->cache_dir);
 		$this->pathify($this->lib);

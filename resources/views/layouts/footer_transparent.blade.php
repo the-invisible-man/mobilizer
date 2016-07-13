@@ -1,4 +1,4 @@
-<footer id="main-footer">
+<footer id="main-footer" style="background: none;">
     <div class="container">
         <div class="row row-wrap">
             <div class="col-md-4" style="text-align: left;">
@@ -55,7 +55,7 @@
 <script src="/js/tweet.js"></script>
 <script src="/js/countdown.js"></script>
 <script src="/js/gridrotator.js"></script>
-<script src="/js/custom.js?v=1"></script>
+<script src="/js/custom.js"></script>
 <script src="/js/pace.min.js"></script>
 <script src="/js/jquery-deparam.js"></script>
 <script src="/js/jsonhttprequest.js"></script>

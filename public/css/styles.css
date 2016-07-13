@@ -2414,7 +2414,9 @@ div.nav-drop {
   padding: 0 7px;
 }
 footer#main-footer {
-  background: #262626;
+  border-top: solid 12px #0066b8;
+  background-image: url("/img/backgrounds/1-KFXpKR7-S7cRet15jfEv6g.jpeg");
+  background-size: cover;
   padding: 30px 0 0 0;
   color: #e6e6e6;
   font-size: 11px;

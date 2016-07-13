@@ -110,3 +110,8 @@ Route::group(['middleware' => 'web'], function () {
 });
 
 Route::post('/mail/relay', 'EmailRelayController@receive');
+Route::post('/includes/tweet/', function () {
+    ob_start();
+    require_once app_path("../public/includes/twitter/index.php");
+    return ob_get_clean();
+});

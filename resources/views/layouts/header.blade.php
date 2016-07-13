@@ -12,7 +12,7 @@
     </script>
     <!-- /FACEBOOK WIDGET -->
     <div class="global-wrap">
-        <header id="main-header" style="background-image:url(/img/photography/1-sLZF6kIWiyaNytLqWjP_HA.jpeg); background-position: center 70%;">
+        <header id="main-header" style="background-color: #262626;">
             <div class="header-top">
                 <div class="container">
                     <div class="row">
@@ -24,6 +24,7 @@
                         <div class="col-md-4 col-md-offset-4">
                             <div class="top-user-area clearfix">
                                 <ul class="top-user-area-list list list-horizontal list-border social-icons">
+                                    <li><a href="/blog/events"><span class="btn btn-primary">Events</span></a></li>
                                     <li><a href="/about_rides"><span class="btn btn-primary">List Ride</span></a></li>
                                 @if (isset($auth) && $auth['status'])
                                         <li class="top-user-area-avatar list nav-drop">

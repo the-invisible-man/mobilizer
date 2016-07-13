@@ -361,16 +361,16 @@ $(document).ready(function() {
 
 $(function($) {
     $("#twitter").tweet({
-        username: "seeyouinp", //!paste here your twitter username!
+        username: "seeyouinp",
         count: 3
     });
 });
 
 $(function($) {
     $("#twitter-ticker").tweet({
-        username: "remtsoy", //!paste here your twitter username!
+        username: "seeyouinp",
         page: 1,
-        count: 20
+        count: 1
     });
 });
 

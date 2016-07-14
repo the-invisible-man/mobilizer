@@ -7,8 +7,12 @@ use App\Lib\Packages\Core\Contracts\ServiceManager;
 
 /**
  * Class GeocodeManager
- * @package App\Lib\Packages\Geo\API
- * @author Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * @package     App\Lib\Packages\Geo\API
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
  */
 class GeocodeManager extends ServiceManager implements ServiceFactory
 {

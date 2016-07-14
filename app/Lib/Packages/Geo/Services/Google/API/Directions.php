@@ -6,9 +6,13 @@ use App\Lib\Packages\Geo\Services\Google\GoogleMapsAPI;
 
 /**
  * Class Directions
- * @package App\Lib\Packages\Geo\Services\Google\Services
- * @author Carlos Granados <granados.carlos91@gmail.com>
- */
+ *
+ * @package     App\Lib\Packages\Geo\Services\Google\Services
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
+ * */
 class Directions extends GoogleMapsAPI {
 
     const   DRIVING     = 'driving',

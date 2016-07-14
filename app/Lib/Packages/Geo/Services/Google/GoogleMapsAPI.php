@@ -16,9 +16,12 @@ use App\Lib\Packages\Geo\Services\Google\Exceptions\GoogleMapsRequestNotOkatExce
  * Google treats directions and geocoding as two separate
  * APIs.
  *
- * @package App\Lib\Packages\Geo\Services\Google
- * @author Carlos Granados <granados.carlos91@gmail.com>
- */
+ * @package     App\Lib\Packages\Geo\Services\Google
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
+ * */
 abstract class GoogleMapsAPI {
 
     use ValidatesConfig;

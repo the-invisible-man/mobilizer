@@ -10,9 +10,12 @@ use Lib\Packages\OpenGraph\Exceptions\OG_UnreachableSiteException;
  * Utility to easily interface with websites following
  * the OpenGraph standards.
  *
- * @author Carlos Granados <granados.carlos91@gmail.com>
- * @package Lib\Packages\OpenGraph
- * @deprecated Now using the Facebook SDK for reliably fetching OpenGraph data
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ * @package     Lib\Packages\OpenGraph
+ * @deprecated  Now using the Facebook SDK for reliably fetching OpenGraph data
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
  */
 class OpenGraph {
 

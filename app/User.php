@@ -7,8 +7,12 @@ use App\Lib\Packages\Tools\Traits\UuidModel;
 
 /**
  * Class User
- * @package App\Lib\Packages\User
- * @author Carlos Granados <carlos@polivet.org>
+ *
+ * @package     App\Lib\Packages\User
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <carlos@polivet.org>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
  */
 class User extends Authenticatable
 {

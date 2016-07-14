@@ -26,8 +26,12 @@ use App\Lib\Packages\Bookings\Contracts\BaseBooking;
 
 /**
  * Class ListingsGateway
- * @package App\Lib\Packages\Listings
- * @author Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * @package     App\Lib\Packages\Listings
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
  */
 class ListingsGateway {
 

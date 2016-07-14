@@ -8,8 +8,12 @@ use Illuminate\Cache\Repository as CacheRepository;
 
 /**
  * Class TripDurationEstimator
- * @package App\Lib\Packages\Geo
- * @author Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * @package     App\Lib\Packages\Geo
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
  */
 class TripDurationEstimator
 {

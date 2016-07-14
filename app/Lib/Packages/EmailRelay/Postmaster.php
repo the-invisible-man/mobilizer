@@ -21,8 +21,11 @@ use Illuminate\Mail\Message;
  * Processes incoming mail traffic redirected by our catch
  * all filter and relay messages to the right user email.
  *
- * @package App\Lib\Packages\EmailRelay
- * @author Carlos Granados <granados.carlos91@gmail.com>
+ * @package     App\Lib\Packages\EmailRelay
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
  */
 class Postmaster {
 

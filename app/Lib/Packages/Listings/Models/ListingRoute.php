@@ -7,9 +7,13 @@ use App\Lib\Packages\Tools\Traits\UuidModel;
 
 /**
  * Class ListingRoute
- * @package App\Lib\Packages\Listings\Models
- * @author Carlos Granados <granados.carlos91@gmail.com>
- */
+ *
+ * @package     App\Lib\Packages\Listings\Models
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
+ * */
 class ListingRoute extends Model {
 
     use UuidModel;

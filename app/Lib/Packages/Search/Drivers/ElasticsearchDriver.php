@@ -9,8 +9,12 @@ use App\Lib\Packages\Search\Exceptions\ElasticsearchAggregationException;
 
 /**
  * Class ElasticsearchDriver
- * @package App\Lib\Packages\Search\Drivers
- * @author Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * @package     App\Lib\Packages\Search\Drivers
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
  */
 class ElasticsearchDriver implements SearchDriverInterface
 {

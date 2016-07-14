@@ -8,8 +8,12 @@ use App\Lib\Packages\Bookings\Models\BookingMetadata;
 
 /**
  * Class BaseBooking
- * @package App\Lib\Packages\Bookings\Contracts
- * @author Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * @package     App\Lib\Packages\Bookings\Contracts
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
  */
 class BaseBooking extends Model implements \JsonSerializable {
 

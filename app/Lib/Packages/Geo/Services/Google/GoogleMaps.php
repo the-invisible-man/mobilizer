@@ -18,8 +18,11 @@ use App\Lib\Packages\Geo\Services\Google\API\Timezone;
  * This class merges the functionality of each Google Maps
  * API in a single object that implements the GeoServiceInterface contract
  *
- * @package App\Lib\Packages\Geo\GeoServices
- * @author Carlos Granados <granados.carlos91@gmail.com>
+ * @package     App\Lib\Packages\Geo\GeoServices
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
  */
 class GoogleMaps implements GeoServiceInterface {
 

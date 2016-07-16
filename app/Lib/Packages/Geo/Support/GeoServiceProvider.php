@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Lib\Packages\Geo\ServiceProvider;
+namespace App\Lib\Packages\Geo\Support;
 
 use App\Lib\Packages\Geo\Services\Google\API\Timezone;
 use Guzzle\Http\Client;

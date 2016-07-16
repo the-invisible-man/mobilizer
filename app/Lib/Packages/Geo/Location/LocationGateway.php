@@ -7,8 +7,13 @@ use Illuminate\Database\DatabaseManager;
 
 /**
  * Class LocationGateway
- * @package App\Lib\Packages\Geo\Location
- * @author Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * @package     App\Lib\Packages\Geo\Location
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
+ * This notice applies retroactively.
  */
 class LocationGateway
 {
@@ -56,8 +61,8 @@ class LocationGateway
         $location->setCountry($response->getCountry());
 
         // Set geospatial data
-        $location->setLat($response->getGeoLocation()->getLat());
-        $location->setLong($response->getGeoLocation()->getLong());
+        $location->setLat($response->getGeopoint()->getLat());
+        $location->setLong($response->getGeopoint()->getLong());
 
         $location->save();
 

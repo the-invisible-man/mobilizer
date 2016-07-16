@@ -60,9 +60,9 @@ class ElasticsearchDriver implements SearchDriverInterface
                 'query' => [
                     'filtered' => [
                         'filter' => [
-                            'geo_distance' => [
-                                'distance' => $this->config['radius'],
-                                'location' => [
+                            'geo_distance'  => [
+                                'distance'  => $this->config['radius'],
+                                'location'  => [
                                     "lat" => $pickupLocation->getLat(),
                                     "lon" => $pickupLocation->getLong()
                                 ]

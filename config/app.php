@@ -152,7 +152,7 @@ return [
         Lib\Packages\Tools\ToolsServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
-        App\Lib\Packages\Geo\ServiceProvider\GeoServiceProvider::class,
+        App\Lib\Packages\Geo\Support\GeoServiceProvider::class,
         App\Lib\Packages\Listings\ServiceProviders\ListingsServiceProvider::class,
         App\Lib\Packages\Search\SearchServiceProvider::class,
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,

@@ -63,7 +63,7 @@ class GeocodeResponse {
             'county'        => $this->getCounty(),
             'state'         => $this->getState(),
             'country'       => $this->getCountry(),
-            'geoLocation'   => $this->getGeoLocation()->toArray()
+            'geoLocation'   => $this->getGeopoint()->toArray()
         ];
     }
 
@@ -80,7 +80,7 @@ class GeocodeResponse {
     /**
      * @return Geopoint
      */
-    public function getGeoLocation()
+    public function getGeopoint()
     {
         return $this->geoLocation;
     }

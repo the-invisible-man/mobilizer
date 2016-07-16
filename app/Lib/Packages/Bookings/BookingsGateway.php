@@ -36,6 +36,7 @@ use Monolog;
  * @author      Carlos Granados <granados.carlos91@gmail.com>
  *
  * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
+ * This notice applies retroactively.
  */
 class BookingsGateway {
 
@@ -127,7 +128,7 @@ class BookingsGateway {
         $this->app              = $app;
         $this->log              = $log;
         $this->listingsGateway  = $listingsGateway;
-        $this->relayGateway       = $relayGateway;
+        $this->relayGateway     = $relayGateway;
 
 
         $this->tripDurationEstimator = $tripDurationEstimator;

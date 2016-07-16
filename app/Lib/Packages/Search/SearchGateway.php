@@ -82,7 +82,7 @@ class SearchGateway {
             throw new IncompleteQueryException("You need to search using at least a ZIP Code or U.S./Canada city");
         }
 
-        $ids        = $this->searchDriver->searchRide($location->getGeoLocation());
+        $ids        = $this->searchDriver->searchRide($location->getGeopoint());
         $results    = $this->fetchListings($ids, $minRemainingSlots);
         $benchmark  = microtime() - $time;
         $filters    = ['total_people' => $minRemainingSlots];
@@ -204,11 +204,11 @@ class SearchGateway {
             'type'                  => $data['type'],
             'additional_info'       => $data['additional_info'],
             'additional_info_trim'  => strlen($data['additional_info']) > 200 ? substr($data['additional_info'], 0, 200) . '...' : $data['additional_info'],
-            'max_occupants'     => $data['max_occupants'],
-            'remaining_slots'   => (int)$data['remaining_slots'],
-            'dog_friendly'      => (bool)$data['dog_friendly'],
-            'cat_friendly'      => (bool)$data['cat_friendly'],
-            'time_of_day'       => ListingMetadata::translateTimeOfDay($data['time_of_day']),
+            'max_occupants'         => $data['max_occupants'],
+            'remaining_slots'       => (int)$data['remaining_slots'],
+            'dog_friendly'          => (bool)$data['dog_friendly'],
+            'cat_friendly'          => (bool)$data['cat_friendly'],
+            'time_of_day'           => ListingMetadata::translateTimeOfDay($data['time_of_day']),
             'location' => [
                 'id'        => $data['location_id'],
                 'city'      => $data['city'],

@@ -14,6 +14,7 @@ use Illuminate\Cache\Repository as CacheRepository;
  * @author      Carlos Granados <granados.carlos91@gmail.com>
  *
  * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
+ * This notice applies retroactively.
  */
 class TripDurationEstimator
 {
@@ -81,8 +82,8 @@ class TripDurationEstimator
         $pickup = $this->geoService->geocode($destination);
 
         // Now let's figure out the timezone of the driver's starting location.
-        $originTimeZone         = $this->geoService->getTimeZone($origin->getGeoLocation(), strtotime($departureDateTime->format('d M Y')));
-        $destinationTimeZone    = $this->geoService->getTimeZone($pickup->getGeoLocation(), strtotime($departureDateTime->format('d M Y')));
+        $originTimeZone         = $this->geoService->getTimeZone($origin->getGeopoint(), strtotime($departureDateTime->format('d M Y')));
+        $destinationTimeZone    = $this->geoService->getTimeZone($pickup->getGeopoint(), strtotime($departureDateTime->format('d M Y')));
 
         // Now create a new datetime object from the original datetime
         // but initialize with timezone of the driver's origin

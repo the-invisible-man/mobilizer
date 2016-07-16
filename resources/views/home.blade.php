@@ -12,13 +12,18 @@
                 <div class="bg-content" style="height:100%;">
                     <div class="container">
                         @include('layouts.header_transparent')
-                        <div class="col-md-12" style="height:300px;padding-top:100px;">
+                        <div class="gap"></div>
+                        <div class="col-md-12">
                             <h1 style="font-size: 40px; font-weight: 700; color:white; text-align: center">RIDES COMING OUT OF 20 US CITIES</h1>
-                            <h1 style="font-size: 40px; font-weight: 700; color:white; text-align: center; margin-top:130px;">OVER 25 EVENTS HAPPENING IN PHILLY</h1>
+                        </div>
+                        <div class="gap"></div>
+                        <div class="col-md-12">
+                            <h1 style="font-size: 40px; font-weight: 700; color:white; text-align: center;">OVER 25 EVENTS HAPPENING IN PHILLY</h1>
                             <p style="text-align: center; font-size:20px;"><a href="/blog/events/" style="color:lightblue;">View Events in Phily</a></p>
                         </div>
                     </div>
-                    <div class="container" style="width: 100%; padding:0; background-color: white; margin-top:300px;">
+                    <div class="gap"></div>
+                    <div class="container" style="width: 100%; padding:0; background-color: white;">
                         <div class="container">
                             <h2 style="margin-bottom:25px; padding-top:10px;">Find Someone Driving Near You</h2>
                             <div class="search-tabs search-tabs-bg search-tabs-nobox search-tabs-lift-top">

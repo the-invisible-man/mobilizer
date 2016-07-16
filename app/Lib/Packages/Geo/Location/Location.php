@@ -8,8 +8,13 @@ use App\Lib\Packages\Tools\Traits\UuidModel;
 
 /**
  * Class Location
- * @package App\Lib\Packages\Geo\Location
- * @author Carlos Granados <granados.carlos91@gamil.com>
+ *
+ * @package     App\Lib\Packages\Geo\Location
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
+ * This notice applies retroactively.
  */
 class Location extends Model
 {
@@ -241,8 +246,8 @@ class Location extends Model
             self::STATE     => $response->getState(),
             self::ZIP       => $response->getZip(),
             self::COUNTRY   => $response->getCountry(),
-            self::LAT       => $response->getGeoLocation()->getLat(),
-            self::LONG      => $response->getGeoLocation()->getLong()
+            self::LAT       => $response->getGeopoint()->getLat(),
+            self::LONG      => $response->getGeopoint()->getLong()
         ]);
     }
 }

@@ -13,6 +13,7 @@ use App\Lib\Packages\Core\Contracts\ServiceManager;
  * @author      Carlos Granados <granados.carlos91@gmail.com>
  *
  * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
+ * This notice applies retroactively.
  */
 class GeocodeManager extends ServiceManager implements ServiceFactory
 {

@@ -16,6 +16,7 @@ use Lib\Packages\OpenGraph\Exceptions\OG_UnreachableSiteException;
  * @deprecated  Now using the Facebook SDK for reliably fetching OpenGraph data
  *
  * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
+ * This notice applies retroactively.
  */
 class OpenGraph {
 
@@ -24,6 +25,10 @@ class OpenGraph {
      */
     private $httpClient = null;
 
+    /**
+     * OpenGraph constructor.
+     * @param Client $httpClient
+     */
     public function __construct(Client $httpClient)
     {
         $this->httpClient = new Client();
@@ -34,7 +39,8 @@ class OpenGraph {
      * @param string $url
      * @return OG_SiteData
      */
-    public function build(string $url) : OG_SiteData {
+    public function build(string $url) : OG_SiteData
+    {
         $htmlBody   = $this->getBody($url);
         $document   = new \DOMDocument();
 
@@ -50,7 +56,8 @@ class OpenGraph {
      * @param string $url
      * @return string
      */
-    private function getBody(string $url) : string {
+    private function getBody(string $url) : string
+    {
         $request = $this->getRequest($url);
         return $request->getBody();
     }
@@ -60,7 +67,8 @@ class OpenGraph {
      * @return Response
      * @throws OG_UnreachableSiteException
      */
-    private function getRequest(string $url) : Response {
+    private function getRequest(string $url) : Response
+    {
         $maxAttempts    = 3;
         $request        = $this->httpClient->createRequest('GET', $url);
 

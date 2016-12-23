@@ -1,4 +1,4 @@
-# Polivet Mobilizer
+# Mobilizer
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
 [![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
@@ -19,4 +19,4 @@ If you discover a security vulnerability within the platform, please send an e-m
 
 ## License
 
-The Mobilizer platform is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+The Mobilizer platform and any derivatives from it, shall be strcily use for non commercial purposes only.

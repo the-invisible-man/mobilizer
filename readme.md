@@ -1,9 +1,6 @@
-# Polivet Mobilizer
+# Mobilizer
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+Project is no longer mantained. It's a decently sized platform, backend built in 1 month and frontend in 1 month. Feel free to reuse something that looks helpful!
 
 The mobilizer package is an open-sourced grass roots activism platform built on top the the Laravel Framework. It includes an HTML version of all pages as well as a RESTful API for creating a fancy SPA.
 
@@ -19,4 +16,4 @@ If you discover a security vulnerability within the platform, please send an e-m
 
 ## License
 
-The Mobilizer platform is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+The Mobilizer platform and any derivatives from it, shall be strcily use for non commercial purposes only.

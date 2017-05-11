@@ -4,20 +4,23 @@ Project is no longer mantained. It's a decently sized platform, backend built in
 
 The mobilizer package is an open-sourced grass roots activism platform built on top the the Laravel Framework. It includes an HTML version of all pages as well as a RESTful API for creating a fancy SPA.
 
-This repository is only the CRUD of the system, for a fully functional platform you will need to pull the Mobilizer-Python-Data repository which includes all mathematical algorithms for expanding and manipulating geospatial points as well as Elasticsearch synchronization. Our Python data repo is currently not public.
+This repository is only the CRUD of the system, for a fully functional platform you will need to pull the Mobilizer-Geo-Tools repository which includes all mathematical algorithms for expanding and manipulating geospatial points as well as Elasticsearch synchronization. You can find this repo [here](https://github.com/the-invisible-man/mobilizer-geo-tools)
 
 ## Important Folders
 The most relevant parts of the application are located bellow:
-* Frontend JS: [Javascript App](https://github.com/the-invisible-man/mobilizer/tree/master/public/js/mobilizer) | [HTML Views](https://github.com/the-invisible-man/mobilizer/tree/master/resources/views)
-* Backend PHP: [Library](https://github.com/the-invisible-man/mobilizer/tree/master/app/Lib/Packages) | [Controllers](https://github.com/the-invisible-man/mobilizer/tree/master/app/Http/Controllers) | [Migrations](https://github.com/the-invisible-man/mobilizer/tree/master/database/migrations)
+* Frontend JS: [Javascript](https://github.com/the-invisible-man/mobilizer/tree/master/public/js/mobilizer) | [HTML Views](https://github.com/the-invisible-man/mobilizer/tree/master/resources/views)
+* Backend PHP: [Core Packages](https://github.com/the-invisible-man/mobilizer/tree/master/app/Lib/Packages) | [Controllers](https://github.com/the-invisible-man/mobilizer/tree/master/app/Http/Controllers) | [Migrations](https://github.com/the-invisible-man/mobilizer/tree/master/database/migrations)
+
+## Dependencies
+
+* Elasticsearch 5.3.*
+* Redis 3.2.*
+* PHP 7.0
+* MySQL 5.7
 
 ## Contributing
 
 You are free to submit a pull request for bug fixes or new features. Major new features should be discussed prior to building.
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within the platform, please send an e-mail to Carlos at granados.carlos91@gmail.com. All security vulnerabilities will be promptly addressed.
 
 ## License
 

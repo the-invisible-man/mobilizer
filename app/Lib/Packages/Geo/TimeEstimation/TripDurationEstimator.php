@@ -108,7 +108,7 @@ class TripDurationEstimator
         // Now we can convert to the timezone of the pick up location
         $final->setTimezone(new \DateTimeZone($destinationTimeZone->getTimeZoneId()));
 
-        // And voila!
+        // yea
         return $final;
     }
 
@@ -149,24 +149,17 @@ class TripDurationEstimator
      */
     private function cacheKeyForZip(string $startingZip, string $destinationZip) : string
     {
-        // Some zip codes in the US start with 0, the smallest zip code is 00501,
-        // currently  in use by the IRS. We will convert to int and multiply both
-        // values, then generate a hash.
         $startingZip        = (int)$startingZip * 10;
         $destinationZip     = (int)$destinationZip * 10;
 
-        // We'll enforce the smaller zip code to always come before the larger zip
-        // code. This will allows us to always generate a seed that will work
-        // regardless of the order that the zip code arguments are passed
+        // Here we make sure that the zip code are always in a specific order
+        // for the purpose of creating the cache key.
         if ($startingZip > $destinationZip) {
             $seed = $destinationZip . $startingZip;
         } else {
             $seed = $startingZip . $destinationZip;
         }
 
-        // Now that we've created a seed based on the zip codes we can run it through
-        // the  sha256 algorithm and  return the generated hash to be uses as a cache
-        // key that works two ways.
         return hash('sha256', $seed);
     }
 }

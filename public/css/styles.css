@@ -2415,8 +2415,9 @@ div.nav-drop {
 }
 footer#main-footer {
   border-top: solid 12px #0066b8;
-  background-image: url("/img/backgrounds/1-KFXpKR7-S7cRet15jfEv6g.jpeg");
+  background-image: url("/img/backgrounds/DD-Patriotic-Grunge-Background-44022-Preview.jpg");
   background-size: cover;
+  background-position-y: -380px;
   padding: 30px 0 0 0;
   color: #e6e6e6;
   font-size: 11px;

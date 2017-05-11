@@ -1,0 +1,28 @@
+$bg-color: #2c3e50;
+$hover-color: #b90000;
+$text-color: #ffffff;
+
+nav {
+    ul {
+        background: $bg-color;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-size: rem-calc(20);
+    }
+
+    li {
+        display: inline-block;
+    }
+
+    a {
+        color: $text-color;
+        display: inline-block;
+        padding: 10px 16px;
+        text-decoration: none;
+    }
+
+    a:hover {
+        background: $hover-color;
+    }
+}

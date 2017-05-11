@@ -32,7 +32,7 @@ use App\Lib\Packages\Bookings\Contracts\BaseBooking;
  * @author      Carlos Granados <granados.carlos91@gmail.com>
  *
  * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
- * This notice applies retroactively.
+ * This notice applies retroactively to all commits.
  */
 class ListingsGateway {
 
@@ -123,6 +123,7 @@ class ListingsGateway {
 
     /**
      * ListingsGateway constructor.
+     *
      * @param DatabaseManager $databaseManager
      * @param LocationGateway $locationGateway
      * @param Application $app

@@ -9,7 +9,7 @@
         </ul>
         <h3 class="booking-title">{{$number_of_hits}}@if($number_of_hits > 1) Rides @else Ride @endif Near <span style="color:#0066b8">@if(strlen($query_info['search_term']['geocoded']['city'])) {{$query_info['search_term']['geocoded']['city']}}, @endif{{$query_info['search_term']['geocoded']['state']}}</span></h3>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3 btn-">
                 <div class="booking-item-dates-change mb30">
                     <form method="get" action="/search" id="ride_search_form">
                         <input type="hidden" name="original_query" value="{{$query_info['search_term']['raw']}}" id="original_query"/>

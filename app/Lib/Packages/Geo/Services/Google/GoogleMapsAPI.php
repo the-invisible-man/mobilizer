@@ -158,7 +158,7 @@ abstract class GoogleMapsAPI {
      */
     private function handleXml(Response $requestInterface) : array
     {
-        // TODO: implement this bullshit
+        // TODO: but why bother
         return [];
     }
 

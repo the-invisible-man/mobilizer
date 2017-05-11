@@ -17,6 +17,7 @@ use App\Lib\Packages\Listings\Models\ListingRoute;
  * @author      Carlos Granados <granados.carlos91@gmail.com>
  *
  * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
+ * This notice applies retroactively to all commits.
  */
 class RideMetadataDriver extends AbstractMetadataDriver
 {

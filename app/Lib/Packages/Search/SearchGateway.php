@@ -78,8 +78,8 @@ class SearchGateway {
         $time       = microtime();
         $location   = $this->geoService->geocode($user_location);
 
-        if ( ! strlen($location->getZip()) && ! strlen($location->getCity())) {
-            throw new IncompleteQueryException("You need to search using at least a ZIP Code or U.S./Canada city");
+        if (!strlen($location->getZip()) && ! strlen($location->getCity())) {
+            throw new IncompleteQueryException("You need to search using at least a U.S./Canada ZIP Code or city");
         }
 
         $ids        = $this->searchDriver->searchRide($location->getGeopoint());

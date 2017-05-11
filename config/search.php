@@ -20,6 +20,8 @@ return [
 
     'elasticsearch'     => [
         'hosts'     => [env('ELASTICSEARCH_HOST', '192.168.10.10') . ':' . env('ELASTICSEARCH_PORT', '9200')],
+
+        // Max search radius
         'radius'    => '32.1869km'
     ]
 ];

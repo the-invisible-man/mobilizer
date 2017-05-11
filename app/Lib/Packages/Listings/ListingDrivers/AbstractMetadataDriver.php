@@ -5,6 +5,16 @@ namespace App\Lib\Packages\Listings\ListingDrivers;
 use App\Lib\Packages\Listings\Contracts\BaseListing;
 use App\Lib\Packages\Listings\Models\ListingMetadata;
 
+/**
+ * Class AbstractMetadataDriver
+ *
+ * @package     App\Lib\Packages\Listings\ListingDrivers
+ * @copyright   Copyright (c) Polivet.org
+ * @author      Carlos Granados <granados.carlos91@gmail.com>
+ *
+ * Unauthorized copying of this file, via any medium is strictly prohibited. Proprietary and confidential.
+ * This notice applies retroactively to all commits.
+ */
 abstract class AbstractMetadataDriver
 {
     /**

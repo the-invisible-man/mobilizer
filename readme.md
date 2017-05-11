@@ -7,8 +7,9 @@ The mobilizer package is an open-sourced grass roots activism platform built on 
 This repository is only the CRUD of the system, for a fully functional platform you will need to pull the Mobilizer-Python-Data repository which includes all mathematical algorithms for expanding and manipulating geospatial points as well as Elasticsearch synchronization. Our Python data repo is currently not public.
 
 ## Important Folders
-Frontend JS: https://github.com/the-invisible-man/mobilizer/tree/master/public/js/mobilizer
-Backend PHP: [Library](https://github.com/the-invisible-man/mobilizer/tree/master/app/Lib/Packages) | [Controllers](https://github.com/the-invisible-man/mobilizer/tree/master/app/Http/Controllers)
+The most relevant parts of the application are located bellow:
+* Frontend JS: [Javascript App](https://github.com/the-invisible-man/mobilizer/tree/master/public/js/mobilizer) | [HTML Views](https://github.com/the-invisible-man/mobilizer/tree/master/resources/views)
+* Backend PHP: [Library](https://github.com/the-invisible-man/mobilizer/tree/master/app/Lib/Packages) | [Controllers](https://github.com/the-invisible-man/mobilizer/tree/master/app/Http/Controllers) | [Migrations](https://github.com/the-invisible-man/mobilizer/tree/master/database/migrations)
 
 ## Contributing
 

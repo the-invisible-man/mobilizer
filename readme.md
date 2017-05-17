@@ -12,7 +12,7 @@ The most relevant parts of the application are located bellow:
 * Backend PHP: [Core Packages](https://github.com/the-invisible-man/mobilizer/tree/master/app/Lib/Packages) | [Controllers](https://github.com/the-invisible-man/mobilizer/tree/master/app/Http/Controllers) | [Migrations](https://github.com/the-invisible-man/mobilizer/tree/master/database/migrations)
 
 ## Ride Search Matching
-This web app aims at connecting drivers with passengers who are along the driver's driving route. A naive approach would be to apply the [Haversine formula](https://en.wikipedia.org/wiki/Haversine_formula) from just the driver's starting point, however this method would be inadequate to tackle the problem of matching a driver with a passenger along his driving route. the Haversine formular provides us with matches within a radius, we need along a narrow tube that cover the driving path.
+This web app aims at connecting drivers with passengers who are along the driver's driving route. A naive approach would be to apply the [Haversine formula](https://en.wikipedia.org/wiki/Haversine_formula) from just the driver's starting point, however this method would be inadequate to tackle the problem of matching a driver with a passenger along his driving route. A single proximity calculation would only give us passengers within an n mile radius from the driver's starting point, instead we need along the entire route.
 
 ### Radius From Starting Point
 ![alt tex](https://raw.githubusercontent.com/the-invisible-man/mobilizer/master/map%20-%20Page%201%20(1).png "Haversine")

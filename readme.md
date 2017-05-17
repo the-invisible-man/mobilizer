@@ -14,10 +14,10 @@ The most relevant parts of the application are located bellow:
 ## Ride Search Matching
 This web app aims at connecting drivers with passengers who are along the driver's driving route. A naive approach would be to apply the [Haversine formula](https://en.wikipedia.org/wiki/Haversine_formula) from just the driver's starting point, however this method would be inadequate to tackle the problem of matching a driver with a passenger along his driving route. A single proximity calculation would only give us passengers within an n mile radius from the driver's starting point, instead we need along the entire route.
 
-### Radius From Starting Point
+### Search Radius From Starting Point
 ![alt tex](https://raw.githubusercontent.com/the-invisible-man/mobilizer/master/map%20-%20Page%201%20(1).png "Haversine")
 
-### Desired Outcome
+### Ideal Search Area
 ![alt tex](https://raw.githubusercontent.com/the-invisible-man/mobilizer/master/map%20-%20Page%201.png "Custom")
 
 To do this we will need to know the driver's route ahead of time. Upon the driver entering his location of origin we will use the Google Maps API to determine all the possible routes that the driver could take. The driver will be asked to select a route. Once a route is selected, we get the 'overview_path' from the Maps API. The 'overview_path' is a list of geospatial points that are used to draw the route on the Map Canvas, we will save the raw overview_path in mysql. 

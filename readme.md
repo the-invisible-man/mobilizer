@@ -20,6 +20,8 @@ With the overview_path in the database, a script on a cron job will pick up this
 
 Using elasticsearch we can do a geospatial search for passengers who fall no more than 15 miles from any one of the points of the 'overview_path'. This ultimately allows us to match drivers only with users who are along their driving route.
 
+## User Email Masking and Relay
+To keep the user's privacy above all things, this web app takes a similar approach to craigslist for user to user contact. When a prospective passenger selects a ride from the search results, he/she will be given a hashes email address such as `aaAAA9Dmnv09398C6G@relay.mobileizer.com`. The email servers are configured to route to MailGun. With MailGun we can set up an event pusher for any incoming emails to any `*@relay.mobileizer.com` account. MailGun hits this API with the email message, and the class [Postmaster](https://github.com/the-invisible-man/mobilizer/blob/master/app/Lib/Packages/EmailRelay/Postmaster.php) takes over to route the email to the correct destination. Checkout the files under the [EmailRelay](https://github.com/the-invisible-man/mobilizer/tree/master/app/Lib/Packages/EmailRelay) package for more info.
 
 ## Dependencies
 

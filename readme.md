@@ -14,6 +14,12 @@ The most relevant parts of the application are located bellow:
 ## Ride Search Matching
 This web app aims at connecting drivers with passengers who are along the driver's driving route. A naive approach would be to apply the [Haversine formula](https://en.wikipedia.org/wiki/Haversine_formula) from the driver's starting point, however this method would be inadequate to tackle the problem of matching a driver with a passenger along his driving route. the Haversine formular provides us with matches within a radius, we need along a narrow tube that cover the driving path.
 
+### Haversine Formula Search Outcome
+![alt tex](https://raw.githubusercontent.com/the-invisible-man/mobilizer/master/map%20-%20Page%201%20(1).png "Haversine")
+
+### Desired Outcome
+![alt tex](https://raw.githubusercontent.com/the-invisible-man/mobilizer/master/map%20-%20Page%201.png "Custom")
+
 To do this we will need to know the driver's route ahead of time. Upon the driver entering his location of origin we will use the Google Maps API to determine all the possible routes that the driver could take. The driver will be asked to select a route. Once a route is selected, we get the 'overview_path' from the Maps API. The 'overview_path' is a list of geospatial points that are used to draw the route on the Map Canvas, we will save the raw overview_path in mysql. 
 
 With the overview_path in the database, a script on a cron job will pick up this newly entered ride listing, it'll grab the overview_path and expand it. The process of expansion means that every point in the overview_path is no more than 10 miles apart. If any two points are more than 10 miles apart, the script will calculate a point that is 10 miles apart from the origin, also accounting for the earth's roundness (flat earthers should navigate away at this point). Once the geospatial points are expanded we will save that data into Elasticsearch.
